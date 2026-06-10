@@ -51,7 +51,6 @@
       }
     };
 
-    // Pre-loaded baseline orders so your dashboard isn't blank on startup
     const INITIAL_ORDERS = [
       {
         id: 'HPC-3891',
@@ -322,7 +321,7 @@
 
               <div className="grid grid-cols-2 gap-4">
                 <input type="text" required placeholder="Garment Colorway" className="w-full px-4 py-2.5 border rounded-xl text-sm" value={color} onChange={e => setColor(e.target.value)} />
-                <input type="date" required className="w-full px-4 py-2.5 border rounded-xl text-sm text-slate-700" value={dueDate} Date={e => setDueDate(e.target.value)} />
+                <input type="date" required className="w-full px-4 py-2.5 border rounded-xl text-sm text-slate-700" value={dueDate} onChange={e => setDueDate(e.target.value)} />
               </div>
 
               <div className="p-4 bg-slate-50 border rounded-xl">
@@ -420,7 +419,7 @@
         if (!apiKey) { triggerToast('Please enter your Gemini API Key in the top header bar.'); return; }
         setLoadingId(order.id);
         try {
-          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ contents: [{ parts: [{ text: `You are the master floor technician at Hussle Print Co. Provide technical shop specifications for this layout: Process: ${order.decorationType}, Blank Stock: ${order.brand}, Count: ${order.totalQuantity}. List optimal screen mesh counts or embroidery backing stabilizers, ink sequence order, and flash drying temperatures. Keep it extremely brief, actionable, text-only paragraphs. No emojis.` }] }] })
