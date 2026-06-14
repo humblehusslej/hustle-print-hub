@@ -75,12 +75,9 @@
             </div>
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Apparel Base Stock</label>
-              <select id="input-brand" onchange="updateFormFields()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <option value="Gildan (Economical)">Gildan (Economical Tier)</option>
-                <option value="Next Level (Mid-Tier)">Next Level (Mid-Tier)</option>
-                <option value="Bella+Canvas (Mid-Tier)">Bella+Canvas (Mid-Tier)</option>
-                <option value="Specialty Blank (Heavyweight / Vintage Boxy)">Specialty Blank (Heavyweight)</option>
-                <option value="Other">Other / Custom Catalog Request</option>
+              <!-- Dinamically switching options between Screen Print and Embroidery catalogs -->
+              <select id="input-brand" onchange="recalculateQuote()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
+                <!-- Dropdown options injected by JavaScript on state boot load below -->
               </select>
             </div>
           </div>
@@ -128,10 +125,10 @@
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Stitch Density Setup Run</label>
               <select id="input-stitch" onchange="recalculateQuote()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800">
-                <option value="5000">Small Cap / Left Chest Logo (5k Stitches)</option>
-                <option value="8000">Standard Crest Outline (8k Stitches)</option>
-                <option value="12000">Detailed Mid-Size Profile (12k Stitches)</option>
-                <option value="15000">Complex Full Back Jacket Run (15k Stitches)</option>
+                <option value="5000">Small Left Chest Logo / Hat Front (5k Stitches)</option>
+                <option value="8000">Standard Pattern Profiling (8k Stitches)</option>
+                <option value="12000">Detailed Mid-Size Layout (12k Stitches)</option>
+                <option value="15000">Intricate Full Back Crest Run (15k Stitches)</option>
               </select>
             </div>
           </div>
@@ -221,7 +218,7 @@
   <script>
     let appOrders = [
       { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks.', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
-      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hat (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { OSFA: 32 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment.', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
+      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment.', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
     ];
 
     let currentArtBase64 = '';
@@ -248,7 +245,7 @@
     }
 
     function switchView(target) {
-      if (!isAdminMode && target === 'dashboard') return; // Strict block if a customer bypasses
+      if (!isAdminMode && target === 'dashboard') return;
       
       if (target === 'estimator') {
         document.getElementById('view-estimator').classList.remove('hidden');
@@ -289,12 +286,47 @@
 
     function updateFormFields() {
       const type = document.getElementById('input-type').value;
+      const brandSelect = document.getElementById('input-brand');
+      
+      // Clear current catalog options cleanly
+      brandSelect.innerHTML = '';
+
       if (type === 'Screen Printing') {
         document.getElementById('box-screenprint').classList.remove('hidden');
         document.getElementById('box-embroidery').classList.add('hidden');
+        
+        // Load Screen Print apparel catalog
+        const spOptions = [
+          { value: 'Gildan (Economical)', text: 'Gildan (Economical Tier)' },
+          { value: 'Next Level (Mid-Tier)', text: 'Next Level (Mid-Tier)' },
+          { value: 'Bella+Canvas (Mid-Tier)', text: 'Bella+Canvas (Mid-Tier)' },
+          { value: 'Specialty Blank (Heavyweight / Vintage Boxy)', text: 'Specialty Blank (Heavyweight)' },
+          { value: 'Other', text: 'Other / Custom Catalog Request' }
+        ];
+        spOptions.forEach(opt => {
+          let el = document.createElement('option');
+          el.value = opt.value;
+          el.text = opt.text;
+          brandSelect.appendChild(el);
+        });
       } else {
         document.getElementById('box-screenprint').classList.add('hidden');
         document.getElementById('box-embroidery').classList.remove('hidden');
+        
+        // NEW UPGRADED EMBROIDERY BLANK STATIONS
+        const embOptions = [
+          { value: 'Hats (Adjustable / Flexfit)', text: 'Hats (Adjustable / Flexfit)' },
+          { value: 'Polos (Professional Blank)', text: 'Polos (Professional Classic)' },
+          { value: 'Hoodies (Midweight Layering)', text: 'Hoodies (Cozy Midweight Fleeces)' },
+          { value: 'Jackets (Outerwear Protection)', text: 'Jackets (Premium Outerwear Layer)' },
+          { value: 'Other', text: 'Other / Custom Blank Catalog Spec' }
+        ];
+        embOptions.forEach(opt => {
+          let el = document.createElement('option');
+          el.value = opt.value;
+          el.text = opt.text;
+          brandSelect.appendChild(el);
+        });
       }
       recalculateQuote();
     }
@@ -320,13 +352,26 @@
                   (parseInt(document.getElementById('size-2xl').value) || 0);
 
       document.getElementById('summary-qty').innerText = qty + " garments";
-      document.getElementById('summary-brand').innerText = brand.split(' ')[0];
+      document.getElementById('summary-brand').innerText = brand ? brand.split(' ')[0] : 'Gildan';
 
-      const retailMap = type === 'Screen Printing' ? 
-        { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)': 8.75, 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other': 10.00 } :
-        { 'Polo (Professional Blank)': 15.00, 'Hat (Adjustable / Flexfit)': 10.00, 'Jacket (Outerwear Blank)': 40.00, 'Other': 10.00 };
+      // Advanced pricing logic maps calibrated for the new custom setups
+      const spRetail = { 
+        'Gildan (Economical)': 6.25, 
+        'Next Level (Mid-Tier)': 8.75, 
+        'Bella+Canvas (Mid-Tier)': 8.75, 
+        'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 
+        'Other': 10.00 
+      };
 
-      const blankRetail = retailMap[brand] || 10.00;
+      const embRetail = {
+        'Hats (Adjustable / Flexfit)': 10.00,
+        'Polos (Professional Blank)': 15.00,
+        'Hoodies (Midweight Layering)': 22.00,
+        'Jackets (Outerwear Protection)': 42.00,
+        'Other': 12.00
+      };
+
+      const blankRetail = type === 'Screen Printing' ? (spRetail[brand] || 10.00) : (embRetail[brand] || 12.00);
       let decoFee = 0;
 
       if (type === 'Screen Printing') {
@@ -398,7 +443,6 @@
       clearUploadedArt();
       recalculateQuote();
       
-      // Hide estimator and display clean thank you screen for the customer
       document.getElementById('view-estimator').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
       showToast('Project registered successfully');
@@ -501,9 +545,9 @@
         });
 
         let cardThumbnailHtml = o.artData ? 
-          <div class="mt-2 border rounded-lg bg-slate-50 p-1 flex justify-center items-center h-16 w-full">
+          `<div class="mt-2 border rounded-lg bg-slate-50 p-1 flex justify-center items-center h-16 w-full">
             <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
-           </div> : '';
+           </div>` : '';
 
         const isLastStage = o.stage === 'ready';
         const cardHtml = `
@@ -515,6 +559,7 @@
             <div>
               <h4 class="font-bold text-sm text-slate-900 truncate leading-tight">${o.customerName}</h4>
               <p class="text-xs text-slate-500 mt-1 font-medium">${o.totalQuantity}x ${o.color} Garments</p>
+              <span class="text-[10px] font-bold text-slate-400 block mt-0.5 uppercase tracking-wide bg-slate-100 px-2 py-0.5 rounded inline-block">${o.brand}</span>
             </div>
 
             ${cardThumbnailHtml}
@@ -540,6 +585,7 @@
       document.getElementById('queue-count').innerText = appOrders.length;
     }
 
+    // Run custom builders on startup boot
     updateFormFields();
     document.getElementById('queue-count').innerText = appOrders.length;
   </script>
