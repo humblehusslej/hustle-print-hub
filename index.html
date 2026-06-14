@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hussle Print Co. - Control Hub</title>
+  <link rel="manifest" href="manifest.json">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
@@ -15,13 +16,14 @@
         <div class="bg-white text-black px-3 py-1 font-black text-xl rounded">H</div>
         <div>
           <h1 class="text-lg font-bold tracking-tight">Hussle Print Co.</h1>
-          <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Production Command Hub</p>
+          <p id="hub-subtitle" class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Project Estimator Portal</p>
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <div class="bg-slate-900 p-1 rounded-xl flex border border-slate-800 shadow-inner">
+        <!-- Dashboard button container is hidden for public users by default -->
+        <div id="admin-nav-container" class="hidden bg-slate-900 p-1 rounded-xl flex border border-slate-800 shadow-inner">
           <button onclick="switchView('estimator')" id="nav-estimator" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black">Estimator</button>
-          <button onclick="switchView('dashboard')" id="nav-dashboard" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white">Dashboard (<span id="queue-count">2</span>)</button>
+          <button onclick="switchView('dashboard')" id="nav-dashboard" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white">Dashboard (<span id="queue-count">0</span>)</button>
         </div>
       </div>
     </div>
@@ -35,6 +37,18 @@
 
   <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
     
+    <!-- SUCCESS SCREEN FOR CUSTOMERS (HIDDEN UNTIL SUBMISSION) -->
+    <div id="view-success" class="hidden max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-4 shadow-sm my-12 animate-fadeIn">
+      <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
+      <h2 class="text-xl font-bold text-slate-900">Quote Request Submitted!</h2>
+      <p class="text-sm text-slate-500 leading-relaxed">
+        Thank you! Your batch details and custom artwork have been uploaded securely into our design review pipeline. An operator from the **Hussle Print Co.** team will review your specifications and reach out shortly with your final digital proof.
+      </p>
+      <button onclick="resetPortalForNewQuote()" class="bg-black hover:bg-slate-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all">
+        Submit Another Project
+      </button>
+    </div>
+
     <!-- SECTION 1: CUSTOMER ESTIMATOR PORTAL -->
     <div id="view-estimator" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
@@ -71,24 +85,22 @@
             </div>
           </div>
 
-          <!-- ABSOLUTE CORE ARTWORK UPLOAD CONTAINER -->
-          <div class="bg-slate-100/80 rounded-2xl p-6 border-2 border-dashed border-slate-300 shadow-inner">
-            <div class="flex flex-col items-center justify-center space-y-3">
-              <div class="text-center">
-                <label class="block text-xs font-extrabold uppercase tracking-widest text-slate-800 mb-1">🎨 CUSTOMER ARTWORK FILES</label>
-                <span class="block text-[11px] text-slate-500 font-medium">Select or drag standard logo images (.PNG, .JPG, .SVG)</span>
-              </div>
-              
-              <div class="w-full flex flex-col items-center justify-center">
-                <input type="file" id="art-uploader-input" accept="image/*" onchange="processIncomingArt(event)" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-black file:text-white hover:file:bg-slate-800 cursor-pointer" />
-              </div>
-
-              <!-- Real-time screen verification thumbnail area -->
-              <div id="art-visual-feedback" class="hidden pt-2">
-                <div class="relative bg-white border p-1.5 rounded-xl shadow-md inline-block">
-                  <img id="art-visual-img" src="" class="h-24 w-24 object-contain rounded-lg" />
-                  <button type="button" onclick="resetActiveArtFile()" class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 text-xs font-black flex items-center justify-center border border-white shadow shadow-black/50 hover:bg-red-700">×</button>
-                </div>
+          <!-- ARTWORK UPLOAD INTEGRATION CONTAINER -->
+          <div class="border-2 border-dashed border-slate-200 rounded-2xl p-6 bg-slate-50/50 text-center space-y-3 transition-colors hover:border-slate-400 relative">
+            <div class="space-y-1">
+              <span class="block text-xs font-bold uppercase tracking-wider text-slate-700">Upload Logo Artwork File</span>
+              <span class="block text-[11px] text-slate-400">Accepts high-res PNG, JPG, or vector SVG assets</span>
+            </div>
+            <div class="flex justify-center items-center">
+              <label class="cursor-pointer bg-white border px-4 py-2 rounded-xl text-xs font-bold shadow-sm hover:bg-slate-50 transition-all">
+                <span>Select Graphic File</span>
+                <input type="file" id="input-art" accept="image/*" onchange="processArtworkFile(event)" class="hidden" />
+              </label>
+            </div>
+            <div id="art-preview-box" class="hidden flex items-center justify-center pt-2">
+              <div class="relative bg-white border p-1 rounded-lg shadow-sm">
+                <img id="art-preview-img" src="" class="h-20 w-20 object-contain rounded" />
+                <button type="button" onclick="clearUploadedArt()" class="absolute -top-2 -right-2 bg-black text-white rounded-full w-5 h-5 text-[10px] font-black flex items-center justify-center border border-white">×</button>
               </div>
             </div>
           </div>
@@ -205,14 +217,24 @@
 
   </main>
 
+  <!-- APP STATE MACHINERY (VANILLA JS SYSTEM STABILITY ENGINE) -->
   <script>
     let appOrders = [
-      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'High density setup.', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
-      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hat (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { OSFA: 32 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Center logo setup.', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
+      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks.', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
+      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hat (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { OSFA: 32 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment.', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
     ];
 
-    let globalArtworkBase64 = '';
+    let currentArtBase64 = '';
     let logoOnFile = false;
+    let isAdminMode = false;
+
+    // Check URL parameters for the secret admin tag
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'true') {
+      isAdminMode = true;
+      document.getElementById('admin-nav-container').classList.remove('hidden');
+      document.getElementById('hub-subtitle').innerText = "Production Command Hub";
+    }
 
     if (localStorage.getItem('hpc_static_orders')) {
       appOrders = JSON.parse(localStorage.getItem('hpc_static_orders'));
@@ -226,13 +248,17 @@
     }
 
     function switchView(target) {
+      if (!isAdminMode && target === 'dashboard') return; // Strict block if a customer bypasses
+      
       if (target === 'estimator') {
         document.getElementById('view-estimator').classList.remove('hidden');
         document.getElementById('view-dashboard').classList.add('hidden');
+        document.getElementById('view-success').classList.add('hidden');
         document.getElementById('nav-estimator').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black";
         document.getElementById('nav-dashboard').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white";
-      } else {
+      } else if (target === 'dashboard') {
         document.getElementById('view-estimator').classList.add('hidden');
+        document.getElementById('view-success').classList.add('hidden');
         document.getElementById('view-dashboard').classList.remove('hidden');
         document.getElementById('nav-dashboard').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black";
         document.getElementById('nav-estimator').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white";
@@ -240,26 +266,25 @@
       }
     }
 
-    // Direct, failsafe artwork rendering machinery
-    function processIncomingArt(event) {
+    function processArtworkFile(event) {
       const file = event.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
       reader.onload = function(e) {
-        globalArtworkBase64 = e.target.result;
-        document.getElementById('art-visual-img').src = globalArtworkBase64;
-        document.getElementById('art-visual-feedback').classList.remove('hidden');
-        showToast('Design layout mapped successfully');
+        currentArtBase64 = e.target.result;
+        document.getElementById('art-preview-img').src = currentArtBase64;
+        document.getElementById('art-preview-box').classList.remove('hidden');
+        showToast('Graphic design file attached successfully');
       };
       reader.readAsDataURL(file);
     }
 
-    function resetActiveArtFile() {
-      globalArtworkBase64 = '';
-      document.getElementById('art-uploader-input').value = '';
-      document.getElementById('art-visual-feedback').classList.add('hidden');
-      document.getElementById('art-visual-img').src = '';
+    function clearUploadedArt() {
+      currentArtBase64 = '';
+      document.getElementById('input-art').value = '';
+      document.getElementById('art-preview-box').classList.add('hidden');
+      document.getElementById('art-preview-img').src = '';
     }
 
     function updateFormFields() {
@@ -324,7 +349,7 @@
       if (qty >= 12) {
         submitBtn.disabled = false;
         submitBtn.className = "w-full bg-black hover:bg-slate-900 text-white font-bold py-4 rounded-xl text-sm tracking-wide shadow transition-all cursor-pointer";
-        submitBtn.innerText = "Request Batch Quote and Start My Proof";
+        submitBtn.innerText = "Submit Quote Request";
         warning.innerText = "Batch run size criteria matched ✓";
         warning.className = "text-[11px] font-bold text-emerald-600";
       } else {
@@ -363,17 +388,25 @@
         notes: document.getElementById('input-notes').value,
         stage: 'pending',
         tasks: [false, false, false, false, false, false],
-        artData: globalArtworkBase64
+        artData: currentArtBase64
       };
 
       appOrders.unshift(newOrder);
       saveState();
       
       document.getElementById('estimator-form').reset();
-      resetActiveArtFile();
+      clearUploadedArt();
       recalculateQuote();
-      showToast('Batch registered inside database pipeline');
-      switchView('dashboard');
+      
+      // Hide estimator and display clean thank you screen for the customer
+      document.getElementById('view-estimator').classList.add('hidden');
+      document.getElementById('view-success').classList.remove('hidden');
+      showToast('Project registered successfully');
+    }
+
+    function resetPortalForNewQuote() {
+      document.getElementById('view-success').classList.add('hidden');
+      document.getElementById('view-estimator').classList.remove('hidden');
     }
 
     function toggleTask(orderId, taskIndex) {
@@ -407,11 +440,11 @@
       }
 
       let artImageHtml = o.artData ? 
-        `<div style="margin-top:20px; border:2px solid black; padding:10px; display:inline-block; border-radius:8px;">
-          <h4 style="margin:0 0 8px 0; font-size:12px; font-weight:bold;">CLIENT ARTWORK PROOF VECTOR:</h4>
-          <img src="${o.artData}" style="max-height:240px; max-width:100%; object-fit:contain;" />
+        `<div style="margin-top:20px; border:1px solid #cbd5e1; padding:10px; display:inline-block; border-radius:8px;">
+          <h4 style="margin:0 0 8px 0; font-size:12px; color:#64748b;">ATTACHED DESIGN LAYOUT REFERENCE:</h4>
+          <img src="${o.artData}" style="max-height:220px; max-width:100%; object-contain:fit;" />
          </div>` : 
-        `<p style="color:#94a3b8; font-style:italic; font-size:12px; margin-top:20px;">No custom graphics uploaded.</p>`;
+        `<p style="color:#94a3b8; font-style:italic; font-size:12px; margin-top:20px;">No graphic artwork uploaded.</p>`;
       
       w.document.write(`
         <html><body style="padding:40px;font-family:sans-serif;">
@@ -459,7 +492,7 @@
 
         let taskButtons = '';
         labels.forEach((label, index) => {
-          const isDone = o.tasks ? o.tasks[index] : false;
+          const isDone = o.tasks[index];
           taskButtons += `
             <button onclick="toggleTask('${o.id}', ${index})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border flex items-center space-x-2 transition-all ${isDone ? 'bg-black text-white border-black shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border-slate-200'}">
               <span>${isDone ? '✓' : '○'}</span><span class="truncate">${label}</span>
@@ -467,10 +500,10 @@
           `;
         });
 
-        let thumbHtml = o.artData ? 
-          `<div class="mt-2 border rounded-lg bg-slate-50 p-1 flex justify-center items-center h-20 w-full shadow-inner">
+        let cardThumbnailHtml = o.artData ? 
+          <div class="mt-2 border rounded-lg bg-slate-50 p-1 flex justify-center items-center h-16 w-full">
             <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
-           </div>` : '';
+           </div> : '';
 
         const isLastStage = o.stage === 'ready';
         const cardHtml = `
@@ -484,7 +517,7 @@
               <p class="text-xs text-slate-500 mt-1 font-medium">${o.totalQuantity}x ${o.color} Garments</p>
             </div>
 
-            ${thumbHtml}
+            ${cardThumbnailHtml}
 
             <div class="grid grid-cols-2 gap-1 pt-1 border-t border-slate-100">
               ${taskButtons}
