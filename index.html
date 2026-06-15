@@ -87,7 +87,7 @@
             We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
           </div>
 
-          <!-- DYNAMIC OTTOCAP PORTAL LINK BOX -->
+          <!-- DYNAMIC OTTOCAP PORTAL LINK BOX (STRICT EMBROIDERY ONLY CONTROLS) -->
           <div id="catalog-notice-ottocap" class="hidden p-4 bg-slate-900 text-white rounded-xl text-xs leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 animate-fadeIn">
             <div>
               <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Options</span>
@@ -160,7 +160,7 @@
             </div>
           </div>
 
-          <!-- INTEGRATED BANNER DIMENSIONS (STRICT VISIBILITY HELD) -->
+          <!-- INTEGRATED BANNER SQUARE FOOTAGE ESTIMATOR BOXES -->
           <div id="box-banner-dimensions" class="hidden grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl animate-fadeIn">
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Banner Width (Feet)</label>
@@ -483,7 +483,6 @@
       checkSelectedBrand();
     }
 
-    // STRICT DROPDOWN VIEW ROUTER WITH TRIPLE DEFENSE SAFE GUARDS
     function checkSelectedBrand() {
       const type = document.getElementById('input-type').value;
       const brandSelect = document.getElementById('input-brand');
@@ -504,8 +503,10 @@
       } 
       
       else if (type === 'Embroidery') {
+        // LOCK THE OTTOCAP LINK SO IT ONLY LIGHTS UP UNDER EMBROIDERY SESSIONS
+        if (ottocapNotice) ottocapNotice.classList.remove('hidden');
+
         if (brand && brand.startsWith('Hats')) {
-          if (ottocapNotice) ottocapNotice.classList.remove('hidden');
           document.getElementById('matrix-label').innerText = "Headwear Run Volume Configuration";
           document.getElementById('hat-osfa-notice').classList.remove('hidden');
           document.getElementById('marketing-volume-box').classList.remove('hidden');
@@ -523,7 +524,7 @@
         document.getElementById('marketing-volume-box').classList.remove('hidden');
         document.getElementById('label-unit-price').innerText = "Per-Unit Wholesale Cost";
 
-        // CRITICAL UPDATE FIX: Only shows dimensions if they explicitly pick banners
+        // CRITICAL UPDATE: SIZES DISAPPEAR UNLESS BANNERS ARE SPECCED
         if (brand && brand.startsWith('Banners')) {
           document.getElementById('box-banner-dimensions').classList.remove('hidden');
           document.getElementById('volume-box-label').innerText = "Total Banners Needed";
