@@ -20,7 +20,6 @@
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <!-- Private Admin Queue Navigation Container Element -->
         <div id="admin-nav-container" class="hidden bg-slate-900 p-1 rounded-xl flex border border-slate-800 shadow-inner">
           <button onclick="switchView('estimator')" id="nav-estimator" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black">Estimator</button>
           <button onclick="switchView('dashboard')" id="nav-dashboard" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white">Dashboard (<span id="queue-count">0</span>)</button>
@@ -77,7 +76,7 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Product Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Managed securely by JavaScript drop injection array matrices below -->
+                <!-- Loaded dynamically via JavaScript dropdown matrices -->
               </select>
             </div>
           </div>
@@ -88,7 +87,7 @@
             We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
           </div>
 
-          <!-- DYNAMIC OTTOCAP CATALOG LINK PORTAL CONTAINER -->
+          <!-- DYNAMIC OTTOCAP PORTAL LINK BOX -->
           <div id="catalog-notice-ottocap" class="hidden p-4 bg-slate-900 text-white rounded-xl text-xs leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 animate-fadeIn">
             <div>
               <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Options</span>
@@ -150,7 +149,18 @@
             </div>
           </div>
 
-          <!-- INTEGRATED BANNER SQUARE FOOTAGE CALCULATOR CONTAINERS -->
+          <div id="box-marketing" class="hidden grid grid-cols-1 gap-4 p-4 bg-slate-50 border rounded-xl">
+            <div>
+              <label class="text-xs font-bold text-slate-500 block mb-1">Asset Finish / Material Coating</label>
+              <select id="input-finish" onchange="recalculateQuote()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800">
+                <option value="Standard/Coated Matched">Standard Finish Coating</option>
+                <option value="Premium Heavyweight Matte">Premium Heavy Matte Texture</option>
+                <option value="Heavy-Duty Outdoor Weatherproof">Heavy-Duty Outdoor Weatherproof</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- INTEGRATED BANNER DIMENSIONS (STRICT VISIBILITY HELD) -->
           <div id="box-banner-dimensions" class="hidden grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl animate-fadeIn">
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Banner Width (Feet)</label>
@@ -162,10 +172,9 @@
             </div>
           </div>
 
-          <!-- BUSINESS CARD TIERS -->
           <div id="box-card-packs" class="hidden p-4 bg-slate-50 border rounded-xl animate-fadeIn">
             <label class="text-xs font-bold text-slate-500 block mb-1">Select Print Quantity Tier Pack</label>
-            <select id="input-card-tier" onchange="syncCardPackCalculations()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800 outline-none">
+            <select id="input-card-tier" onchange="syncCardPackQuantityValues()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800 outline-none">
               <option value="250">Starter Run Batch (250 Cards - $60)</option>
               <option value="500">Commercial Standard Batch (500 Cards - $120)</option>
             </select>
@@ -183,17 +192,17 @@
             </div>
           </div>
 
-          <!-- TURNAROUND NOTIFICATION ALERT BADGE -->
+          <!-- TURNAROUND NOTIFICATION BOX -->
           <div id="date-turnaround-notice" class="p-3.5 rounded-xl border text-xs leading-normal transition-all hidden"></div>
 
-          <!-- QUANTITY SELECTION MATRIX RUN -->
+          <!-- ADAPTIVE QUANTITY TRACKER MATRIX -->
           <div class="p-4 bg-slate-50 border rounded-xl space-y-3">
             <div class="flex justify-between items-center">
               <label id="matrix-label" class="text-xs font-bold text-slate-600 uppercase tracking-wider">Garment Sizing Volumes</label>
               <span id="min-warning" class="text-[11px] font-bold text-slate-800">Add 12 total garments to initialize batch</span>
             </div>
             
-            <!-- Standard Garment Grid Run -->
+            <!-- Standard Clothing Sizing Grid -->
             <div id="sizing-grid" class="grid grid-cols-5 gap-2">
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">S</span><input type="number" id="size-s" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">M</span><input type="number" id="size-m" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
@@ -202,13 +211,13 @@
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">2XL</span><input type="number" id="size-2xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
             </div>
 
-            <!-- Static Headwear OSFA Notification -->
+            <!-- Dynamic Hat Framework Notice -->
             <div id="hat-osfa-notice" class="hidden bg-white border border-slate-200 p-4 rounded-xl text-xs text-slate-600 animate-fadeIn">
               <span class="font-bold text-black block mb-0.5">Size Run Configuration:</span>
-              Headwear items run out via professional wholesale <b>One Size Fits All (OSFA) / Adjustable Snapbacks</b>. Specific size distribution grids are locked. Use the run box below to specify layout counts!
+              Headwear items run out via professional wholesale <b>One Size Fits All (OSFA) / Adjustable Snapbacks</b>. Specific size distribution grids are locked.
             </div>
             
-            <!-- Contextual non-apparel general count item input tracker -->
+            <!-- Marketing Sizing Count CONNECTOR -->
             <div id="marketing-volume-box" class="hidden bg-white border rounded-xl p-3 shadow-sm flex items-center justify-between">
               <span id="volume-box-label" class="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Order Quantity</span>
               <input type="number" id="input-marketing-qty" min="1" value="12" oninput="recalculateQuote()" class="text-right font-bold text-sm outline-none border-b w-24 focus:border-black" />
@@ -217,16 +226,16 @@
 
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Special Operator Notes / Requirements</label>
-            <textarea id="input-notes" rows="3" placeholder="Specify clothing placement dimensions, specialized hard textures, thread setups, or custom catalog style markers..." class="w-full px-4 py-2.5 border rounded-xl outline-none text-sm resize-none focus:ring-1 focus:ring-black text-slate-800"></textarea>
+            <textarea id="input-notes" rows="3" placeholder="Specify clothing placement dimensions, thread setups, or custom copy specifications..." class="w-full px-4 py-2.5 border rounded-xl outline-none text-sm resize-none focus:ring-1 focus:ring-black text-slate-800"></textarea>
           </div>
 
           <button type="submit" id="submit-btn" disabled class="w-full bg-slate-100 text-slate-400 font-bold py-4 rounded-xl text-sm border border-slate-200 text-center shadow-inner cursor-not-allowed">
-            Submit Project Request
+            Request Quote (Minimum requirement not met)
           </button>
         </form>
       </div>
 
-      <!-- SIDE INVOICE SUMMARY PANEL -->
+      <!-- SIDE TALLY BOARD -->
       <div class="space-y-4">
         <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl border border-slate-800">
           <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 pb-2 border-b border-slate-800">Live Invoice Summary</h3>
@@ -405,7 +414,6 @@
       document.getElementById('art-preview-img').src = '';
     }
 
-    // ORIGINAL RESTORED INJECTION ENGINE (Repaired with safe try-catch wrapper blocks)
     function updateFormFields() {
       const type = document.getElementById('input-type').value;
       const brandSelect = document.getElementById('input-brand');
@@ -475,13 +483,14 @@
       checkSelectedBrand();
     }
 
+    // STRICT DROPDOWN VIEW ROUTER WITH TRIPLE DEFENSE SAFE GUARDS
     function checkSelectedBrand() {
       const type = document.getElementById('input-type').value;
       const brandSelect = document.getElementById('input-brand');
       const brand = brandSelect ? brandSelect.value : '';
       const ottocapNotice = document.getElementById('catalog-notice-ottocap');
 
-      // Clear structural visibility triggers safely
+      // Clear operational layers before calculating choices
       document.getElementById('box-banner-dimensions').classList.add('hidden');
       document.getElementById('box-card-packs').classList.add('hidden');
       document.getElementById('sizing-grid').classList.add('hidden');
@@ -514,6 +523,7 @@
         document.getElementById('marketing-volume-box').classList.remove('hidden');
         document.getElementById('label-unit-price').innerText = "Per-Unit Wholesale Cost";
 
+        // CRITICAL UPDATE FIX: Only shows dimensions if they explicitly pick banners
         if (brand && brand.startsWith('Banners')) {
           document.getElementById('box-banner-dimensions').classList.remove('hidden');
           document.getElementById('volume-box-label').innerText = "Total Banners Needed";
@@ -778,7 +788,6 @@
       document.getElementById('queue-count').innerText = appOrders.length;
     }
 
-    // Initialize layout builders cleanly on application startup run
     updateFormFields();
     initializeDefaultDates();
   </script>
