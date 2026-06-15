@@ -67,12 +67,57 @@
           </div>
         </div>
 
-        <form id="estimator-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Customer Name / Organization</label>
-            <input type="text" id="input-name" required placeholder="e.g. Hussle Cafe" class="w-full px-4 py-2.5 border rounded-xl outline-none focus:ring-1 focus:ring-black text-sm text-slate-800" />
+        <!-- PERMANENT HIGH-VISIBILITY DESIGN SHOWROOM VISUALIZER PANEL -->
+        <div class="border border-slate-300 rounded-2xl overflow-hidden bg-slate-200/50 shadow-sm">
+          <div class="p-4 bg-white border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span class="block text-xs font-black uppercase tracking-widest text-slate-800">📸 HUSSLE PRINT CO. - DESIGN STUDIO VIEW</span>
+              <span class="block text-[11px] text-slate-500">Your logo artwork will position directly onto the digital product below</span>
+            </div>
+            <label class="cursor-pointer bg-black text-white hover:bg-slate-900 px-5 py-2.5 rounded-xl text-xs font-black tracking-wide shadow-sm transition-all text-center whitespace-nowrap">
+              <span>👉 UPLOAD LOGO ARTWORK</span>
+              <input type="file" id="input-art" accept="image/*" onchange="processArtworkFile(event)" class="hidden" />
+            </label>
           </div>
           
+          <div class="p-8 flex flex-col items-center justify-center min-h-[320px] relative bg-slate-100">
+            <button type="button" id="btn-clear-mockup-art" onclick="clearUploadedArt()" class="hidden absolute top-4 right-4 z-20 bg-white border border-slate-200 text-slate-500 hover:text-black rounded-xl px-2.5 py-1.5 text-[11px] font-bold shadow-sm transition-all">
+              Reset Canvas ×
+            </button>
+
+            <!-- THE INTERACTIVE SHOWROOM EMBED FRAME -->
+            <div class="w-56 h-56 relative flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
+              
+              <!-- 1. Shirt (Screenprint Base) -->
+              <svg id="canvas-svg-shirt" class="absolute inset-0 w-full h-full text-slate-400 fill-current transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
+                <path d="M18,2H14.5A2.5,2.5,0,0,0,12,4.5,2.5,2.5,0,0,0,9.5,2H6A2,2,0,0,0,4,4V9a1,1,0,0,0,1,1H6v11a1,1,0,0,0,1,1H17a1,1,0,0,0,1,-1V10h1a1,1,0,0,0,1,-1V4A2,2,0,0,0,18,2ZM7,8V4H9a4,4,0,0,1,6,0h2V8Z"/>
+              </svg>
+
+              <!-- 2. Cap (Embroidery Headwear Base) -->
+              <svg id="canvas-svg-cap" class="hidden absolute inset-0 w-full h-full text-slate-400 fill-current transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
+                <path d="M12,2A10,10,0,0,0,2,12a2,2,0,0,0,2,2h1a1,1,0,0,1,1,1v1a2,2,0,0,0,2,2h8a2,2,0,0,0,2,-2V15a1,1,0,0,1,1,-1h1a2,2,0,0,0,2,-2A10,10,0,0,0,12,2Zm5,11H7V10H17ZM2,17h20a1,1,0,0,1,0,2H2a1,1,0,0,1,0,-2Z"/>
+              </svg>
+
+              <!-- 3. Cards/Vinyl Base (Marketing Base) -->
+              <div id="canvas-svg-card" class="hidden absolute inset-0 w-full h-full bg-slate-400 rounded-2xl border border-slate-500 shadow-md flex items-center justify-center transition-colors duration-300">
+                <div class="w-[90%] h-[85%] border border-dashed border-slate-200 rounded-xl flex items-center justify-center">
+                  <span class="text-[9px] font-black text-white/50 uppercase tracking-widest mockup-placement-pulse">Print Coverage Space</span>
+                </div>
+              </div>
+
+              <!-- LIVE GRAPHIC PLACEMENT TARGET LAYER -->
+              <div id="mockup-print-run-target" class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                <div id="mockup-sight-ring" class="w-16 h-16 rounded-full border-2 border-dashed border-white/80 bg-black/20 mockup-placement-pulse flex flex-col items-center justify-center">
+                  <span class="text-[9px] font-bold text-white uppercase tracking-wider text-center leading-tight">Live<br/>Preview</span>
+                </div>
+                <img id="mockup-live-graphic-render" src="" class="hidden object-contain drop-shadow-lg transition-all" />
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <form id="estimator-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Decoration Style / Category</label>
@@ -85,7 +130,7 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Product Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Loaded dynamically via JavaScript dropdown matrices -->
+                <!-- Managed securely by JavaScript drop injection arrays -->
               </select>
             </div>
           </div>
@@ -105,63 +150,6 @@
             <a href="https://ottocap.com" target="_blank" rel="noopener noreferrer" class="bg-white text-black hover:bg-slate-100 font-extrabold px-3 py-2 rounded-lg text-[10px] uppercase tracking-wide whitespace-nowrap text-center transition-all">
               Browse Ottocap Catalog ↗
             </a>
-          </div>
-
-          <!-- BRAND NEW DEDICATED VISUAL MOCKUP STUDIO BLOCK -->
-          <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-100/60 shadow-inner">
-            <div class="p-4 bg-white border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <span class="block text-xs font-bold uppercase tracking-wider text-slate-800">⚡ Live Custom Mockup Engine</span>
-                <span class="block text-[11px] text-slate-400">Attach your logo file below to instantly generate a layout blueprint</span>
-              </div>
-              <label class="cursor-pointer bg-black text-white hover:bg-slate-900 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all text-center whitespace-nowrap">
-                <span>Upload Logo Graphic</span>
-                <input type="file" id="input-art" accept="image/*" onchange="processArtworkFile(event)" class="hidden" />
-              </label>
-            </div>
-            
-            <!-- DYNAMIC DISPLAY SCREEN AREA -->
-            <div class="p-8 flex flex-col items-center justify-center min-h-[300px] relative">
-              
-              <!-- CLEAR Blueprints OVERLAY RUN TRIGGER -->
-              <button type="button" id="btn-clear-mockup-art" onclick="clearUploadedArt()" class="hidden absolute top-4 right-4 z-20 bg-white border border-slate-200 text-slate-500 hover:text-black rounded-xl px-2.5 py-1.5 text-[11px] font-bold shadow-sm flex items-center space-x-1.5 transition-all">
-                <span>Reset Canvas</span><span>×</span>
-              </button>
-
-              <div class="w-56 h-56 relative flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
-                
-                <!-- BACKGROUND CANVAS SHAPE MATRICES -->
-                <!-- Shirt Silhouette (Screenprint Target) -->
-                <svg id="canvas-svg-shirt" class="absolute inset-0 w-full h-full text-slate-300 fill-current transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
-                  <path d="M18,2H14.5A2.5,2.5,0,0,0,12,4.5,2.5,2.5,0,0,0,9.5,2H6A2,2,0,0,0,4,4V9a1,1,0,0,0,1,1H6v11a1,1,0,0,0,1,1H17a1,1,0,0,0,1,-1V10h1a1,1,0,0,0,1,-1V4A2,2,0,0,0,18,2ZM7,8V4H9a4,4,0,0,1,6,0h2V8Z"/>
-                </svg>
-
-                <!-- Snapback Hat Silhouette (Embroidery Target) -->
-                <svg id="canvas-svg-cap" class="hidden absolute inset-0 w-full h-full text-slate-300 fill-current transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
-                  <path d="M12,2A10,10,0,0,0,2,12a2,2,0,0,0,2,2h1a1,1,0,0,1,1,1v1a2,2,0,0,0,2,2h8a2,2,0,0,0,2,-2V15a1,1,0,0,1,1,-1h1a2,2,0,0,0,2,-2A10,10,0,0,0,12,2Zm5,11H7V10H17ZM2,17h20a1,1,0,0,1,0,2H2a1,1,0,0,1,0,-2Z"/>
-                </svg>
-
-                <!-- Digital Media Card Div Card Block (Marketing Target) -->
-                <div id="canvas-svg-card" class="hidden absolute inset-0 w-full h-full bg-slate-300 rounded-2xl border-2 border-slate-400/40 shadow-md flex items-center justify-center transition-colors duration-300">
-                  <div class="w-[90%] h-[85%] border-2 border-dashed border-slate-400/50 rounded-xl flex items-center justify-center">
-                    <span class="text-[10px] font-black text-slate-400/80 uppercase tracking-widest mockup-placement-pulse">Print Coverage Bounds</span>
-                  </div>
-                </div>
-
-                <!-- OVERLAY ALIGNMENT CENTER ENGINE FOR TRANSLUCENT CUSTOM GRAPHICS -->
-                <div id="mockup-print-run-target" class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                  
-                  <!-- Target Placement Scope Sight Ring -->
-                  <div id="mockup-sight-ring" class="w-20 h-20 rounded-full border-2 border-dashed border-white/80 bg-black/10 mockup-placement-pulse flex flex-col items-center justify-center">
-                    <span class="text-[9px] font-bold text-white uppercase tracking-wider text-center leading-tight">Live<br/>Mockup</span>
-                  </div>
-                  
-                  <!-- This img handles the actual live sizing adjustments -->
-                  <img id="mockup-live-graphic-render" src="" class="hidden object-contain drop-shadow-lg transition-all" />
-                </div>
-
-              </div>
-            </div>
           </div>
 
           <!-- METHOD DEPENDENT CONFIGURATIONS -->
@@ -230,10 +218,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Asset Base Color</label>
-              <input type="text" id="input-color" required placeholder="e.g. Midnight Black / Full Color" oninput="updateMockupCanvasFabricColor()" class="w-full px-4 py-2.5 border rounded-xl text-sm text-slate-800 outline-none focus:ring-1 focus:ring-black" />
+              <input type="text" id="input-color" required placeholder="e.g. Midnight Black" oninput="updateMockupCanvasFabricColor()" class="w-full px-4 py-2.5 border rounded-xl text-sm text-slate-800 outline-none focus:ring-1 focus:ring-black" />
             </div>
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Desired Completion Date</label>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Customer Name / Organization</label>
+              <input type="text" placeholder="Your Brand Name" class="hidden" /> <!-- Variable routing pad -->
               <input type="date" id="input-date" required onchange="validateTurnaroundTimeline()" class="w-full px-4 py-2.5 border rounded-xl text-sm text-slate-700 outline-none focus:ring-1 focus:ring-black" />
             </div>
           </div>
@@ -245,7 +234,7 @@
           <div class="p-4 bg-slate-50 border rounded-xl space-y-3">
             <div class="flex justify-between items-center">
               <label id="matrix-label" class="text-xs font-bold text-slate-600 uppercase tracking-wider">Garment Sizing Volumes</label>
-              <span id="min-warning" class="text-[11px] font-bold text-slate-800">Add 12 total garments to initialize batch</span>
+              <span id="min-warning" class="text-[11px] font-bold text-emerald-600">Add 12 total garments to initialize batch</span>
             </div>
             
             <!-- Standard Clothing Sizing Grid -->
@@ -439,7 +428,7 @@
       }
     }
 
-    // LIVE ARTWORK PROTOTYPING POSITION ENGINE
+    // REAL-TIME CANVAS MOCKUP GRAPHIC INSERTER
     function processArtworkFile(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -458,7 +447,7 @@
           sightRing.classList.add('hidden'); 
           if (clearBtn) clearBtn.classList.remove('hidden');
         }
-        showToast('Design layered onto visual mockup preview canvas');
+        showToast('Design scaled and positioned onto mockup preview canvas');
         recalculateQuote();
       };
       reader.readAsDataURL(file);
@@ -476,12 +465,11 @@
         mockupImg.src = '';
         mockupImg.classList.add('hidden');
         sightRing.classList.remove('hidden'); 
-        if (clearBtn) clearBtn.add('hidden');
+        if (clearBtn) clearBtn.classList.add('hidden');
       }
       recalculateQuote();
     }
 
-    // INTERACTIVE REAL-TIME CANVAS FABRIC SHIFTING AGENT
     function updateMockupCanvasFabricColor() {
       const colorVal = document.getElementById('input-color').value.toLowerCase().trim();
       const shirtSvg = document.getElementById('canvas-svg-shirt');
@@ -511,7 +499,6 @@
       
       brandSelect.innerHTML = '';
 
-      // Reset design visualizer canvas layers strictly based on medium configuration shifts
       const shirtSvg = document.getElementById('canvas-svg-shirt');
       const capSvg = document.getElementById('canvas-svg-cap');
       const cardDiv = document.getElementById('canvas-svg-card');
@@ -714,7 +701,7 @@
       document.getElementById('summary-brand').innerText = brand ? brand.split(' ')[0] : 'Gildan';
 
       const spRetail = { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)': 8.75, 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other Sourced Apparel': 10.00 };
-      const embRetail = { 'Hats (Adjustable / Flexfit)': 10.00, 'Polos (Professional Blank)', text: 'Polos (Professional Classic)', 'Hoodies (Midweight Layering)': 22.00, 'Jackets (Outerwear Protection)': 42.00, 'Other Sourced Embroidery': 12.00 };
+      const embRetail = { 'Hats (Adjustable / Flexfit)': 10.00, 'Polos (Professional Blank)': 15.00, 'Hoodies (Midweight Layering)': 22.00, 'Jackets (Outerwear Protection)': 42.00, 'Other Sourced Embroidery': 12.00 };
 
       let blankRetail = 0;
       let decoFee = 0;
@@ -860,69 +847,6 @@
         t.classList.remove('hidden');
         setTimeout(() => t.classList.add('hidden'), 3500);
       }
-    }
-
-    function renderDashboard() {
-      document.getElementById('col-pending').innerHTML = '';
-      document.getElementById('col-prepress').innerHTML = '';
-      document.getElementById('col-production').innerHTML = '';
-      document.getElementById('col-ready').innerHTML = '';
-
-      appOrders.forEach(o => {
-        const labels = o.decorationType === 'Marketing Materials' ?
-          ['Design Approved', 'Stock Loaded', 'Bleed Verified', 'Color Profiled', 'Plotter Prepped', 'Packaged & QA'] :
-          (o.decorationType === 'Screen Printing' ? 
-            ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] :
-            ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Master Proofed', 'Threads Prepped']);
-
-        let taskButtons = '';
-        labels.forEach((label, index) => {
-          const isDone = o.tasks[index];
-          taskButtons += `
-            <button onclick="toggleTask('${o.id}', ${index})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border flex items-center space-x-2 transition-all ${isDone ? 'bg-black text-white border-black shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border-slate-200'}">
-              <span>${isDone ? '✓' : '○'}</span><span class="truncate">${label}</span>
-            </button>
-          `;
-        });
-
-        let cardThumbnailHtml = o.artData ? 
-          `<div class="mt-2 border rounded-lg bg-slate-50 p-1 flex justify-center items-center h-16 w-full">
-            <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
-           </div>` : '';
-
-        const isLastStage = o.stage === 'ready';
-        const cardHtml = `
-          <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
-            <div class="flex justify-between items-center text-[10px] font-bold">
-              <span class="bg-slate-900 text-white px-2 py-0.5 rounded">${o.id}</span>
-              <span class="text-slate-400 font-semibold">${o.dueDate}</span>
-            </div>
-            <div>
-              <h4 class="font-bold text-sm text-slate-900 truncate leading-tight">${o.customerName}</h4>
-              <p class="text-xs text-slate-500 mt-1 font-medium">${o.totalQuantity ? o.totalQuantity + 'x Items' : 'Run Items Ordered'}</p>
-              <span class="text-[10px] font-bold text-slate-400 block mt-0.5 uppercase tracking-wide bg-slate-100 px-2 py-0.5 rounded inline-block truncate max-w-full">${o.brand}</span>
-            </div>
-
-            ${cardThumbnailHtml}
-
-            <div class="grid grid-cols-2 gap-1 pt-1 border-t border-slate-100">
-              ${taskButtons}
-            </div>
-
-            <div class="pt-2 border-t flex justify-between items-center text-xs">
-              <div>
-                <span class="text-[9px] text-slate-400 block uppercase font-bold tracking-wider">Total Value</span>
-                <span class="text-xs font-extrabold text-slate-900">${o.estimatedTotal ? '$' + o.estimatedTotal.toFixed(2) : 'Quote Pending'}</span>
-              </div>
-            </div>
-            
-            ${!isLastStage ? `<button onclick="advanceJob('${o.id}')" class="w-full bg-black hover:bg-slate-900 text-white font-bold py-2 rounded-lg text-xs transition-colors flex items-center justify-center space-x-1">Advance Stage →</button>` : ''}
-          </div>
-        `;
-
-        document.getElementById(`col-${o.stage}`).innerHTML += cardHtml;
-      });
-      document.getElementById('queue-count').innerText = appOrders.length;
     }
 
     updateFormFields();
