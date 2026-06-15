@@ -430,4 +430,281 @@
         embOptions.forEach(opt => {
           let el = document.createElement('option');
           el.value = opt.value;
-          el.text =
+          el.text = opt.text;
+          brandSelect.appendChild(el);
+        });
+      } else if (type === 'Marketing Materials') {
+        document.getElementById('box-screenprint').classList.add('hidden');
+        document.getElementById('box-embroidery').classList.add('hidden');
+        document.getElementById('box-marketing').classList.remove('hidden');
+        document.getElementById('catalog-notice-screenprint').classList.add('hidden');
+        document.getElementById('catalog-notice-ottocap').classList.add('hidden');
+
+        const mktOptions = [
+          { value: 'Banners (Outdoor Heavy Vinyl)', text: 'Banners (Grommeted Outdoor Vinyl - $5/sq ft)' },
+          { value: 'Business Cards (Premium Heavy 16pt)', text: 'Business Cards (Premium Heavy 16pt)' },
+          { value: 'Metal Signage (Aluminum Panels)', text: 'Metal Signage (Heavy Aluminum Panels)' },
+          { value: 'Car Magnets (Vehicle Strength)', text: 'Car Magnets (.030 Vehicle Strength)' },
+          { value: 'Promo Items (Mugs, Accessories)', text: 'Promo Items (Pens, Mugs, Custom Accessories)' },
+          { value: 'Other Sourced Media Specs', text: 'Other / Custom Media Request' }
+        ];
+        mktOptions.forEach(opt => {
+          let el = document.createElement('option');
+          el.value = opt.value;
+          el.text = opt.text;
+          brandSelect.appendChild(el);
+        });
+      }
+      checkSelectedBrand();
+    }
+
+    // ARRESTS CRASHES WITH SAFE SCAPE CONTROLS FOR UNDEFINED CHOICES
+    function checkSelectedBrand() {
+      const type = document.getElementById('input-type').value;
+      const brandSelect = document.getElementById('input-brand');
+      
+      // Fallback escape if system brand drop context has not populated arrays yet
+      const brand = (brandSelect && brandSelect.value) ? brandSelect.value : '';
+      const ottocapNotice = document.getElementById('catalog-notice-ottocap');
+
+      // public clean background state wipeouts
+      document.getElementById('box-banner-dimensions').classList.add('hidden');
+      document.getElementById('box-card-packs').classList.add('hidden');
+      document.getElementById('sizing-grid').classList.add('hidden');
+      document.getElementById('hat-osfa-notice').classList.add('hidden');
+      document.getElementById('marketing-volume-box').classList.add('hidden');
+
+      if (type === 'Screen Printing') {
+        document.getElementById('matrix-label').innerText = "Garment Sizing Volumes";
+        document.getElementById('sizing-grid').classList.remove('hidden');
+      } 
+      
+      else if (type === 'Embroidery') {
+        if (brand && brand.startsWith('Hats')) {
+          if(ottocapNotice) ottocapNotice.classList.remove('hidden');
+          document.getElementById('matrix-label').innerText = "Headwear Run Volume Configuration";
+          document.getElementById('hat-osfa-notice').classList.remove('hidden');
+          document.getElementById('marketing-volume-box').classList.remove('hidden');
+          document.getElementById('volume-box-label').innerText = "Total Caps Needed in Batch";
+          document.getElementById('label-unit-price').innerText = "Per-Hat (Finished)";
+        } else {
+          if(ottocapNotice) ottocapNotice.classList.add('hidden');
+          document.getElementById('matrix-label').innerText = "Garment Sizing Volumes";
+          document.getElementById('sizing-grid').classList.remove('hidden');
+          document.getElementById('label-unit-price').innerText = "Per-Garment (Finished)";
+        }
+      } 
+      
+      else if (type === 'Marketing Materials') {
+        document.getElementById('matrix-label').innerText = "Print Asset Volume Run Setup";
+        document.getElementById('marketing-volume-box').classList.remove('hidden');
+        document.getElementById('label-unit-price').innerText = "Per-Unit Wholesale Cost";
+
+        if (brand && brand.startsWith('Banners')) {
+          document.getElementById('box-banner-dimensions').classList.remove('hidden');
+          document.getElementById('volume-box-label').innerText = "Total Banners Needed";
+        } else if (brand && brand.startsWith('Business')) {
+          document.getElementById('box-card-packs').classList.remove('hidden');
+          document.getElementById('marketing-volume-box').classList.add('hidden'); 
+          syncCardPackVolumes();
+          return;
+        } else {
+          document.getElementById('volume-box-label').innerText = "Total Order Quantity";
+        }
+      }
+      recalculateQuote();
+    }
+
+    function syncCardPackVolumes() {
+      const tier = document.getElementById('input-card-tier').value;
+      document.getElementById('input-marketing-qty').value = tier;
+      recalculateQuote();
+    }
+
+    function setLogoOnFile(val) {
+      logoOnFile = val;
+      document.getElementById('btn-file-yes').className = val ? "px-3 py-1 rounded border text-[11px] font-bold bg-black text-white" : "px-3 py-1 rounded border text-[11px] font-bold bg-slate-100";
+      document.getElementById('btn-file-no').className = !val ? "px-3 py-1 rounded border text-[11px] font-bold bg-black text-white" : "px-3 py-1 rounded border text-[11px] font-bold bg-slate-100";
+      recalculateQuote();
+    }
+
+    function recalculateQuote() {
+      const type = document.getElementById('input-type').value;
+      const brandSelect = document.getElementById('input-brand');
+      const brand = (brandSelect && brandSelect.value) ? brandSelect.value : '';
+      
+      const frontColors = parseInt(document.getElementById('input-front').value) || 0;
+      const backColors = parseInt(document.getElementById('input-back').value) || 0;
+      const stitchCount = parseInt(document.getElementById('input-stitch').value) || 5000;
+      const mktQty = parseInt(document.getElementById('input-marketing-qty').value) || 0;
+
+      let qty = 0;
+      if (type === 'Marketing Materials' || (type === 'Embroidery' && brand && brand.startsWith('Hats'))) {
+        qty = mktQty;
+      } else {
+        qty = (parseInt(document.getElementById('size-s').value) || 0) +
+              (parseInt(document.getElementById('size-m').value) || 0) +
+              (parseInt(document.getElementById('size-l').value) || 0) +
+              (parseInt(document.getElementById('size-xl').value) || 0) +
+              (parseInt(document.getElementById('size-2xl').value) || 0);
+      }
+
+      document.getElementById('summary-qty').innerText = qty + " items";
+      document.getElementById('summary-brand').innerText = brand ? brand.split(' ')[0] : 'Gildan';
+
+      const spRetail = { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)': 8.75, 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other Sourced Apparel': 10.00 };
+      const embRetail = { 'Hats (Adjustable / Flexfit)': 10.00, 'Polos (Professional Blank)': 15.00, 'Hoodies (Midweight Layering)': 22.00, 'Jackets (Outerwear Protection)': 42.00, 'Other Sourced Embroidery': 12.00 };
+      const mktRetail = { 'Banners (Outdoor Heavy Vinyl)': 38.00, 'Business Cards (Premium Heavy 16pt)': 0.10, 'Metal Signage (Aluminum Panels)': 55.00, 'Car Magnets (Vehicle Strength)': 24.00, 'Promo Items (Mugs, Accessories)': 3.50, 'Other Sourced Media Specs': 5.00 };
+
+      let blankRetail = 0;
+      let decoFee = 0;
+      let isCustomQuoteItem = false;
+
+      document.getElementById('rate-wrapper').classList.remove('hidden');
+      document.getElementById('total-wrapper').innerHTML = `$<span id="summary-total">0.00</span>`;
+
+      if (type === 'Screen Printing') {
+        blankRetail = spRetail[brand] || 10.00;
+        const grid = [0, 6.50, 7.50, 8.50, 9.50];
+        decoFee = (grid[Math.min(4, Math.max(0, frontColors))] || 0) + (grid[Math.min(4, Math.max(0, backColors))] || 0);
+      } else if (type === 'Embroidery') {
+        blankRetail = embRetail[brand] || 12.00;
+        let baseRun = qty < 12 ? 5.00 : qty < 24 ? 4.00 : qty < 48 ? 3.00 : 2.50;
+        decoFee = baseRun + ((stitchCount / 1000) * 1.50);
+      } else if (type === 'Marketing Materials') {
+        if (brand && brand.startsWith('Banners')) {
+          const w = parseInt(document.getElementById('input-banner-w').value) || 1;
+          const h = parseInt(document.getElementById('input-banner-h').value) || 1;
+          blankRetail = (w * h) * 5.00; 
+          decoFee = 0;
+        } else if (brand && brand.startsWith('Business')) {
+          blankRetail = (mktQty === 250) ? 60.00 : 120.00; 
+          decoFee = 0;
+          qty = 1; 
+        } else {
+          isCustomQuoteItem = true;
+        }
+      }
+
+      const rate = blankRetail + decoFee;
+      let total = qty * rate;
+      if (type === 'Embroidery' && !logoOnFile) total += 30.00;
+
+      if (isCustomQuoteItem) {
+        document.getElementById('rate-wrapper').classList.add('hidden');
+        document.getElementById('total-wrapper').innerHTML = `<span class="text-sm font-bold text-sky-400">Quote Pending Review</span>`;
+      } else {
+        document.getElementById('summary-rate').innerText = rate.toFixed(2);
+        document.getElementById('summary-total').innerText = total.toFixed(2);
+      }
+
+      const submitBtn = document.getElementById('submit-btn');
+      const warning = document.getElementById('min-warning');
+
+      let minRequired = 12;
+      if (type === 'Marketing Materials') {
+        if (brand && (brand.startsWith('Banners') || brand.startsWith('Metal') || brand.startsWith('Car') || isCustomQuoteItem)) {
+          minRequired = 1;
+        } else {
+          minRequired = 250;
+        }
+      }
+
+      const baselineCheckQty = (brand && brand.startsWith('Business')) ? mktQty : qty;
+
+      if (baselineCheckQty >= minRequired) {
+        submitBtn.disabled = false;
+        submitBtn.className = "w-full bg-black hover:bg-slate-900 text-white font-bold py-4 rounded-xl text-sm tracking-wide shadow transition-all cursor-pointer";
+        warning.innerText = "Order quantity requirements matched ✓";
+        warning.className = "text-[11px] font-bold text-emerald-600";
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full bg-slate-100 text-slate-400 font-bold py-4 rounded-xl text-sm border border-slate-200 text-center shadow-inner cursor-not-allowed";
+        warning.className = "text-[11px] font-bold text-slate-800";
+        warning.innerText = `Adjust count parameters to initialize batch runs.`;
+      }
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const type = document.getElementById('input-type').value;
+      const brandSelect = document.getElementById('input-brand');
+      const brand = brandSelect ? brandSelect.value : '';
+      
+      let s = 0, m = 0, l = 0, xl = 0, xxl = 0, totalQty = 0;
+      if (type === 'Marketing Materials' || (type === 'Embroidery' && brand && brand.startsWith('Hats'))) {
+        totalQty = parseInt(document.getElementById('input-marketing-qty').value) || 0;
+      } else {
+        s = parseInt(document.getElementById('size-s').value) || 0;
+        m = parseInt(document.getElementById('size-m').value) || 0;
+        l = parseInt(document.getElementById('size-l').value) || 0;
+        xl = parseInt(document.getElementById('size-xl').value) || 0;
+        xxl = parseInt(document.getElementById('size-2xl').value) || 0;
+        totalQty = s + m + l + xl + xxl;
+      }
+
+      let orderNotes = document.getElementById('input-notes').value;
+      if (type === 'Marketing Materials') {
+        orderNotes += ` [Finish: ${document.getElementById('input-finish').value}]`;
+        if (brand.startsWith('Banners')) {
+          orderNotes += ` [Dimensions: ${document.getElementById('input-banner-w').value}x${document.getElementById('input-banner-h').value} ft]`;
+        }
+      }
+
+      const displayTotalText = document.getElementById('summary-total') ? parseFloat(document.getElementById('summary-total').innerText) : 0;
+
+      const newOrder = {
+        id: "HPC-" + Math.floor(1000 + Math.random() * 9000),
+        customerName: document.getElementById('input-name').value,
+        decorationType: type,
+        brand: brand,
+        color: document.getElementById('input-color').value,
+        dueDate: document.getElementById('input-date').value,
+        frontColors: parseInt(document.getElementById('input-front').value) || 0,
+        backColors: parseInt(document.getElementById('input-back').value) || 0,
+        stitchCount: parseInt(document.getElementById('input-stitch').value) || 5000,
+        logoOnFile: logoOnFile,
+        sizes: { S: s, M: m, L: l, XL: xl, '2XL': xxl },
+        totalQuantity: (brand.startsWith('Business')) ? parseInt(document.getElementById('input-marketing-qty').value) : totalQty,
+        estimatedTotal: displayTotalText,
+        notes: orderNotes,
+        stage: 'pending',
+        tasks: [false, false, false, false, false, false],
+        artData: currentArtBase64
+      };
+
+      appOrders.unshift(newOrder);
+      saveState();
+      
+      document.getElementById('estimator-form').reset();
+      clearUploadedArt();
+      
+      document.getElementById('view-estimator').classList.add('hidden');
+      document.getElementById('portal-footer').classList.add('hidden');
+      document.getElementById('view-success').classList.remove('hidden');
+      showToast('Project registered successfully');
+    }
+
+    function resetPortalForNewQuote() {
+      document.getElementById('view-success').classList.add('hidden');
+      document.getElementById('view-estimator').classList.remove('hidden');
+      document.getElementById('portal-footer').classList.remove('hidden');
+      updateFormFields();
+      initializeDefaultDates();
+    }
+
+    function showToast(text) {
+      const t = document.getElementById('toast');
+      if (t) {
+        document.getElementById('toast-text').innerText = text;
+        t.classList.remove('hidden');
+        setTimeout(() => t.classList.add('hidden'), 3500);
+      }
+    }
+
+    // Safe launch sequence orchestration
+    updateFormFields();
+    initializeDefaultDates();
+  </script>
+</body>
+</html>
