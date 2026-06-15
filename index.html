@@ -7,60 +7,62 @@
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Premium Industrial Blueprint Grid Background */
-    .bg-grid-pattern {
-      background-color: #fafafa;
-      background-image: data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M24 0v24H0V0h24zM1 1v22h22V1H1z' fill='%23000000' fill-opacity='0.03'/%3E%3C/svg%3E);
+    /* High-Vis Custom Screen Print Halftone Dot Pattern Background */
+    .bg-print-halftone {
+      background-color: #ffffff;
+      background-image: radial-gradient(#000000 12%, transparent 12%);
+      background-size: 16px 16px;
+      background-attachment: fixed;
     }
   </style>
 </head>
-<body class="bg-grid-pattern text-black font-sans min-h-screen flex flex-col antialiased">
+<body class="bg-print-halftone text-black font-sans min-h-screen flex flex-col antialiased">
 
   <!-- TOP HUB NAVIGATION BAR -->
-  <header class="bg-black text-white p-5 border-b-2 border-black sticky top-0 z-50 shadow-lg">
+  <header class="bg-black text-white p-5 border-b-4 border-black sticky top-0 z-50 shadow-2xl">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center space-x-3">
-        <div class="bg-white text-black px-3 py-1 font-black text-2xl rounded tracking-tighter">H</div>
+        <div class="bg-white text-black px-4 py-1.5 font-black text-2xl rounded-none transform -rotate-2 border-2 border-white shadow-[3px_3px_0px_0px_rgba(255,255,255,0.2)] tracking-tighter">H</div>
         <div>
-          <h1 class="text-xl font-black tracking-tight uppercase">Hussle Print Co.</h1>
-          <p id="hub-subtitle" class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Project Estimator Portal</p>
+          <h1 class="text-xl font-black tracking-tighter uppercase">Hussle Print Co.</h1>
+          <p id="hub-subtitle" class="text-[10px] text-zinc-400 font-black uppercase tracking-widest">Project Estimator Portal</p>
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <div id="admin-nav-container" class="hidden bg-zinc-950 p-1 rounded-xl flex border border-zinc-800 shadow-inner">
-          <button onclick="switchView('estimator')" id="nav-estimator" class="px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all bg-white text-black">Estimator</button>
-          <button onclick="switchView('dashboard')" id="nav-dashboard" class="px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all text-zinc-400 hover:text-white">Dashboard (<span id="queue-count">0</span>)</button>
+        <div id="admin-nav-container" class="hidden bg-zinc-950 p-1 border-2 border-zinc-800 shadow-inner">
+          <button onclick="switchView('estimator')" id="nav-estimator" class="px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all bg-white text-black">Estimator</button>
+          <button onclick="switchView('dashboard')" id="nav-dashboard" class="px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all text-zinc-400 hover:text-white">Dashboard (<span id="queue-count">0</span>)</button>
         </div>
       </div>
     </div>
   </header>
 
   <!-- NOTIFICATION TOAST BOX ENGINE -->
-  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-black text-white px-5 py-3 rounded-xl border border-zinc-800 flex items-center space-x-3 shadow-2xl">
-    <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-black text-white px-5 py-3 border-4 border-black flex items-center space-x-3 shadow-[6px_6px_0px_0px_rgba(255,255,255,1)]">
+    <span class="w-2.5 h-2.5 bg-white animate-ping"></span>
     <span id="toast-text" class="text-xs font-black uppercase tracking-widest">Action Processed</span>
   </div>
 
   <main class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full relative">
     
     <!-- SUCCESS SCREEN FOR CUSTOMERS -->
-    <div id="view-success" class="hidden max-w-xl mx-auto bg-white rounded-3xl border-2 border-black p-8 text-center space-y-5 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] my-12 animate-fadeIn">
-      <div class="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center mx-auto text-2xl font-black">✓</div>
-      <h2 class="text-2xl font-black uppercase tracking-tight">Quote Submitted!</h2>
-      <p class="text-sm text-zinc-600 leading-relaxed font-medium">
+    <div id="view-success" class="hidden max-w-xl mx-auto bg-white rounded-none border-4 border-black p-8 text-center space-y-5 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] my-12 animate-fadeIn">
+      <div class="w-14 h-14 bg-black text-white rounded-none flex items-center justify-center mx-auto text-2xl font-black border-2 border-black">✓</div>
+      <h2 class="text-2xl font-black uppercase tracking-tighter">Quote Submitted!</h2>
+      <p class="text-sm text-zinc-600 leading-relaxed font-bold">
         Thank you! Your batch details and placement preferences have been uploaded securely into our design review pipeline. An operator from the **Hussle Print Co.** team will review your specifications and reach out shortly with your final digital proof.
       </p>
-      <button onclick="resetPortalForNewQuote()" class="bg-black hover:bg-zinc-900 text-white font-black px-6 py-3 rounded-xl text-xs uppercase tracking-widest transition-all shadow-md">
+      <button onclick="resetPortalForNewQuote()" class="bg-black hover:bg-zinc-900 text-white font-black px-6 py-3 rounded-none text-xs uppercase tracking-widest transition-all border-2 border-black shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]">
         Submit Another Project
       </button>
     </div>
 
     <!-- SECTION 1: CUSTOMER ESTIMATOR PORTAL -->
     <div id="view-estimator" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-      <div class="lg:col-span-2 bg-white rounded-3xl border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 space-y-6">
-        <div class="p-4 bg-zinc-50 border-2 border-dashed border-zinc-300 rounded-2xl flex items-start space-x-3">
-          <div class="text-xs font-medium text-zinc-700 leading-relaxed">
-            <span class="font-black text-black block uppercase tracking-wide mb-1">Bulk Run Configurations</span>
+      <div class="lg:col-span-2 bg-white rounded-none border-4 border-black shadow-[10px_12px_0px_0px_rgba(0,0,0,1)] p-6 space-y-6">
+        <div class="p-4 bg-zinc-50 border-4 border-black rounded-none flex items-start space-x-3">
+          <div class="text-xs font-bold text-zinc-700 leading-relaxed">
+            <span class="font-black text-black block uppercase tracking-wider mb-1">Bulk Run Configurations</span>
             To deliver premium print calibration and wholesale pricing structures, custom gear is prepped in bulk runs. Minimum batch thresholds update dynamically depending on your stock style!
           </div>
         </div>
@@ -68,13 +70,13 @@
         <form id="estimator-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
           <div>
             <label class="block text-xs font-black uppercase tracking-widest text-black mb-2">Customer Name / Organization</label>
-            <input type="text" id="input-name" required placeholder="e.g. Hussle Cafe" class="w-full px-4 py-3 border-2 border-black rounded-xl outline-none font-medium focus:ring-2 focus:ring-black text-sm text-black placeholder-zinc-400" />
+            <input type="text" id="input-name" required placeholder="e.g. Hussle Cafe" class="w-full px-4 py-3 border-4 border-black rounded-none outline-none font-bold focus:bg-zinc-50 text-sm text-black placeholder-zinc-400" />
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-black uppercase tracking-widest text-black mb-2">Decoration Style / Category</label>
-              <select id="input-type" onchange="updateFormFields()" class="w-full p-3 border-2 border-black rounded-xl bg-white text-sm text-black font-bold outline-none cursor-pointer focus:border-black">
+              <select id="input-type" onchange="updateFormFields()" class="w-full p-3 border-4 border-black rounded-none inherit bg-white text-sm text-black font-black outline-none cursor-pointer">
                 <option value="Screen Printing">Screen Printing</option>
                 <option value="Embroidery">Custom Embroidery</option>
                 <option value="Marketing Materials">Marketing Materials</option>
@@ -82,30 +84,30 @@
             </div>
             <div>
               <label class="block text-xs font-black uppercase tracking-widest text-black mb-2">Product Base Stock</label>
-              <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-3 border-2 border-black rounded-xl bg-white text-sm text-black font-bold outline-none cursor-pointer focus:border-black">
+              <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-3 border-4 border-black rounded-none inherit bg-white text-sm text-black font-black outline-none cursor-pointer">
                 <!-- Loaded dynamically via JavaScript layout dropdown matrices -->
               </select>
             </div>
           </div>
 
           <!-- COMPACT ARTWORK UPLOAD LINE -->
-          <div class="p-4 bg-zinc-50 border-2 border-black rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="p-4 bg-zinc-50 border-4 border-black rounded-none flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <label class="block text-xs font-black uppercase tracking-widest text-black">Logo Graphic Sourcing File</label>
               <span id="art-preview-label" class="block text-[11px] text-zinc-400 font-bold mt-0.5 uppercase tracking-wide">No drawing vector attached</span>
             </div>
-            <label class="cursor-pointer bg-black text-white hover:bg-zinc-900 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-sm transition-all text-center whitespace-nowrap">
+            <label class="cursor-pointer bg-black text-white hover:bg-zinc-900 px-5 py-3 rounded-none text-xs font-black uppercase tracking-widest transition-all text-center whitespace-nowrap border-2 border-black shadow-[3px_3px_0px_0px_rgba(255,255,255,0.2)]">
               <span>Select File</span>
               <input type="file" id="input-art" accept="image/*" onchange="processArtworkFile(event)" class="hidden" />
             </label>
           </div>
 
           <!-- DROPDOWN LOGO PLACEMENT OPTIONS -->
-          <div id="box-design-placement-hub" class="p-4 bg-zinc-50 border-2 border-black rounded-2xl space-y-2">
+          <div id="box-design-placement-hub" class="p-4 bg-zinc-50 border-4 border-black rounded-none space-y-2">
             <label class="block text-xs font-black uppercase tracking-widest text-black">Logo Print/Stitch Location</label>
             
             <!-- Screen Print Location Select Dropdown -->
-            <select id="placement-screenprint" class="w-full p-3 border-2 border-black rounded-xl bg-white text-sm font-bold text-black outline-none cursor-pointer">
+            <select id="placement-screenprint" class="w-full p-3 border-4 border-black rounded-none bg-white text-sm font-black text-black outline-none cursor-pointer">
               <option value="Full Front Layout Print">Standard Full Front Layout Print</option>
               <option value="Left Chest Pocket Print">Standard Left Chest Print</option>
               <option value="Full Center Back Print">Standard Full Back Print</option>
@@ -115,7 +117,7 @@
             </select>
 
             <!-- Embroidery Location Select Dropdown -->
-            <select id="placement-embroidery" class="hidden w-full p-3 border-2 border-black rounded-xl bg-white text-sm font-bold text-black outline-none cursor-pointer">
+            <select id="placement-embroidery" class="hidden w-full p-3 border-4 border-black rounded-none bg-white text-sm font-black text-black outline-none cursor-pointer">
               <option value="Hat Front Center Profile">Hat Front Center Profile</option>
               <option value="Left Chest Crest Run">Garment Left Chest Pocket Crest</option>
               <option value="Hat Left Panel Stitch">Hat Left Side Panel Arc</option>
@@ -126,45 +128,45 @@
           </div>
 
           <!-- PUBLIC CATALOG SOURCING NOTICES -->
-          <div id="catalog-notice-screenprint" class="p-4 bg-zinc-50 border border-zinc-300 rounded-2xl text-xs text-zinc-600 font-medium leading-relaxed">
+          <div id="catalog-notice-screenprint" class="p-4 bg-zinc-50 border-2 border-black text-xs text-zinc-600 font-bold leading-relaxed">
             <span class="font-black text-black block uppercase tracking-wide mb-0.5">Looking for specific styles?</span>
-            We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
+            We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-black underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-black underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
           </div>
 
           <!-- DYNAMIC OTTOCAP CATALOG BANNER LINK -->
-          <div id="catalog-notice-ottocap" class="hidden p-4 bg-black text-white rounded-2xl text-xs leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-md animate-fadeIn">
-            <div class="font-medium">
-              <span class="font-black uppercase tracking-wide text-white block mb-0.5">Explore Wholesale Headwear Options</span>
-              Need help choosing your canvas? Click to browse real-time configurations, trucker meshes, snaps, and dad caps over at <span class="font-bold text-zinc-300 underline">Ottocap.com</span>.
+          <div id="catalog-notice-ottocap" class="hidden p-5 bg-black text-white rounded-none border-2 border-black text-xs leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-2xl animate-fadeIn">
+            <div class="font-bold">
+              <span class="font-black uppercase tracking-wider text-white block mb-0.5">Explore Wholesale Headwear Options</span>
+              Need help choosing your canvas? Click to browse real-time configurations, trucker meshes, snaps, and dad caps over at <span class="font-black text-zinc-300 underline">Ottocap.com</span>.
             </div>
-            <a href="https://ottocap.com" target="_blank" rel="noopener noreferrer" class="bg-white text-black hover:bg-zinc-100 font-black px-4 py-2.5 rounded-xl text-[10px] uppercase tracking-widest whitespace-nowrap text-center transition-all shadow-sm">
+            <a href="https://ottocap.com" target="_blank" rel="noopener noreferrer" class="bg-white text-black hover:bg-zinc-100 font-black px-4 py-2.5 rounded-none text-[10px] uppercase tracking-widest whitespace-nowrap text-center transition-all shadow-md border-2 border-white">
               Browse Catalog ↗
             </a>
           </div>
 
           <!-- METHOD DEPENDENT CONFIGURATIONS -->
-          <div id="box-screenprint" class="grid grid-cols-2 gap-4 p-4 bg-zinc-50 border-2 border-black rounded-2xl">
+          <div id="box-screenprint" class="grid grid-cols-2 gap-4 p-4 bg-zinc-50 border-4 border-black rounded-none">
             <div>
               <label class="text-xs font-black uppercase tracking-widest text-black block mb-1.5">Front Ink Colors (0 - 4)</label>
-              <input type="number" id="input-front" min="0" max="4" value="1" oninput="recalculateQuote()" class="w-full p-2.5 border-2 border-black rounded-xl text-sm font-bold text-black" />
+              <input type="number" id="input-front" min="0" max="4" value="1" oninput="recalculateQuote()" class="w-full p-2.5 border-4 border-black font-black text-sm text-black" />
             </div>
             <div>
               <label class="text-xs font-black uppercase tracking-widest text-black block mb-1.5">Back Ink Colors (0 - 4)</label>
-              <input type="number" id="input-back" min="0" max="4" value="0" oninput="recalculateQuote()" class="w-full p-2.5 border-2 border-black rounded-xl text-sm font-bold text-black" />
+              <input type="number" id="input-back" min="0" max="4" value="0" oninput="recalculateQuote()" class="w-full p-2.5 border-4 border-black font-black text-sm text-black" />
             </div>
           </div>
 
-          <div id="box-embroidery" class="hidden p-4 bg-zinc-50 border-2 border-black rounded-2xl space-y-4">
+          <div id="box-embroidery" class="hidden p-4 bg-zinc-50 border-4 border-black rounded-none space-y-4">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs">
               <span class="font-black uppercase tracking-wide text-black">Logo Sizing File History Run</span>
               <div class="flex space-x-2">
-                <button type="button" id="btn-file-yes" onclick="setLogoOnFile(true)" class="px-4 py-1.5 rounded-lg border-2 border-black text-[11px] font-black uppercase tracking-wider bg-zinc-100">Yes</button>
-                <button type="button" id="btn-file-no" onclick="setLogoOnFile(false)" class="px-4 py-1.5 rounded-lg border-2 border-black text-[11px] font-black uppercase tracking-wider bg-black text-white">No ($30 setup)</button>
+                <button type="button" id="btn-file-yes" onclick="setLogoOnFile(true)" class="px-4 py-1.5 rounded-none border-4 border-black text-[11px] font-black uppercase tracking-wider bg-zinc-100">Yes</button>
+                <button type="button" id="btn-file-no" onclick="setLogoOnFile(false)" class="px-4 py-1.5 rounded-none border-4 border-black text-[11px] font-black uppercase tracking-wider bg-black text-white">No ($30 setup)</button>
               </div>
             </div>
             <div>
               <label class="text-xs font-black uppercase tracking-widest text-black block mb-1.5">Stitch Density Setup Run</label>
-              <select id="input-stitch" onchange="recalculateQuote()" class="w-full p-3 border-2 border-black rounded-xl bg-white text-sm font-bold text-black cursor-pointer">
+              <select id="input-stitch" onchange="recalculateQuote()" class="w-full p-3 border-4 border-black rounded-none bg-white text-sm font-black text-black cursor-pointer">
                 <option value="5000">Small Left Chest Logo / Hat Front (5k Stitches)</option>
                 <option value="8000">Standard Pattern Profiling (8k Stitches)</option>
                 <option value="12000">Detailed Mid-Size Layout (12k Stitches)</option>
@@ -173,10 +175,10 @@
             </div>
           </div>
 
-          <div id="box-marketing" class="hidden grid grid-cols-1 gap-4 p-4 bg-zinc-50 border-2 border-black rounded-2xl">
+          <div id="box-marketing" class="hidden grid grid-cols-1 gap-4 p-4 bg-zinc-50 border-4 border-black rounded-none">
             <div>
               <label class="text-xs font-black uppercase tracking-widest text-black block mb-1.5">Asset Finish / Material Coating</label>
-              <select id="input-finish" onchange="recalculateQuote()" class="w-full p-3 border-2 border-black rounded-xl bg-white text-sm font-bold text-black cursor-pointer">
+              <select id="input-finish" onchange="recalculateQuote()" class="w-full p-3 border-4 border-black rounded-none bg-white text-sm font-black text-black cursor-pointer">
                 <option value="Standard/Coated Matched">Standard Finish Coating</option>
                 <option value="Premium Heavyweight Matte">Premium Heavy Matte Texture</option>
                 <option value="Heavy-Duty Outdoor Weatherproof">Heavy-Duty Outdoor Weatherproof</option>
@@ -185,20 +187,20 @@
           </div>
 
           <!-- BANNER MEASUREMENTS -->
-          <div id="box-banner-dimensions" class="hidden grid grid-cols-2 gap-4 p-4 bg-zinc-50 border-2 border-black rounded-2xl animate-fadeIn">
+          <div id="box-banner-dimensions" class="hidden grid grid-cols-2 gap-4 p-4 bg-zinc-50 border-4 border-black rounded-none animate-fadeIn">
             <div>
               <label class="text-xs font-black uppercase tracking-widest text-black block mb-1.5">Banner Width (Feet)</label>
-              <input type="number" id="input-banner-w" min="1" value="4" oninput="recalculateQuote()" class="w-full p-2.5 border-2 border-black rounded-xl font-bold text-black outline-none" />
+              <input type="number" id="input-banner-w" min="1" value="4" oninput="recalculateQuote()" class="w-full p-2.5 border-4 border-black font-black text-black outline-none" />
             </div>
             <div>
               <label class="text-xs font-black uppercase tracking-widest text-black block mb-1.5">Banner Height (Feet)</label>
-              <input type="number" id="input-banner-h" min="1" value="2" oninput="recalculateQuote()" class="w-full p-2.5 border-2 border-black rounded-xl font-bold text-black outline-none" />
+              <input type="number" id="input-banner-h" min="1" value="2" oninput="recalculateQuote()" class="w-full p-2.5 border-4 border-black font-black text-black outline-none" />
             </div>
           </div>
 
-          <div id="box-card-packs" class="hidden p-4 bg-zinc-50 border-2 border-black rounded-2xl animate-fadeIn">
+          <div id="box-card-packs" class="hidden p-4 bg-zinc-50 border-4 border-black rounded-none animate-fadeIn">
             <label class="text-xs font-black uppercase tracking-widest text-black block mb-1.5">Select Print Quantity Tier Pack</label>
-            <select id="input-card-tier" onchange="syncCardPackQuantityValues()" class="w-full p-3 border-2 border-black rounded-xl bg-white text-sm font-bold text-black cursor-pointer">
+            <select id="input-card-tier" onchange="syncCardPackQuantityValues()" class="w-full p-3 border-4 border-black rounded-none bg-white text-sm font-black text-black cursor-pointer">
               <option value="250">Starter Run Batch (250 Cards - $60)</option>
               <option value="500">Commercial Standard Batch (500 Cards - $120)</option>
             </select>
@@ -208,53 +210,53 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-black uppercase tracking-widest text-black mb-2">Asset Base Color</label>
-              <input type="text" id="input-color" required placeholder="e.g. Midnight Black" class="w-full px-4 py-3 border-2 border-black rounded-xl text-sm font-medium text-black outline-none focus:ring-2 focus:ring-black" />
+              <input type="text" id="input-color" required placeholder="e.g. Midnight Black" class="w-full px-4 py-3 border-4 border-black rounded-none text-sm font-black text-black outline-none" />
             </div>
             <div>
               <label class="block text-xs font-black uppercase tracking-widest text-black mb-2">Desired Completion Date</label>
-              <input type="date" id="input-date" required onchange="validateTurnaroundTimeline()" class="w-full px-4 py-3 border-2 border-black rounded-xl text-sm font-bold text-black outline-none focus:ring-2 focus:ring-black" />
+              <input type="date" id="input-date" required onchange="validateTurnaroundTimeline()" class="w-full px-4 py-3 border-4 border-black rounded-none text-sm font-black text-black outline-none" />
             </div>
           </div>
 
           <!-- TURNAROUND NOTIFICATION BOX -->
-          <div id="date-turnaround-notice" class="p-4 rounded-2xl border-2 tracking-wide text-xs font-medium leading-relaxed transition-all hidden"></div>
+          <div id="date-turnaround-notice" class="p-4 rounded-none border-4 font-black text-xs leading-relaxed transition-all hidden"></div>
 
           <!-- QUANTITY TRACKER MATRIX BOARD WITH FULL 7-TIER ROW -->
-          <div class="p-4 bg-zinc-50 border-2 border-black rounded-2xl space-y-3">
+          <div class="p-4 bg-zinc-50 border-4 border-black rounded-none space-y-3">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
               <label id="matrix-label" class="text-xs font-black uppercase tracking-widest text-black">Garment Sizing Volumes</label>
               <span id="min-warning" class="text-[11px] font-black uppercase tracking-wide text-zinc-900">Add 12 total garments to initialize batch</span>
             </div>
             
             <div id="sizing-grid" class="grid grid-cols-4 sm:grid-cols-7 gap-2">
-              <div class="bg-white border-2 border-black rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">S</span><input type="number" id="size-s" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none" /></div>
-              <div class="bg-white border-2 border-black rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">M</span><input type="number" id="size-m" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none" /></div>
-              <div class="bg-white border-2 border-black rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">L</span><input type="number" id="size-l" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none" /></div>
-              <div class="bg-white border-2 border-black rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">XL</span><input type="number" id="size-xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none" /></div>
-              <div class="bg-white border-2 border-black rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">2XL</span><input type="number" id="size-2xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none" /></div>
-              <div class="bg-white border-2 border-black rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">3XL</span><input type="number" id="size-3xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none bg-transparent" /></div>
-              <div class="bg-white border-2 border-black rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">4XL</span><input type="number" id="size-4xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none bg-transparent" /></div>
+              <div class="bg-white border-4 border-black rounded-none p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">S</span><input type="number" id="size-s" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none" /></div>
+              <div class="bg-white border-4 border-black rounded-none p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">M</span><input type="number" id="size-m" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none" /></div>
+              <div class="bg-white border-4 border-black rounded-none p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">L</span><input type="number" id="size-l" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none" /></div>
+              <div class="bg-white border-4 border-black rounded-none p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">XL</span><input type="number" id="size-xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none" /></div>
+              <div class="bg-white border-4 border-black rounded-none p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">2XL</span><input type="number" id="size-2xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none" /></div>
+              <div class="bg-white border-4 border-black rounded-none p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">3XL</span><input type="number" id="size-3xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none bg-transparent" /></div>
+              <div class="bg-white border-4 border-black rounded-none p-2 text-center shadow-sm"><span class="text-[10px] font-black text-zinc-400 block mb-0.5">4XL</span><input type="number" id="size-4xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-black text-sm outline-none bg-transparent" /></div>
             </div>
 
             <!-- Headwear Config Flag -->
-            <div id="hat-osfa-notice" class="hidden bg-white border-2 border-black p-4 rounded-xl text-xs text-zinc-600 font-medium leading-relaxed animate-fadeIn">
+            <div id="hat-osfa-notice" class="hidden bg-white border-4 border-black p-4 rounded-none text-xs text-zinc-600 font-bold leading-relaxed animate-fadeIn">
               <span class="font-black text-black uppercase tracking-wide block mb-0.5">Size Run Configuration:</span>
               Headwear items run out via professional wholesale <b>One Size Fits All (OSFA) / Adjustable Snapbacks</b>. Specific size distribution grids are locked.
             </div>
             
             <!-- Marketing Sizing Count CONNECTOR -->
-            <div id="marketing-volume-box" class="hidden bg-white border-2 border-black p-3 rounded-xl shadow-sm flex items-center justify-between">
+            <div id="marketing-volume-box" class="hidden bg-white border-4 border-black p-3 rounded-none shadow-sm flex items-center justify-between">
               <span id="volume-box-label" class="text-xs font-black uppercase tracking-wide text-zinc-500">Total Order Quantity</span>
-              <input type="number" id="input-marketing-qty" min="1" value="12" oninput="recalculateQuote()" class="text-right font-black text-sm outline-none border-b border-black w-24 focus:border-b-2" />
+              <input type="number" id="input-marketing-qty" min="1" value="12" oninput="recalculateQuote()" class="text-right font-black text-sm outline-none border-b border-black w-24" />
             </div>
           </div>
 
           <div>
             <label class="block text-xs font-black uppercase tracking-widest text-black mb-2">Special Operator Notes / Requirements</label>
-            <textarea id="input-notes" rows="3" placeholder="Specify clothing placement dimensions, thread setups, or custom copy specifications..." class="w-full px-4 py-3 border-2 border-black rounded-xl outline-none font-medium text-sm resize-none focus:ring-2 focus:ring-black text-black"></textarea>
+            <textarea id="input-notes" rows="3" placeholder="Specify clothing placement dimensions, thread setups, or custom copy specifications..." class="w-full px-4 py-3 border-4 border-black rounded-none outline-none font-bold text-sm resize-none text-black"></textarea>
           </div>
 
-          <button type="submit" id="submit-btn" disabled class="w-full bg-zinc-100 text-zinc-400 font-black py-4 rounded-xl text-sm border-2 border-dashed border-zinc-300 text-center shadow-inner cursor-not-allowed uppercase tracking-widest transition-all">
+          <button type="submit" id="submit-btn" disabled class="w-full bg-zinc-100 text-zinc-400 font-black py-4 rounded-none text-sm border-4 border-dashed border-zinc-300 text-center shadow-inner cursor-not-allowed uppercase tracking-widest transition-all">
             Request Quote (Minimum requirement not met)
           </button>
         </form>
@@ -262,19 +264,19 @@
 
       <!-- SIDE TALLY BOARD -->
       <div class="space-y-4">
-        <div class="bg-black text-white rounded-3xl p-6 shadow-2xl border-2 border-black">
-          <h3 class="text-xs font-black uppercase tracking-widest text-zinc-400 mb-4 pb-2 border-b border-zinc-800">Live Invoice Summary</h3>
+        <div class="bg-black text-white rounded-none p-6 shadow-2xl border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.25)]">
+          <h3 class="text-xs font-black uppercase tracking-widest text-zinc-400 mb-4 pb-2 border-b-2 border-zinc-800">Live Invoice Summary</h3>
           <div class="space-y-3 text-xs font-bold">
             <div class="flex justify-between"><span class="text-zinc-400 uppercase tracking-wide">Total Run Items:</span><span id="summary-qty" class="font-black text-white">0 items</span></div>
             <div class="flex justify-between"><span class="text-zinc-400 uppercase tracking-wide">Product Base:</span><span id="summary-brand" class="font-black text-zinc-200">Gildan</span></div>
-            <div class="flex justify-between border-t border-zinc-800 pt-3">
+            <div class="flex justify-between border-t-2 border-zinc-800 pt-3">
               <div>
                 <span id="label-unit-price" class="text-[10px] uppercase text-zinc-400 block font-black tracking-widest">Per-Garment</span>
                 <span class="text-2xl font-black text-white" id="rate-wrapper">$<span id="summary-rate">0.00</span></span>
               </div>
               <div class="text-right">
                 <span class="text-[10px] uppercase text-zinc-400 block font-black tracking-widest">Project Value</span>
-                <span class="text-2xl font-black text-white border-b-2 border-white pb-0.5" id="total-wrapper">$<span id="summary-total">0.00</span></span>
+                <span class="text-2xl font-black text-white border-b-4 border-white pb-0.5" id="total-wrapper">$<span id="summary-total">0.00</span></span>
               </div>
             </div>
           </div>
@@ -284,20 +286,20 @@
 
     <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD -->
     <div id="view-dashboard" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
-      <div class="border-2 border-black rounded-3xl p-4 min-h-[500px] flex flex-col bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-        <div class="flex justify-between items-center border-b-2 border-black pb-2 mb-4"><span class="text-xs font-black uppercase tracking-widest text-black">Pending Review</span></div>
+      <div class="border-4 border-black rounded-none p-4 min-h-[500px] flex flex-col bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-4"><span class="text-xs font-black uppercase tracking-widest text-black">Pending Review</span></div>
         <div id="col-pending" class="space-y-3 flex-1"></div>
       </div>
-      <div class="border-2 border-black rounded-3xl p-4 min-h-[500px] flex flex-col bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-        <div class="flex justify-between items-center border-b-2 border-black pb-2 mb-4"><span class="text-xs font-black uppercase tracking-widest text-black">Pre-Press / Proofing</span></div>
+      <div class="border-4 border-black rounded-none p-4 min-h-[500px] flex flex-col bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-4"><span class="text-xs font-black uppercase tracking-widest text-black">Pre-Press / Proofing</span></div>
         <div id="col-prepress" class="space-y-3 flex-1"></div>
       </div>
-      <div class="border-2 border-black rounded-3xl p-4 min-h-[500px] flex flex-col bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-        <div class="flex justify-between items-center border-b-2 border-black pb-2 mb-4"><span class="text-xs font-black uppercase tracking-widest text-black">In Production</span></div>
+      <div class="border-4 border-black rounded-none p-4 min-h-[500px] flex flex-col bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-4"><span class="text-xs font-black uppercase tracking-widest text-black">In Production</span></div>
         <div id="col-production" class="space-y-3 flex-1"></div>
       </div>
-      <div class="border-2 border-black rounded-3xl p-4 min-h-[500px] flex flex-col bg-zinc-900 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-        <div class="flex justify-between items-center border-b border-zinc-800 pb-2 mb-4"><span class="text-xs font-black uppercase tracking-widest text-zinc-300">Ready / Complete</span></div>
+      <div class="border-4 border-black rounded-none p-4 min-h-[500px] flex flex-col bg-zinc-950 text-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <div class="flex justify-between items-center border-b-2 border-zinc-800 pb-2 mb-4"><span class="text-xs font-black uppercase tracking-widest text-zinc-300">Ready / Complete</span></div>
         <div id="col-ready" class="space-y-3 flex-1"></div>
       </div>
     </div>
@@ -305,24 +307,24 @@
   </main>
 
   <!-- MASTER CONTACT FOOTER -->
-  <footer id="portal-footer" class="bg-black text-zinc-400 text-xs py-8 mt-auto border-t-2 border-black">
+  <footer id="portal-footer" class="bg-black text-zinc-400 text-xs py-8 mt-auto border-t-4 border-black">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-6 text-center sm:text-left">
       <div class="space-y-1">
         <span class="font-black text-white text-sm uppercase tracking-wide block">Hussle Print Co.</span>
-        <p class="text-[11px] text-zinc-500 font-medium">Premium Screen Printing, Embroidery & Commercial Media Solutions</p>
+        <p class="text-[11px] text-zinc-500 font-bold">Premium Screen Printing, Embroidery & Commercial Media Solutions</p>
       </div>
-      <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 font-bold">
+      <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 font-black">
         <div>
-          <span class="text-[10px] uppercase text-zinc-500 block tracking-widest font-black">Main Shop Desk</span>
+          <span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Main Shop Desk</span>
           <a href="tel:8067824224" class="text-white hover:underline text-xs">806-782-4224</a>
         </div>
         <div>
-          <span class="text-[10px] uppercase text-zinc-500 block tracking-widest font-black">Office Email</span>
+          <span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Office Email</span>
           <a href="mailto:thehumblehussle@gmail.com" class="text-white hover:underline text-xs">thehumblehussle@gmail.com</a>
         </div>
         <div>
-          <span class="text-[10px] uppercase text-zinc-500 block tracking-widest font-black">Shop Headquarters</span>
-          <span class="text-zinc-300 text-xs block font-medium">5113 34th Street</span>
+          <span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Shop Headquarters</span>
+          <span class="text-zinc-300 text-xs block">5113 34th Street</span>
         </div>
       </div>
     </div>
@@ -330,8 +332,8 @@
 
   <script>
     let appOrders = [
-      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2xl': 4, '3xl': 0, '4xl': 0 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks. [Placement: Full Front Layout Print]', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
-      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2xl': 0, '3xl': 0, '4xl': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
+      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4, '3XL': 0, '4XL': 0 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks. [Placement: Full Front Layout Print]', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
+      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
     ];
 
     let currentArtBase64 = '';
@@ -387,13 +389,13 @@
       noticeBox.classList.remove('hidden');
 
       if (daysDiff < 14) {
-        noticeBox.className = "p-4 rounded-2xl border-2 border-black bg-white text-xs text-black font-medium leading-relaxed shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-fadeIn";
+        noticeBox.className = "p-4 rounded-none border-4 border-black bg-white text-xs text-black font-black leading-relaxed shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-fadeIn";
         noticeBox.innerHTML = `
           <span class="font-black uppercase tracking-wider text-black block mb-1">⚡ Expedited Timeline Surcharge Bound</span>
           We try our absolute best to never miss a deadline. Go ahead and submit your project specs—our team will look over our current production schedule right away and do everything we can to squeeze you in. Please note that projects needed inside our standard 2-week turnaround window <b>may be subject to an expedited rush order fee</b> to cover late-night setups, or timeline adjustments depending on stock availability.
         `;
       } else {
-        noticeBox.className = "p-4 rounded-2xl border-2 border-black bg-black text-white text-xs font-bold leading-relaxed";
+        noticeBox.className = "p-4 rounded-none border-4 border-black bg-black text-white text-xs font-black leading-relaxed shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)]";
         noticeBox.innerHTML = `
           <span class="font-black uppercase tracking-wider block mb-0.5">✓ Standard Timeline Confirmed</span>
           Your date clears our baseline 14-day production windows. No rush penalties apply.
@@ -409,15 +411,15 @@
         document.getElementById('portal-footer').classList.remove('hidden');
         document.getElementById('view-success').classList.add('hidden');
         document.getElementById('view-dashboard').classList.add('hidden');
-        document.getElementById('nav-estimator').className = "px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all bg-white text-black";
-        document.getElementById('nav-dashboard').className = "px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all text-zinc-400 hover:text-white";
+        document.getElementById('nav-estimator').className = "px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all bg-white text-black";
+        document.getElementById('nav-dashboard').className = "px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all text-zinc-400 hover:text-white";
       } else if (target === 'dashboard') {
         document.getElementById('view-estimator').classList.add('hidden');
         document.getElementById('view-success').classList.add('hidden');
         document.getElementById('portal-footer').classList.add('hidden');
         document.getElementById('view-dashboard').classList.remove('hidden');
-        document.getElementById('nav-dashboard').className = "px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all bg-white text-black";
-        document.getElementById('nav-estimator').className = "px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all text-zinc-400 hover:text-white";
+        document.getElementById('nav-dashboard').className = "px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all bg-white text-black";
+        document.getElementById('nav-estimator').className = "px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all text-zinc-400 hover:text-white";
         renderDashboard();
       }
     }
@@ -431,7 +433,7 @@
         currentArtBase64 = e.target.result;
         const previewLabel = document.getElementById('art-preview-label');
         if (previewLabel) {
-          previewLabel.innerText = "✓ " + file.name + " uploaded cleanly";
+          previewLabel.innerText = "✓ " + file.name + " attached";
           previewLabel.className = "block text-[11px] font-black text-black uppercase tracking-wide mt-0.5";
         }
         showToast('Graphic design file pinned successfully');
@@ -446,7 +448,7 @@
       const previewLabel = document.getElementById('art-preview-label');
       if (previewLabel) {
         previewLabel.innerText = "No drawing vector attached";
-        previewLabel.className = "block text-[11px] text-zinc-400 mt-0.5 uppercase tracking-wide";
+        previewLabel.className = "block text-[11px] text-zinc-400 mt-0.5 uppercase tracking-wide font-bold";
       }
       recalculateQuote();
     }
@@ -600,8 +602,8 @@
 
     function setLogoOnFile(val) {
       logoOnFile = val;
-      document.getElementById('btn-file-yes').className = val ? "px-4 py-1.5 rounded-lg border-2 border-black text-[11px] font-black uppercase tracking-wider bg-black text-white" : "px-4 py-1.5 rounded-lg border-2 border-black text-[11px] font-black uppercase tracking-wider bg-zinc-100";
-      document.getElementById('btn-file-no').className = !val ? "px-4 py-1.5 rounded-lg border-2 border-black text-[11px] font-black uppercase tracking-wider bg-black text-white" : "px-4 py-1.5 rounded-lg border-2 border-black text-[11px] font-black uppercase tracking-wider bg-zinc-100";
+      document.getElementById('btn-file-yes').className = val ? "px-4 py-1.5 rounded-none border-4 border-black text-[11px] font-black uppercase tracking-wider bg-black text-white" : "px-4 py-1.5 rounded-none border-4 border-black text-[11px] font-black uppercase tracking-wider bg-zinc-100";
+      document.getElementById('btn-file-no').className = !val ? "px-4 py-1.5 rounded-none border-4 border-black text-[11px] font-black uppercase tracking-wider bg-black text-white" : "px-4 py-1.5 rounded-none border-4 border-black text-[11px] font-black uppercase tracking-wider bg-zinc-100";
       recalculateQuote();
     }
 
@@ -692,12 +694,12 @@
 
       if (baselineCheckQty >= minRequired) {
         submitBtn.disabled = false;
-        submitBtn.className = "w-full bg-black hover:bg-zinc-900 text-white font-black py-4 rounded-xl text-sm uppercase tracking-widest shadow-md cursor-pointer border-2 border-black transition-all";
+        submitBtn.className = "w-full bg-black hover:bg-zinc-900 text-white font-black py-4 rounded-none text-sm uppercase tracking-widest border-2 border-black transition-all cursor-pointer shadow-md";
         warning.innerText = "Order quantity threshold verified ✓";
         warning.className = "text-[11px] font-black uppercase text-black tracking-wide";
       } else {
         submitBtn.disabled = true;
-        submitBtn.className = "w-full bg-zinc-100 text-zinc-400 font-black py-4 rounded-xl text-sm border-2 border-dashed border-zinc-300 text-center shadow-inner cursor-not-allowed uppercase tracking-widest";
+        submitBtn.className = "w-full bg-zinc-100 text-zinc-400 font-black py-4 rounded-none text-sm border-4 border-dashed border-zinc-300 text-center shadow-inner cursor-not-allowed uppercase tracking-widest";
         warning.className = "text-[11px] font-black uppercase text-zinc-400 tracking-wide";
         warning.innerText = `Adjust count parameters to initialize batch runs.`;
       }
@@ -771,7 +773,7 @@
       document.getElementById('view-estimator').classList.add('hidden');
       document.getElementById('portal-footer').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
-      showToast('Project specifications logged');
+      showToast('Project registered successfully');
     }
 
     function resetPortalForNewQuote() {
@@ -809,31 +811,31 @@
         labels.forEach((label, index) => {
           const isDone = o.tasks[index];
           taskButtons += `
-            <button class="w-full text-left text-[10px] p-1.5 rounded font-bold border flex items-center space-x-2 transition-all ${isDone ? 'bg-black text-white border-black shadow-sm' : 'bg-slate-50 text-slate-500 border-slate-200'}">
+            <button class="w-full text-left text-[10px] p-1.5 rounded-none font-bold border-2 border-black flex items-center space-x-2 transition-all ${isDone ? 'bg-black text-white' : 'bg-slate-50 text-slate-500'}">
               <span>${isDone ? '✓' : '○'}</span><span class="truncate">${label}</span>
             </button>
           `;
         });
 
         let cardThumbnailHtml = o.artData ? 
-          `<div class="mt-2 border rounded-lg bg-slate-50 p-1 flex justify-center items-center h-16 w-full">
+          `<div class="mt-2 border-2 border-black bg-slate-50 p-1 flex justify-center items-center h-16 w-full">
             <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
            </div>` : '';
 
         const cardHtml = `
-          <div class="bg-white border-2 border-black rounded-2xl p-4 shadow-sm space-y-3">
-            <div class="flex justify-between items-center text-[10px] font-bold">
-              <span class="bg-black text-white px-2 py-0.5 rounded font-black">${o.id}</span>
-              <span class="text-zinc-400 font-bold">${o.dueDate}</span>
+          <div class="bg-white border-4 border-black rounded-none p-4 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] space-y-3">
+            <div class="flex justify-between items-center text-[10px] font-black">
+              <span class="bg-black text-white px-2 py-0.5 rounded-none">${o.id}</span>
+              <span class="text-zinc-500">${o.dueDate}</span>
             </div>
             <div>
-              <h4 class="font-black text-sm text-black truncate leading-tight uppercase tracking-tight">${o.customerName}</h4>
-              <p class="text-xs text-zinc-500 mt-1 font-bold uppercase tracking-wide">${o.totalQuantity}x Items Run</p>
+              <h4 class="font-black text-sm text-black truncate leading-tight uppercase">${o.customerName}</h4>
+              <p class="text-xs text-zinc-500 mt-1 font-bold uppercase">${o.totalQuantity}x Items Run</p>
               <span class="text-[10px] font-black text-zinc-400 block mt-0.5 uppercase tracking-wide bg-zinc-100 px-2 py-0.5 rounded inline-block truncate max-w-full">${o.brand}</span>
             </div>
             ${cardThumbnailHtml}
-            <div class="text-[11px] bg-zinc-50 border border-zinc-200 p-2 rounded text-zinc-600 font-medium break-words max-w-full leading-normal">${o.notes}</div>
-            <div class="grid grid-cols-2 gap-1 pt-1 border-t border-zinc-100">
+            <div class="text-[11px] bg-zinc-50 border border-zinc-200 p-2 text-zinc-600 font-bold break-words max-w-full leading-normal">${o.notes}</div>
+            <div class="grid grid-cols-2 gap-1 pt-1 border-t-2 border-zinc-100">
               ${taskButtons}
             </div>
           </div>
