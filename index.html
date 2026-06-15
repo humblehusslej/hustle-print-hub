@@ -9,7 +9,6 @@
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
 
-  <!-- TOP HUB NAVIGATION BAR -->
   <header class="bg-black text-white p-4 border-b border-slate-800 sticky top-0 z-50 shadow-md">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center space-x-3">
@@ -28,15 +27,8 @@
     </div>
   </header>
 
-  <!-- NOTIFICATION TOAST BOX -->
-  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-black text-white px-5 py-3 rounded-xl border border-slate-800 flex items-center space-x-3 shadow-2xl">
-    <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-    <span id="toast-text" class="text-xs font-bold uppercase tracking-wide">Action Processed</span>
-  </div>
-
   <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
     
-    <!-- SUCCESS SCREEN FOR CUSTOMERS -->
     <div id="view-success" class="hidden max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-4 shadow-sm my-12 animate-fadeIn">
       <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
       <h2 class="text-xl font-bold text-slate-900">Quote Request Submitted!</h2>
@@ -48,7 +40,6 @@
       </button>
     </div>
 
-    <!-- SECTION 1: CUSTOMER ESTIMATOR PORTAL -->
     <div id="view-estimator" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
         <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-start space-x-3">
@@ -75,18 +66,15 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Apparel Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Dropdown options injected dynamically by JavaScript -->
-              </select>
+                </select>
             </div>
           </div>
 
-          <!-- PUBLIC CATALOG SOURCING NOTICES -->
           <div id="catalog-notice-screenprint" class="p-4 bg-slate-50 border rounded-xl text-xs text-slate-600 leading-normal">
             <span class="font-bold text-black block mb-0.5">Looking for specific styles?</span>
             We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
           </div>
 
-          <!-- DYNAMIC OTTOCAP PORTAL LINK BOX -->
           <div id="catalog-notice-ottocap" class="hidden p-4 bg-slate-900 text-white rounded-xl text-xs leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Options</span>
@@ -97,7 +85,6 @@
             </a>
           </div>
 
-          <!-- ARTWORK UPLOAD INTEGRATION CONTAINER -->
           <div class="border-2 border-dashed border-slate-200 rounded-2xl p-6 bg-slate-50/50 text-center space-y-3 transition-colors hover:border-slate-400 relative">
             <div class="space-y-1">
               <span class="block text-xs font-bold uppercase tracking-wider text-slate-700">Upload Logo Artwork File</span>
@@ -117,7 +104,6 @@
             </div>
           </div>
 
-          <!-- METHOD DEPENDENT CONFIGURATIONS -->
           <div id="box-screenprint" class="grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl">
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Front Ink Colors (0 - 4)</label>
@@ -148,7 +134,6 @@
             </div>
           </div>
 
-          <!-- TARGET PRODUCTION DATE FRAME -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Garment Color</label>
@@ -160,12 +145,8 @@
             </div>
           </div>
 
-          <!-- TURNAROUND NOTIFICATION BOX -->
-          <div id="date-turnaround-notice" class="p-3.5 rounded-xl border text-xs leading-normal transition-all hidden">
-            <!-- Populated dynamically via JavaScript -->
-          </div>
+          <div id="date-turnaround-notice" class="p-3.5 rounded-xl border text-xs leading-normal transition-all hidden"></div>
 
-          <!-- QUANTITY MATRIX RUN -->
           <div class="p-4 bg-slate-50 border rounded-xl space-y-3">
             <div class="flex justify-between items-center">
               <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Garment Sizing Volumes</label>
@@ -191,7 +172,6 @@
         </form>
       </div>
 
-      <!-- SIDE TALLY BOARD -->
       <div class="space-y-4">
         <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl border border-slate-800">
           <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 pb-2 border-b border-slate-800">Live Invoice Summary</h3>
@@ -213,7 +193,6 @@
       </div>
     </div>
 
-    <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD -->
     <div id="view-dashboard" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
       <div class="border rounded-2xl p-4 min-h-[500px] flex flex-col bg-slate-50 border-slate-200">
         <div class="flex justify-between items-center border-b pb-2 mb-4"><span class="text-xs font-extrabold uppercase tracking-wider text-slate-600">Pending Review</span></div>
@@ -225,447 +204,4 @@
       </div>
       <div class="border rounded-2xl p-4 min-h-[500px] flex flex-col bg-slate-200/40 border-slate-300">
         <div class="flex justify-between items-center border-b pb-2 mb-4"><span class="text-xs font-extrabold uppercase tracking-wider text-slate-800">In Production</span></div>
-        <div id="col-production" class="space-y-3 flex-1"></div>
-      </div>
-      <div class="border rounded-2xl p-4 min-h-[500px] flex flex-col bg-slate-900/10 border-slate-400">
-        <div class="flex justify-between items-center border-b pb-2 mb-4"><span class="text-xs font-extrabold uppercase tracking-wider text-slate-900">Ready / Complete</span></div>
-        <div id="col-ready" class="space-y-3 flex-1"></div>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- APP STATE MACHINERY -->
-  <script>
-    let appOrders = [
-      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks.', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
-      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment.', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
-    ];
-
-    let currentArtBase64 = '';
-    let logoOnFile = false;
-    let isAdminMode = false;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('admin') === 'true') {
-      isAdminMode = true;
-      document.getElementById('admin-nav-container').classList.remove('hidden');
-      document.getElementById('hub-subtitle').innerText = "Production Command Hub";
-    }
-
-    if (localStorage.getItem('hpc_static_orders')) {
-      appOrders = JSON.parse(localStorage.getItem('hpc_static_orders'));
-    } else {
-      localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
-    }
-
-    function saveState() {
-      localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
-      document.getElementById('queue-count').innerText = appOrders.length;
-    }
-
-    function initializeDefaultDates() {
-      const dateInput = document.getElementById('input-date');
-      const today = new Date();
-      
-      const twoWeeksOut = new Date(today.getTime() + (14 * 24 * 60 * 60 * 1000));
-      const year = twoWeeksOut.getFullYear();
-      const month = String(twoWeeksOut.getMonth() + 1).padStart(2, '0');
-      const day = String(twoWeeksOut.getDate()).padStart(2, '0');
-      
-      dateInput.value = `${year}-${month}-${day}`;
-      validateTurnaroundTimeline();
-    }
-
-    function validateTurnaroundTimeline() {
-      const dateInput = document.getElementById('input-date').value;
-      const noticeBox = document.getElementById('date-turnaround-notice');
-      if (!dateInput) {
-        noticeBox.classList.add('hidden');
-        return;
-      }
-
-      const selectedDate = new Date(dateInput + 'T00:00:00');
-      const today = new Date();
-      today.setHours(0,0,0,0);
-
-      const timeDiff = selectedDate.getTime() - today.getTime();
-      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-      noticeBox.classList.remove('hidden');
-
-      if (daysDiff < 14) {
-        noticeBox.className = "p-4 rounded-xl border border-sky-200 bg-sky-50 text-xs text-sky-800 leading-normal animate-fadeIn";
-        noticeBox.innerHTML = `
-          <span class="font-bold text-sky-950 block mb-0.5">⚡ Need it quick? Let's talk!</span>
-          We try our absolute best to never miss a deadline. Go ahead and submit your project specs—our team will look over our current production schedule right away and do everything we can to squeeze you in. Please note that projects needed inside our standard 2-week turnaround window <b>may be subject to an expedited rush order fee</b> to cover late-night setups, or timeline adjustments depending on stock availability.
-        `;
-      } else {
-        noticeBox.className = "p-3.5 rounded-xl border border-emerald-100 bg-emerald-50/50 text-xs text-emerald-700 leading-normal";
-        noticeBox.innerHTML = `
-          <span class="font-bold text-emerald-800 block mb-0.5">✓ Standard Timeline Confirmed</span>
-          Your date clears our baseline 14-day production windows. No rush penalties apply.
-        `;
-      }
-    }
-
-    function switchView(target) {
-      if (!isAdminMode && target === 'dashboard') return;
-      
-      if (target === 'estimator') {
-        document.getElementById('view-estimator').classList.remove('hidden');
-        document.getElementById('view-dashboard').classList.add('hidden');
-        document.getElementById('view-success').classList.add('hidden');
-        document.getElementById('nav-estimator').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black";
-        document.getElementById('nav-dashboard').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white";
-      } else if (target === 'dashboard') {
-        document.getElementById('view-estimator').classList.add('hidden');
-        document.getElementById('view-success').classList.add('hidden');
-        document.getElementById('view-dashboard').classList.remove('hidden');
-        document.getElementById('nav-dashboard').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black";
-        document.getElementById('nav-estimator').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white";
-        renderDashboard();
-      }
-    }
-
-    function processArtworkFile(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        currentArtBase64 = e.target.result;
-        document.getElementById('art-preview-img').src = currentArtBase64;
-        document.getElementById('art-preview-box').classList.remove('hidden');
-        showToast('Graphic design file attached successfully');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function clearUploadedArt() {
-      currentArtBase64 = '';
-      document.getElementById('input-art').value = '';
-      document.getElementById('art-preview-box').classList.add('hidden');
-      document.getElementById('art-preview-img').src = '';
-    }
-
-    // FIXED FIELD SWITCH BUILD ENGINE
-    function updateFormFields() {
-      const type = document.getElementById('input-type').value;
-      const brandSelect = document.getElementById('input-brand');
-      
-      brandSelect.innerHTML = '';
-
-      if (type === 'Screen Printing') {
-        document.getElementById('box-screenprint').classList.remove('hidden');
-        document.getElementById('box-embroidery').classList.add('hidden');
-        document.getElementById('catalog-notice-screenprint').classList.remove('hidden');
-        document.getElementById('catalog-notice-ottocap').classList.add('hidden');
-        
-        const spOptions = [
-          { value: 'Gildan (Economical)', text: 'Gildan (Economical Tier)' },
-          { value: 'Next Level (Mid-Tier)', text: 'Next Level (Mid-Tier)' },
-          { value: 'Bella+Canvas (Mid-Tier)', text: 'Bella+Canvas (Mid-Tier)' },
-          { value: 'Specialty Blank (Heavyweight / Vintage Boxy)', text: 'Specialty Blank (Heavyweight)' },
-          { value: 'Other', text: 'Other / Custom Catalog Request' }
-        ];
-        spOptions.forEach(opt => {
-          let el = document.createElement('option');
-          el.value = opt.value;
-          el.text = opt.text;
-          brandSelect.appendChild(el);
-        });
-      } else {
-        document.getElementById('box-screenprint').classList.add('hidden');
-        document.getElementById('box-embroidery').classList.remove('hidden');
-        document.getElementById('catalog-notice-screenprint').classList.add('hidden');
-        
-        const embOptions = [
-          { value: 'Hats (Adjustable / Flexfit)', text: 'Hats (Adjustable / Flexfit)' },
-          { value: 'Polos (Professional Blank)', text: 'Polos (Professional Classic)' },
-          { value: 'Hoodies (Midweight Layering)', text: 'Hoodies (Cozy Midweight Fleeces)' },
-          { value: 'Jackets (Outerwear Protection)', text: 'Jackets (Premium Outerwear Layer)' },
-          { value: 'Other', text: 'Other / Custom Blank Catalog Spec' }
-        ];
-        embOptions.forEach(opt => {
-          let el = document.createElement('option');
-          el.value = opt.value;
-          el.text = opt.text;
-          brandSelect.appendChild(el);
-        });
-      }
-      checkSelectedBrand();
-    }
-
-    function checkSelectedBrand() {
-      const type = document.getElementById('input-type').value;
-      const brand = document.getElementById('input-brand').value;
-      const ottocapNotice = document.getElementById('catalog-notice-ottocap');
-
-      if (type === 'Embroidery' && brand && brand.startsWith('Hats')) {
-        ottocapNotice.classList.remove('hidden');
-      } else {
-        ottocapNotice.classList.add('hidden');
-      }
-      recalculateQuote();
-    }
-
-    function setLogoOnFile(val) {
-      logoOnFile = val;
-      document.getElementById('btn-file-yes').className = val ? "px-3 py-1 rounded border text-[11px] font-bold bg-black text-white" : "px-3 py-1 rounded border text-[11px] font-bold bg-slate-100";
-      document.getElementById('btn-file-no').className = !val ? "px-3 py-1 rounded border text-[11px] font-bold bg-black text-white" : "px-3 py-1 rounded border text-[11px] font-bold bg-slate-100";
-      recalculateQuote();
-    }
-
-    function recalculateQuote() {
-      const type = document.getElementById('input-type').value;
-      const brand = document.getElementById('input-brand').value;
-      const frontColors = parseInt(document.getElementById('input-front').value) || 0;
-      const backColors = parseInt(document.getElementById('input-back').value) || 0;
-      const stitchCount = parseInt(document.getElementById('input-stitch').value) || 5000;
-
-      const qty = (parseInt(document.getElementById('size-s').value) || 0) +
-                  (parseInt(document.getElementById('size-m').value) || 0) +
-                  (parseInt(document.getElementById('size-l').value) || 0) +
-                  (parseInt(document.getElementById('size-xl').value) || 0) +
-                  (parseInt(document.getElementById('size-2xl').value) || 0);
-
-      document.getElementById('summary-qty').innerText = qty + " garments";
-      document.getElementById('summary-brand').innerText = brand ? brand.split(' ')[0] : 'Gildan';
-
-      const spRetail = { 
-        'Gildan (Economical)': 6.25, 
-        'Next Level (Mid-Tier)': 8.75, 
-        'Bella+Canvas (Mid-Tier)': 8.75, 
-        'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 
-        'Other': 10.00 
-      };
-
-      const embRetail = {
-        'Hats (Adjustable / Flexfit)': 10.00,
-        'Polos (Professional Blank)': 15.00,
-        'Hoodies (Midweight Layering)': 22.00,
-        'Jackets (Outerwear Protection)': 42.00,
-        'Other': 12.00
-      };
-
-      const blankRetail = type === 'Screen Printing' ? (spRetail[brand] || 10.00) : (embRetail[brand] || 12.00);
-      let decoFee = 0;
-
-      if (type === 'Screen Printing') {
-        const grid = [0, 6.50, 7.50, 8.50, 9.50];
-        decoFee = (grid[Math.min(4, Math.max(0, frontColors))] || 0) + (grid[Math.min(4, Math.max(0, backColors))] || 0);
-      } else {
-        let baseRun = qty < 12 ? 5.00 : qty < 24 ? 4.00 : qty < 48 ? 3.00 : 2.50;
-        decoFee = baseRun + ((stitchCount / 1000) * 1.50);
-      }
-
-      const rate = qty > 0 ? (blankRetail + decoFee) : 0;
-      let total = qty * rate;
-      if (type === 'Embroidery' && !logoOnFile) total += 30.00;
-
-      document.getElementById('summary-rate').innerText = rate.toFixed(2);
-      document.getElementById('summary-total').innerText = total.toFixed(2);
-
-      const submitBtn = document.getElementById('submit-btn');
-      const warning = document.getElementById('min-warning');
-      if (qty >= 12) {
-        submitBtn.disabled = false;
-        submitBtn.className = "w-full bg-black hover:bg-slate-900 text-white font-bold py-4 rounded-xl text-sm tracking-wide shadow transition-all cursor-pointer";
-        submitBtn.innerText = "Submit Quote Request";
-        warning.innerText = "Batch run size criteria matched ✓";
-        warning.className = "text-[11px] font-bold text-emerald-600";
-      } else {
-        submitBtn.disabled = true;
-        submitBtn.className = "w-full bg-slate-100 text-slate-400 font-bold py-4 rounded-xl text-sm border border-slate-200 text-center shadow-inner cursor-not-allowed";
-        submitBtn.innerText = "Request Quote (Minimum of 12 items required)";
-        warning.className = "text-[11px] font-bold text-slate-800";
-        warning.innerText = `Almost there! Add ${12 - qty} more items to activate batch quote`;
-      }
-    }
-
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      
-      const s = parseInt(document.getElementById('size-s').value) || 0;
-      const m = parseInt(document.getElementById('size-m').value) || 0;
-      const l = parseInt(document.getElementById('size-l').value) || 0;
-      const xl = parseInt(document.getElementById('size-xl').value) || 0;
-      const xxl = parseInt(document.getElementById('size-2xl').value) || 0;
-      const totalQty = s + m + l + xl + xxl;
-
-      const newOrder = {
-        id: "HPC-" + Math.floor(1000 + Math.random() * 9000),
-        customerName: document.getElementById('input-name').value,
-        decorationType: document.getElementById('input-type').value,
-        brand: document.getElementById('input-brand').value,
-        color: document.getElementById('input-color').value,
-        dueDate: document.getElementById('input-date').value,
-        frontColors: parseInt(document.getElementById('input-front').value) || 0,
-        backColors: parseInt(document.getElementById('input-back').value) || 0,
-        stitchCount: parseInt(document.getElementById('input-stitch').value) || 5000,
-        logoOnFile: logoOnFile,
-        sizes: { S: s, M: m, L: l, XL: xl, '2XL': xxl },
-        totalQuantity: totalQty,
-        estimatedTotal: parseFloat(document.getElementById('summary-total').innerText),
-        notes: document.getElementById('input-notes').value,
-        stage: 'pending',
-        tasks: [false, false, false, false, false, false],
-        artData: currentArtBase64
-      };
-
-      appOrders.unshift(newOrder);
-      saveState();
-      
-      document.getElementById('estimator-form').reset();
-      clearUploadedArt();
-      
-      document.getElementById('view-estimator').classList.add('hidden');
-      document.getElementById('view-success').classList.remove('hidden');
-      showToast('Project registered successfully');
-    }
-
-    function resetPortalForNewQuote() {
-      document.getElementById('view-success').classList.add('hidden');
-      document.getElementById('view-estimator').classList.remove('hidden');
-      updateFormFields();
-      initializeDefaultDates();
-    }
-
-    function toggleTask(orderId, taskIndex) {
-      const o = appOrders.find(order => order.id === orderId);
-      if (o) {
-        o.tasks[taskIndex] = !o.tasks[taskIndex];
-        saveState();
-        renderDashboard();
-      }
-    }
-
-    function advanceJob(orderId) {
-      const o = appOrders.find(order => order.id === orderId);
-      if (o) {
-        if (o.stage === 'pending') o.stage = 'prepress';
-        else if (o.stage === 'prepress') o.stage = 'production';
-        else if (o.stage === 'production') o.stage = 'ready';
-        saveState();
-        showToast('Job card advanced down pipeline');
-        renderDashboard();
-      }
-    }
-
-    function printTicket(id) {
-      const o = appOrders.find(order => order.id === id);
-      if (!o) return;
-      const w = window.open('', '_blank');
-      let szHtml = '';
-      for (let [sz, q] of Object.entries(o.sizes)) {
-        if(q > 0) szHtml += `<td style="border:1px solid black;padding:10px;text-align:center;"><b>${sz}</b><br/>${q} Pcs</td>`;
-      }
-
-      let artImageHtml = o.artData ? 
-        `<div style="margin-top:20px; border:1px solid #cbd5e1; padding:10px; display:inline-block; border-radius:8px;">
-          <h4 style="margin:0 0 8px 0; font-size:12px; color:#64748b;">ATTACHED DESIGN LAYOUT REFERENCE:</h4>
-          <img src="${o.artData}" style="max-height:220px; max-width:100%; object-contain:fit;" />
-         </div>` : 
-        `<p style="color:#94a3b8; font-style:italic; font-size:12px; margin-top:20px;">No graphic artwork uploaded.</p>`;
-      
-      w.document.write(`
-        <html><body style="padding:40px;font-family:sans-serif;">
-          <h1 style="border-bottom:4px solid black;padding-bottom:10px;margin-bottom:2px;">HUSSLE PRINT CO.</h1>
-          <div style="font-size:12px;text-transform:uppercase;color:#64748b;font-weight:bold;margin-bottom:20px;">Physical Run Sheet Ticket</div>
-          <p><b>Order Reference ID:</b> ${o.id}</p>
-          <p><b>Client Partner:</b> ${o.customerName}</p>
-          <p><b>Decoration Medium:</b> ${o.decorationType} (${o.brand})</p>
-          <p><b>Fabric Color Required:</b> ${o.color}</p>
-          <p><b>Target Delivery Date:</b> ${o.dueDate}</p>
-          
-          ${artImageHtml}
-
-          <h4 style="border-bottom:1px solid black;padding-bottom:4px;margin-top:30px;">Size Run Distribution Quantities</h4>
-          <table style="border-collapse:collapse;border:1px solid black;margin-bottom:20px;"><tr>${szHtml}</tr></table>
-          <p style="background:#f1f5f9;padding:12px;font-size:12px;border-left:3px solid black;font-style:italic;">"Floor Notes: ${o.notes || 'Default layout parameters apply.'}"</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid black;margin-top:40px;text-align:center;font-size:11px;">
-            <div style="padding:15px;">Pre-Press Signed<br/><br/>____________</div>
-            <div style="padding:15px;">Operator Setup Signed<br/><br/>____________</div>
-            <div style="padding:15px;">QA Inspected Signed<br/><br/>____________</div>
-          </div>
-        </body></html>
-      `);
-      w.document.close();
-      w.print();
-    }
-
-    function showToast(text) {
-      const t = document.getElementById('toast');
-      document.getElementById('toast-text').innerText = text;
-      t.classList.remove('hidden');
-      setTimeout(() => t.classList.add('hidden'), 3500);
-    }
-
-    function renderDashboard() {
-      document.getElementById('col-pending').innerHTML = '';
-      document.getElementById('col-prepress').innerHTML = '';
-      document.getElementById('col-production').innerHTML = '';
-      document.getElementById('col-ready').innerHTML = '';
-
-      appOrders.forEach(o => {
-        const labels = o.decorationType === 'Screen Printing' ? 
-          ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] :
-          ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Master Proofed', 'Threads Prepped'];
-
-        let taskButtons = '';
-        labels.forEach((label, index) => {
-          const isDone = o.tasks[index];
-          taskButtons += `
-            <button onclick="toggleTask('${o.id}', ${index})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border flex items-center space-x-2 transition-all ${isDone ? 'bg-black text-white border-black shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border-slate-200'}">
-              <span>${isDone ? '✓' : '○'}</span><span class="truncate">${label}</span>
-            </button>
-          `;
-        });
-
-        let cardThumbnailHtml = o.artData ? 
-          `<div class="mt-2 border rounded-lg bg-slate-50 p-1 flex justify-center items-center h-16 w-full">
-            <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
-           </div>` : '';
-
-        const isLastStage = o.stage === 'ready';
-        const cardHtml = `
-          <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
-            <div class="flex justify-between items-center text-[10px] font-bold">
-              <span class="bg-slate-900 text-white px-2 py-0.5 rounded">${o.id}</span>
-              <span class="text-slate-400 font-semibold">${o.dueDate}</span>
-            </div>
-            <div>
-              <h4 class="font-bold text-sm text-slate-900 truncate leading-tight">${o.customerName}</h4>
-              <p class="text-xs text-slate-500 mt-1 font-medium">${o.totalQuantity}x ${o.color} Garments</p>
-              <span class="text-[10px] font-bold text-slate-400 block mt-0.5 uppercase tracking-wide bg-slate-100 px-2 py-0.5 rounded inline-block">${o.brand}</span>
-            </div>
-
-            ${cardThumbnailHtml}
-
-            <div class="grid grid-cols-2 gap-1 pt-1 border-t border-slate-100">
-              ${taskButtons}
-            </div>
-
-            <div class="pt-2 border-t flex justify-between items-center text-xs">
-              <div>
-                <span class="text-[9px] text-slate-400 block uppercase font-bold tracking-wider">Total Value</span>
-                <span class="text-xs font-extrabold text-slate-900">${o.estimatedTotal ? '$' + o.estimatedTotal.toFixed(2) : 'Quote Pending'}</span>
-              </div>
-              <button onclick="printTicket('${o.id}')" class="bg-slate-50 hover:bg-slate-100 border text-slate-700 px-3 py-1 rounded text-[10px] font-bold">Ticket</button>
-            </div>
-            
-            ${!isLastStage ? `<button onclick="advanceJob('${o.id}')" class="w-full bg-black hover:bg-slate-900 text-white font-bold py-2 rounded-lg text-xs transition-colors flex items-center justify-center space-x-1">Advance Stage →</button>` : ''}
-          </div>
-        `;
-
-        document.getElementById(`col-${o.stage}`).innerHTML += cardHtml;
-      });
-      document.getElementById('queue-count').innerText = appOrders.length;
-    }
-
-    updateFormFields();
-    initializeDefaultDates();
-  </script>
-</body>
-</html>
+        <div id="col-production" class="space-y
