@@ -29,7 +29,6 @@
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <!-- Private admin queue navigation toggle dashboard -->
         <div id="admin-nav-container" class="hidden bg-slate-900 p-1 rounded-xl flex border border-slate-800 shadow-inner">
           <button onclick="switchView('estimator')" id="nav-estimator" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black">Estimator</button>
           <button onclick="switchView('dashboard')" id="nav-dashboard" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white">Dashboard (<span id="queue-count">0</span>)</button>
@@ -68,7 +67,7 @@
           </div>
         </div>
 
-        <!-- PERMANENT HIGHEST VISIBILITY SHOWROOM DESIGN studio PANEL -->
+        <!-- HIGH-VISIBILITY DESIGN STUDIO CANVAS -->
         <div class="border border-slate-300 rounded-2xl overflow-hidden bg-slate-200/50 shadow-sm">
           <div class="p-4 bg-white border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -81,15 +80,15 @@
             </label>
           </div>
 
-          <!-- MOCKUP CANVAS TOGGLES -->
+          <!-- MOCKUP CANVAS MODEL SELECTORS -->
           <div class="px-4 py-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center gap-2 justify-center sm:justify-start">
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Canvas Model:</span>
             <button type="button" id="btn-model-shirt" onclick="switchMockupCanvasProductStyle('shirt')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-black text-white border-black">👕 T-Shirt</button>
-            <button type="button" id="btn-model-hoodie" onclick="switchMockupCanvasProductStyle('hoodie')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-white text-slate-600 border-slate-200 hover:bg-slate-100"><i></i>🧥 Hoodie</button>
+            <button type="button" id="btn-model-hoodie" onclick="switchMockupCanvasProductStyle('hoodie')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-white text-slate-600 border-slate-200 hover:bg-slate-100">🧥 Hoodie</button>
             <button type="button" id="btn-model-cap" onclick="switchMockupCanvasProductStyle('cap')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-white text-slate-600 border-slate-200 hover:bg-slate-100">🧢 Snapback Cap</button>
           </div>
 
-          <!-- PLACEMENT ZONE CONTROLS -->
+          <!-- PLACEMENT TARGET CONTROLS -->
           <div class="px-4 py-2 bg-slate-100/80 border-b border-slate-200 flex flex-wrap items-center gap-1.5 justify-center sm:justify-start text-xs">
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Logo Target Site:</span>
             <button type="button" id="btn-place-front" onclick="setMockupGraphicPlacementZone('front')" class="apparel-place-btn px-2.5 py-1 rounded bg-black text-white font-bold text-[11px] border border-black transition-all">Front Center</button>
@@ -106,32 +105,32 @@
               Reset Canvas ×
             </button>
 
-            <!-- REAL-TIME ACTIVE LAYER CONTROLLER (Z-INDEX ASSIGNED HIGH TO AVOID OVERLAPS) -->
+            <!-- CANVAS INTERACTIVE WORKSPACE (STABILIZED LAYER VALUES) -->
             <div id="mockup-frame-view-box" class="w-64 h-56 relative flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
               
-              <!-- T-Shirt Graphic Canvas -->
-              <svg id="canvas-svg-shirt" class="absolute inset-0 w-full h-full text-slate-300 fill-current z-0 transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
+              <!-- Shirt Frame -->
+              <svg id="canvas-svg-shirt" class="absolute inset-0 w-full h-full text-slate-300 fill-current z-10 transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
                 <path d="M18,2H14.5A2.5,2.5,0,0,0,12,4.5,2.5,2.5,0,0,0,9.5,2H6A2,2,0,0,0,4,4V9a1,1,0,0,0,1,1H6v11a1,1,0,0,0,1,1H17a1,1,0,0,0,1,-1V10h1a1,1,0,0,0,1,-1V4A2,2,0,0,0,18,2ZM7,8V4H9a4,4,0,0,1,6,0h2V8Z"/>
               </svg>
 
-              <!-- Hoodie Graphic Canvas -->
-              <svg id="canvas-svg-hoodie" class="hidden absolute inset-0 w-full h-full text-slate-300 fill-current z-0 transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
+              <!-- Hoodie Frame -->
+              <svg id="canvas-svg-hoodie" class="hidden absolute inset-0 w-full h-full text-slate-300 fill-current z-10 transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
                 <path d="M12,2A3,3,0,0,0,9,5a3,3,0,0,0,1,2.24V8H6A2,2,0,0,0,4,10v10a2,2,0,0,0,2,2H18a2,2,0,0,0,2,-2V10a2,2,0,0,0,-2,-2H14V7.24A3,3,0,0,0,15,5,3,3,0,0,0,12,2ZM12,14a2,2,0,1,1,-2,-2A2,2,0,0,1,12,14Z"/>
               </svg>
 
-              <!-- Cap Graphic Canvas -->
-              <svg id="canvas-svg-cap" class="hidden absolute inset-0 w-full h-full text-slate-300 fill-current z-0 transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
+              <!-- Cap Frame -->
+              <svg id="canvas-svg-cap" class="hidden absolute inset-0 w-full h-full text-slate-300 fill-current z-10 transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
                 <path d="M12,2A10,10,0,0,0,2,12a2,2,0,0,0,2,2h1a1,1,0,0,1,1,1v1a2,2,0,0,0,2,2h8a2,2,0,0,0,2,-2V15a1,1,0,0,1,1,-1h1a2,2,0,0,0,2,-2A10,10,0,0,0,12,2Zm5,11H7V10H17ZM2,17h20a1,1,0,0,1,0,2H2a1,1,0,0,1,0,-2Z"/>
               </svg>
 
-              <!-- Marketing Asset Canvas Box -->
-              <div id="canvas-svg-card" class="hidden absolute inset-0 w-full h-full bg-slate-300 rounded-2xl border border-slate-400 z-0 shadow-md transition-colors duration-300 flex items-center justify-center">
+              <!-- Marketing Frame Box -->
+              <div id="canvas-svg-card" class="hidden absolute inset-0 w-full h-full bg-slate-300 rounded-2xl border border-slate-400 z-10 shadow-md transition-colors duration-300 flex items-center justify-center">
                 <div class="w-[90%] h-[85%] border border-dashed border-white/40 rounded-xl flex items-center justify-center">
                   <span class="text-[9px] font-black text-white/40 uppercase tracking-widest mockup-placement-pulse">Print bounds active</span>
                 </div>
               </div>
 
-              <!-- TARGET LAYER FOR IMAGES (FIXED TYPO CODES FOR ALIGNMENT RUNS) -->
+              <!-- GRAPHIC RENDER PLACEMENT CORE OVERLAYS (FORCED OVER THE TOP) -->
               <div id="mockup-print-run-target" class="absolute inset-0 pointer-events-none z-30">
                 <div id="mockup-sight-ring" class="absolute w-14 h-14 rounded-full border-2 border-dashed border-white/90 bg-black/30 mockup-placement-pulse flex items-center justify-center transition-all duration-300" style="top: 36%; left: 39%;">
                   <span class="text-[8px] font-bold text-white uppercase tracking-wider text-center leading-tight">Sight<br/>Zone</span>
@@ -144,6 +143,11 @@
         </div>
 
         <form id="estimator-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Customer Name / Organization</label>
+            <input type="text" id="input-name" required placeholder="e.g. Hussle Cafe" class="w-full px-4 py-2.5 border rounded-xl outline-none focus:ring-1 focus:ring-black text-sm text-slate-800" />
+          </div>
+
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Decoration Style / Category</label>
@@ -156,18 +160,18 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Product Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Managed dynamically via JavaScript dropdown filters -->
+                <!-- Loaded dynamically via JavaScript dropdown matrices -->
               </select>
             </div>
           </div>
 
-          <!-- PUBLIC CATALOG SOURCING NOTICES -->
+          <!-- SOURCING CATALOGS CODES NOTICES -->
           <div id="catalog-notice-screenprint" class="p-4 bg-slate-50 border rounded-xl text-xs text-slate-600 leading-normal">
             <span class="font-bold text-black block mb-0.5">Looking for specific styles?</span>
             We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
           </div>
 
-          <!-- OTTOCAP PORTAL BANNER LINK -->
+          <!-- DYNAMIC OTTOCAP CATALOG BANNER LINK -->
           <div id="catalog-notice-ottocap" class="hidden p-4 bg-slate-900 text-white rounded-xl text-xs leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 animate-fadeIn">
             <div>
               <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Options</span>
@@ -178,7 +182,7 @@
             </a>
           </div>
 
-          <!-- METHOD DEPENDENT CONFIGURATIONS -->
+          <!-- DEPENDENT CONFIGURATIONS -->
           <div id="box-screenprint" class="grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl">
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Front Ink Colors (0 - 4)</label>
@@ -220,7 +224,7 @@
             </div>
           </div>
 
-          <!-- BANNER MEASUREMENT MATRIX -->
+          <!-- BANNER MEASUREMENTS -->
           <div id="box-banner-dimensions" class="hidden grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl animate-fadeIn">
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Banner Width (Feet)</label>
@@ -240,7 +244,7 @@
             </select>
           </div>
 
-          <!-- TARGET PRODUCTION DATE FRAME -->
+          <!-- PRODUCTION DATE FRAME -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Asset Base Color</label>
@@ -255,7 +259,7 @@
           <!-- TURNAROUND NOTIFICATION BOX -->
           <div id="date-turnaround-notice" class="p-3.5 rounded-xl border text-xs leading-normal transition-all hidden"></div>
 
-          <!-- DYNAMIC ALL TIER SIZES ROW (S-4XL ALL STABILIZED) -->
+          <!-- QUANTITY TRACKER MATRIX BOARD WITH FULL 7-TIER ROW -->
           <div class="p-4 bg-slate-50 border rounded-xl space-y-3">
             <div class="flex justify-between items-center">
               <label id="matrix-label" class="text-xs font-bold text-slate-600 uppercase tracking-wider">Garment Sizing Volumes</label>
@@ -380,7 +384,9 @@
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true') {
       isAdminMode = true;
-      document.getElementById('admin-nav-container').classList.remove('hidden');
+      if (document.getElementById('admin-nav-container')) {
+        document.getElementById('admin-nav-container').classList.remove('hidden');
+      }
       document.getElementById('hub-subtitle').innerText = "Production Command Hub";
     }
 
@@ -392,7 +398,7 @@
 
     function saveState() {
       localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
-      if(document.getElementById('queue-count')) {
+      if (document.getElementById('queue-count')) {
         document.getElementById('queue-count').innerText = appOrders.length;
       }
     }
@@ -459,7 +465,6 @@
       }
     }
 
-    // CORE MOCKUP CONTROLLER WITH Z-INDEX LAYERS ALIGNED OVER SVG CODES
     function processArtworkFile(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -479,7 +484,7 @@
           if (clearBtn) clearBtn.classList.remove('hidden');
         }
         applyMockupSizingCoordinatesEngine();
-        showToast('Design scaled and rendered on top of mockup canvas');
+        showToast('Design scaled and positioned onto mockup preview canvas');
         recalculateQuote();
       };
       reader.readAsDataURL(file);
@@ -559,32 +564,32 @@
       const art = document.getElementById('mockup-live-graphic-render');
       if (!ring || !art) return;
 
-      let coordinates = { top: '36%', left: '39%', width: '56px', height: '56px' }; 
+      let topVal = '36%', leftVal = '39%', widthVal = '56px', heightVal = '56px';
 
       if (currentMockupActiveStyle === 'shirt' || currentMockupActiveStyle === 'hoodie') {
         if (currentMockupActiveZone === 'chest') {
-          coordinates = { top: '34%', left: '55%', width: '30px', height: '32px' };
+          topVal = '34%'; leftVal = '55%'; widthVal = '30px'; heightVal = '32px';
         } else if (currentMockupActiveZone === 'back') {
-          coordinates = { top: '28%', left: '33%', width: '84px', height: '84px' };
+          topVal = '28%'; leftVal = '33%'; widthVal = '84px'; heightVal = '84px';
         }
       } else if (currentMockupActiveStyle === 'cap') {
         if (currentMockupActiveZone === 'capfront') {
-          coordinates = { top: '40%', left: '33%', width: '64px', height: '40px' };
+          topVal = '40%'; leftVal = '33%'; widthVal = '64px'; heightVal = '40px';
         } else if (currentMockupActiveZone === 'capleft') {
-          coordinates = { top: '44%', left: '16%', width: '36px', height: '24px' };
+          topVal = '44%'; leftVal = '16%'; widthVal = '36px'; heightVal = '24px';
         } else if (currentMockupActiveZone === 'capright') {
-          coordinates = { top: '44%', left: '60%', width: '36px', height: '24px' };
+          topVal = '44%'; leftVal = '60%'; widthVal = '36px'; heightVal = '24px';
         }
       } else if (currentMockupActiveStyle === 'marketing') {
-        coordinates = { top: '25%', left: '20%', width: '112px', height: '80px' };
+        topVal = '25%'; leftVal = '20%'; widthVal = '112px'; heightVal = '80px';
       }
 
       let targets = [ring, art];
       targets.forEach(t => {
-        t.style.top = coordinates.top;
-        t.style.left = coordinates.left;
-        t.style.width = coordinates.width;
-        t.style.height = coordinates.height;
+        t.style.top = topVal;
+        t.style.left = leftVal;
+        t.style.width = widthVal;
+        t.style.height = heightVal;
       });
     }
 
@@ -619,8 +624,38 @@
       
       brandSelect.innerHTML = '';
 
+      const shirtSvg = document.getElementById('canvas-svg-shirt');
+      const capSvg = document.getElementById('canvas-svg-cap');
+      const cardDiv = document.getElementById('canvas-svg-card');
+      const liveGraphic = document.getElementById('mockup-live-graphic-render');
+
+      if (shirtSvg && capSvg && cardDiv) {
+        shirtSvg.classList.add('hidden');
+        capSvg.classList.add('hidden');
+        cardDiv.classList.add('hidden');
+
+        if (type === 'Screen Printing') {
+          shirtSvg.classList.remove('hidden');
+          if (liveGraphic) {
+            liveGraphic.className = "hidden absolute object-contain drop-shadow-2xl transition-all duration-300 z-40";
+            if (currentArtBase64) liveGraphic.classList.remove('hidden');
+          }
+        } else if (type === 'Embroidery') {
+          capSvg.classList.remove('hidden');
+          if (liveGraphic) {
+            liveGraphic.className = "hidden absolute object-contain drop-shadow-2xl transition-all duration-300 z-40";
+            if (currentArtBase64) liveGraphic.classList.remove('hidden');
+          }
+        } else if (type === 'Marketing Materials') {
+          cardDiv.classList.remove('hidden');
+          if (liveGraphic) {
+            liveGraphic.className = "hidden absolute object-contain drop-shadow-2xl transition-all duration-300 z-40";
+            if (currentArtBase64) liveGraphic.classList.remove('hidden');
+          }
+        }
+      }
+
       if (type === 'Screen Printing') {
-        switchMockupCanvasProductStyle('shirt');
         document.getElementById('box-screenprint').classList.remove('hidden');
         document.getElementById('box-embroidery').classList.add('hidden');
         document.getElementById('box-marketing').classList.add('hidden');
@@ -640,7 +675,6 @@
           brandSelect.appendChild(el);
         });
       } else if (type === 'Embroidery') {
-        switchMockupCanvasProductStyle('cap');
         document.getElementById('box-screenprint').classList.add('hidden');
         document.getElementById('box-embroidery').classList.remove('hidden');
         document.getElementById('box-marketing').classList.add('hidden');
@@ -703,6 +737,10 @@
       document.getElementById('marketing-volume-box').classList.add('hidden');
       if (ottocapNotice) ottocapNotice.classList.add('hidden');
 
+      const shirtSvg = document.getElementById('canvas-svg-shirt');
+      const capSvg = document.getElementById('canvas-svg-cap');
+      const liveGraphic = document.getElementById('mockup-live-graphic-render');
+
       if (type === 'Screen Printing') {
         document.getElementById('matrix-label').innerText = "Garment Sizing Volumes";
         document.getElementById('sizing-grid').classList.remove('hidden');
@@ -737,7 +775,7 @@
         } else if (brand && brand.startsWith('Business')) {
           document.getElementById('box-card-packs').classList.remove('hidden');
           document.getElementById('marketing-volume-box').classList.add('hidden'); 
-          syncCardPackCalculations();
+          syncCardPackQuantityValues();
           return;
         } else {
           document.getElementById('volume-box-label').innerText = "Total Order Quantity";
@@ -827,8 +865,8 @@
         document.getElementById('rate-wrapper').classList.add('hidden');
         document.getElementById('total-wrapper').innerHTML = `<span class="text-sm font-bold text-sky-400">Quote Pending Review</span>`;
       } else {
-        document.getElementById('summary-rate').innerText = rate.toFixed(2);
-        document.getElementById('summary-total').innerText = total.toFixed(2);
+        if(document.getElementById('summary-rate')) document.getElementById('summary-rate').innerText = rate.toFixed(2);
+        if(document.getElementById('summary-total')) document.getElementById('summary-total').innerText = total.toFixed(2);
       }
 
       const submitBtn = document.getElementById('submit-btn');
@@ -919,7 +957,7 @@
       document.getElementById('view-estimator').classList.add('hidden');
       document.getElementById('portal-footer').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
-      showToast('Project setup and mockup preferences logged');
+      showToast('Project registered successfully');
     }
 
     function resetPortalForNewQuote() {
@@ -940,6 +978,7 @@
     }
 
     function renderDashboard() {
+      if(!document.getElementById('col-pending')) return;
       document.getElementById('col-pending').innerHTML = '';
       document.getElementById('col-prepress').innerHTML = '';
       document.getElementById('col-production').innerHTML = '';
@@ -956,7 +995,7 @@
         labels.forEach((label, index) => {
           const isDone = o.tasks[index];
           taskButtons += `
-            <button onclick="toggleTask('${o.id}', ${index})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border flex items-center space-x-2 transition-all ${isDone ? 'bg-black text-white border-black shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border-slate-200'}">
+            <button class="w-full text-left text-[10px] p-1.5 rounded font-bold border flex items-center space-x-2 transition-all ${isDone ? 'bg-black text-white border-black shadow-sm' : 'bg-slate-50 text-slate-500 border-slate-200'}">
               <span>${isDone ? '✓' : '○'}</span><span class="truncate">${label}</span>
             </button>
           `;
@@ -967,7 +1006,6 @@
             <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
            </div>` : '';
 
-        const isLastStage = o.stage === 'ready';
         const cardHtml = `
           <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
             <div class="flex justify-between items-center text-[10px] font-bold">
@@ -976,28 +1014,17 @@
             </div>
             <div>
               <h4 class="font-bold text-sm text-slate-900 truncate leading-tight">${o.customerName}</h4>
-              <p class="text-xs text-slate-500 mt-1 font-medium">${o.totalQuantity ? o.totalQuantity + 'x Items' : 'Run Items Ordered'}</p>
+              <p class="text-xs text-slate-500 mt-1 font-medium">${o.totalQuantity}x Items</p>
               <span class="text-[10px] font-bold text-slate-400 block mt-0.5 uppercase tracking-wide bg-slate-100 px-2 py-0.5 rounded inline-block truncate max-w-full">${o.brand}</span>
             </div>
-
             ${cardThumbnailHtml}
-
             <div class="grid grid-cols-2 gap-1 pt-1 border-t border-slate-100">
               ${taskButtons}
             </div>
-
-            <div class="pt-2 border-t flex justify-between items-center text-xs">
-              <div>
-                <span class="text-[9px] text-slate-400 block uppercase font-bold tracking-wider">Total Value</span>
-                <span class="text-xs font-extrabold text-slate-900">${o.estimatedTotal ? '$' + o.estimatedTotal.toFixed(2) : 'Quote Pending'}</span>
-              </div>
-            </div>
-            
-            ${!isLastStage ? `<button onclick="advanceJob('${o.id}')" class="w-full bg-black hover:bg-slate-900 text-white font-bold py-2 rounded-lg text-xs transition-colors flex items-center justify-center space-x-1">Advance Stage →</button>` : ''}
           </div>
         `;
-
-        document.getElementById(`col-${o.stage}`).innerHTML += cardHtml;
+        const targetCol = document.getElementById(`col-${o.stage}`);
+        if(targetCol) targetCol.innerHTML += cardHtml;
       });
       if(document.getElementById('queue-count')) {
         document.getElementById('queue-count').innerText = appOrders.length;
