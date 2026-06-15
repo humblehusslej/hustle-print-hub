@@ -71,7 +71,7 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Product Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Loaded dynamically via JavaScript layout switches -->
+                <!-- Loaded dynamically via JavaScript switches -->
               </select>
             </div>
           </div>
@@ -144,16 +144,25 @@
             </div>
           </div>
 
-          <!-- MARKETING MATERIAL LAYER OPTIONS -->
-          <div id="box-marketing" class="hidden grid grid-cols-1 gap-4 p-4 bg-slate-50 border rounded-xl">
+          <!-- INTEGRATED BANNER SQUARE FOOTAGE ESTIMATOR BOXES -->
+          <div id="box-banner-dimensions" class="hidden grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl">
             <div>
-              <label class="text-xs font-bold text-slate-500 block mb-1">Asset Finish / Material Coating</label>
-              <select id="input-finish" onchange="recalculateQuote()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800">
-                <option value="Standard/Coated Matched">Standard Gloss / Protected Finish</option>
-                <option value="Premium Heavyweight Matte">Premium Heavy Matte Texture</option>
-                <option value="Heavy-Duty Outdoor Raw">Heavy-Duty Outdoor Weatherproof</option>
-              </select>
+              <label class="text-xs font-bold text-slate-500 block mb-1">Banner Width (Feet)</label>
+              <input type="number" id="input-banner-w" min="1" value="4" oninput="recalculateQuote()" class="w-full p-2 border rounded-lg text-sm text-slate-800 outline-none" />
             </div>
+            <div>
+              <label class="text-xs font-bold text-slate-500 block mb-1">Banner Height (Feet)</label>
+              <input type="number" id="input-banner-h" min="1" value="2" oninput="recalculateQuote()" class="w-full p-2 border rounded-lg text-sm text-slate-800 outline-none" />
+            </div>
+          </div>
+
+          <!-- BUSINESS CARD PACK SELECTOR BOX -->
+          <div id="box-card-packs" class="hidden p-4 bg-slate-50 border rounded-xl">
+            <label class="text-xs font-bold text-slate-500 block mb-1">Select Print Quantity Tier Pack</label>
+            <select id="input-card-tier" onchange="syncCardPackVolumes()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800 outline-none">
+              <option value="250">Starter Run Batch (250 Cards - $60)</option>
+              <option value="500">Commercial Standard Batch (500 Cards - $120)</option>
+            </select>
           </div>
 
           <!-- TARGET PRODUCTION DATE FRAME -->
@@ -177,6 +186,7 @@
               <label id="matrix-label" class="text-xs font-bold text-slate-600 uppercase tracking-wider">Garment Sizing Volumes</label>
               <span id="min-warning" class="text-[11px] font-bold text-slate-800">Add 12 total garments to initialize batch</span>
             </div>
+            
             <div id="sizing-grid" class="grid grid-cols-5 gap-2">
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">S</span><input type="number" id="size-s" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">M</span><input type="number" id="size-m" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
@@ -185,16 +195,16 @@
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">2XL</span><input type="number" id="size-2xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
             </div>
             
-            <!-- Alternative volume field for structural components -->
+            <!-- General count box for banners, signage or magnets -->
             <div id="marketing-volume-box" class="hidden bg-white border rounded-xl p-3 shadow-sm flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Order Quantity</span>
-              <input type="number" id="input-marketing-qty" min="1" value="50" oninput="recalculateQuote()" class="text-right font-bold text-sm outline-none border-b w-24 focus:border-black" />
+              <span id="volume-box-label" class="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Order Quantity</span>
+              <input type="number" id="input-marketing-qty" min="1" value="1" oninput="recalculateQuote()" class="text-right font-bold text-sm outline-none border-b w-24 focus:border-black" />
             </div>
           </div>
 
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Special Operator Notes / Requirements</label>
-            <textarea id="input-notes" rows="3" placeholder="Specify layout sizing details (e.g., 24x36 inch metal panels, 12x24 magnet sheets), or custom catalog item names..." class="w-full px-4 py-2.5 border rounded-xl outline-none text-sm resize-none focus:ring-1 focus:ring-black text-slate-800"></textarea>
+            <textarea id="input-notes" rows="3" placeholder="Specify layout details, exact width indicators, style code configurations, or custom text..." class="w-full px-4 py-2.5 border rounded-xl outline-none text-sm resize-none focus:ring-1 focus:ring-black text-slate-800"></textarea>
           </div>
 
           <button type="submit" id="submit-btn" disabled class="w-full bg-slate-100 text-slate-400 font-bold py-4 rounded-xl text-sm border border-slate-200 text-center shadow-inner cursor-not-allowed">
@@ -208,16 +218,16 @@
         <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl border border-slate-800">
           <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 pb-2 border-b border-slate-800">Live Invoice Summary</h3>
           <div class="space-y-3 text-xs">
-            <div class="flex justify-between"><span class="text-slate-400">Total Run Items:</span><span id="summary-qty" class="font-bold">0 garments</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">Total Run Items:</span><span id="summary-qty" class="font-bold">0 items</span></div>
             <div class="flex justify-between"><span class="text-slate-400">Product Base:</span><span id="summary-brand" class="font-bold text-slate-200">Gildan</span></div>
             <div class="flex justify-between border-t border-slate-800 pt-3">
               <div>
                 <span id="label-unit-price" class="text-[10px] uppercase text-slate-400 block font-bold tracking-wider">Per-Garment (Finished)</span>
-                <span class="text-xl font-black text-white">$<span id="summary-rate">0.00</span></span>
+                <span class="text-xl font-black text-white" id="rate-wrapper">$<span id="summary-rate">0.00</span></span>
               </div>
               <div class="text-right">
                 <span class="text-[10px] uppercase text-slate-400 block font-bold tracking-wider">Project Value</span>
-                <span class="text-xl font-black text-emerald-400">$<span id="summary-total">0.00</span></span>
+                <span class="text-xl font-black text-emerald-400" id="total-wrapper">$<span id="summary-total">0.00</span></span>
               </div>
             </div>
           </div>
@@ -395,6 +405,10 @@
       
       brandSelect.innerHTML = '';
 
+      // Reset dynamic layouts to baseline hidden paths
+      document.getElementById('box-banner-dimensions').classList.add('hidden');
+      document.getElementById('box-card-packs').classList.add('hidden');
+
       if (type === 'Screen Printing') {
         document.getElementById('box-screenprint').classList.remove('hidden');
         document.getElementById('box-embroidery').classList.add('hidden');
@@ -451,19 +465,18 @@
         document.getElementById('catalog-notice-screenprint').classList.add('hidden');
         document.getElementById('catalog-notice-ottocap').classList.add('hidden');
 
-        document.getElementById('matrix-label').innerText = "Print Asset Run Volumes";
+        document.getElementById('matrix-label').innerText = "Print Asset Volume Run Setup";
         document.getElementById('sizing-grid').classList.add('hidden');
         document.getElementById('marketing-volume-box').classList.remove('hidden');
         document.getElementById('label-unit-price').innerText = "Per-Unit Wholesale Cost";
 
-        // THE UPGRADED COMPREHENSIVE HARD ASSET CATALOG
         const mktOptions = [
-          { value: 'Banners (Grommeted Outdoor Vinyl)', text: 'Banners (Grommeted Outdoor Vinyl)' },
-          { value: 'Business Cards (Premium Heavy 16pt)', text: 'Business Cards (Premium Heavy 16pt)' },
-          { value: 'Metal Signage (Heavy Aluminum Panels)', text: 'Metal Signage (Heavy Aluminum Panels)' },
-          { value: 'Car Magnets (030 Vehicle Strength)', text: 'Car Magnets (.030 Vehicle Strength)' },
-          { value: 'Promo Items (Pens, Mugs, Lanyards)', text: 'Promo Items (Pens, Mugs, Custom Accessories)' },
-          { value: 'Other Sourced Sizing Options', text: 'Other / Custom Media Request' }
+          { value: 'Banners (Outdoor Heavy Vinyl)', text: 'Banners (Grommeted Outdoor Vinyl - $5/sq ft)' },
+          { value: 'Business Cards (Premium 16pt)', text: 'Business Cards (Premium Heavy 16pt Packs)' },
+          { value: 'Metal Signage (Aluminum Panels)', text: 'Metal Signage (Heavy Aluminum Panels)' },
+          { value: 'Car Magnets (Vehicle Strength)', text: 'Car Magnets (.030 Vehicle Strength)' },
+          { value: 'Promo Items (Mugs, Accessories)', text: 'Promo Items (Pens, Mugs, Accessories)' },
+          { value: 'Other Sourced Media Specs', text: 'Other / Custom Print Media Request' }
         ];
         mktOptions.forEach(opt => {
           let el = document.createElement('option');
@@ -475,16 +488,43 @@
       checkSelectedBrand();
     }
 
+    // Handles contextual visibility switches based on specific business types
     function checkSelectedBrand() {
       const type = document.getElementById('input-type').value;
       const brand = document.getElementById('input-brand').value;
       const ottocapNotice = document.getElementById('catalog-notice-ottocap');
+
+      // Reset dynamic element containers
+      document.getElementById('box-banner-dimensions').classList.add('hidden');
+      document.getElementById('box-card-packs').classList.add('hidden');
+      document.getElementById('marketing-volume-box').classList.remove('hidden');
 
       if (type === 'Embroidery' && brand && brand.startsWith('Hats')) {
         ottocapNotice.classList.remove('hidden');
       } else {
         ottocapNotice.classList.add('hidden');
       }
+
+      if (type === 'Marketing Materials' && brand) {
+        if (brand.startsWith('Banners')) {
+          document.getElementById('box-banner-dimensions').classList.remove('hidden');
+          document.getElementById('volume-box-label').innerText = "Total Banners Needed";
+        } else if (brand.startsWith('Business')) {
+          document.getElementById('box-card-packs').classList.remove('hidden');
+          document.getElementById('marketing-volume-box').classList.add('hidden'); // Enforce choice synchronization
+          syncCardPackVolumes();
+          return;
+        } else {
+          document.getElementById('volume-box-label').innerText = "Total Order Quantity";
+        }
+      }
+      recalculateQuote();
+    }
+
+    // Locks dynamic dropdown choice directly into volume counter arrays
+    function syncCardPackVolumes() {
+      const tier = document.getElementById('input-card-tier').value;
+      document.getElementById('input-marketing-qty').value = tier;
       recalculateQuote();
     }
 
@@ -514,24 +554,19 @@
               (parseInt(document.getElementById('size-2xl').value) || 0);
       }
 
-      document.getElementById('summary-qty').innerText = qty + " items";
+      document.getElementById('summary-qty').innerText = qty + (type === 'Marketing Materials' ? " items" : " garments");
       document.getElementById('summary-brand').innerText = brand ? brand.split(' ')[0] : 'Gildan';
 
       const spRetail = { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)': 8.75, 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other': 10.00 };
       const embRetail = { 'Hats (Adjustable / Flexfit)': 10.00, 'Polos (Professional Blank)': 15.00, 'Hoodies (Midweight Layering)': 22.00, 'Jackets (Outerwear Protection)': 42.00, 'Other': 12.00 };
       
-      // Calibrated wholesale calculation metrics
-      const mktRetail = {
-        'Banners (Grommeted Outdoor Vinyl)': 38.00,
-        'Business Cards (Premium Heavy 16pt)': 0.10,
-        'Metal Signage (Heavy Aluminum Panels)': 55.00,
-        'Car Magnets (030 Vehicle Strength)': 24.00,
-        'Promo Items (Pens, Mugs, Lanyards)': 3.50,
-        'Other Sourced Sizing Options': 5.00
-      };
-
       let blankRetail = 0;
       let decoFee = 0;
+      let isCustomQuoteItem = false;
+
+      // Reset dynamic field display settings
+      document.getElementById('rate-wrapper').classList.remove('hidden');
+      document.getElementById('total-wrapper').innerHTML = `$<span id="summary-total">0.00</span>`;
 
       if (type === 'Screen Printing') {
         blankRetail = spRetail[brand] || 10.00;
@@ -542,48 +577,71 @@
         let baseRun = qty < 12 ? 5.00 : qty < 24 ? 4.00 : qty < 48 ? 3.00 : 2.50;
         decoFee = baseRun + ((stitchCount / 1000) * 1.50);
       } else if (type === 'Marketing Materials') {
-        blankRetail = mktRetail[brand] || 5.00;
-        decoFee = 0;
+        if (brand && brand.startsWith('Banners')) {
+          const w = parseInt(document.getElementById('input-banner-w').value) || 1;
+          const h = parseInt(document.getElementById('input-banner-h').value) || 1;
+          const sqFt = w * h;
+          blankRetail = sqFt * 5.00; // Flat $5 per square foot parameter logic
+          decoFee = 0;
+          document.getElementById('label-unit-price').innerText = "Cost Per Banner";
+        } else if (brand && brand.startsWith('Business')) {
+          blankRetail = (qty === 250) ? 60.00 : 120.00; // Tier pricing matrix paths
+          decoFee = 0;
+          qty = 1; // Enforce package logic directly into mathematical summary engine below
+          document.getElementById('label-unit-price').innerText = "Package Cost";
+        } else {
+          isCustomQuoteItem = true;
+        }
       }
 
-      const rate = qty > 0 ? (blankRetail + decoFee) : 0;
+      const rate = blankRetail + decoFee;
       let total = qty * rate;
       if (type === 'Embroidery' && !logoOnFile) total += 30.00;
 
-      document.getElementById('summary-rate').innerText = rate.toFixed(2);
-      document.getElementById('summary-total').innerText = total.toFixed(2);
+      // Handle displaying custom quote notice vs calculated figures
+      if (isCustomQuoteItem) {
+        document.getElementById('rate-wrapper').classList.add('hidden');
+        document.getElementById('total-wrapper').innerHTML = `<span class="text-sm font-bold text-sky-400">Quote Pending Review</span>`;
+        document.getElementById('label-unit-price').innerText = "Custom Pricing Matrix";
+      } else {
+        document.getElementById('summary-rate').innerText = rate.toFixed(2);
+        document.getElementById('summary-total').innerText = total.toFixed(2);
+      }
 
       const submitBtn = document.getElementById('submit-btn');
       const warning = document.getElementById('min-warning');
 
-      // Heavy hardware pieces pass fine as singles, print runs demand batch baselines
+      // Adjust structural volume approvals dynamically
       let minRequired = 12;
       if (type === 'Marketing Materials') {
-        if (brand && (brand.startsWith('Banners') || brand.startsWith('Metal') || brand.startsWith('Car'))) {
+        if (brand && (brand.startsWith('Banners') || brand.startsWith('Metal') || brand.startsWith('Car') || isCustomQuoteItem)) {
           minRequired = 1;
         } else {
-          minRequired = 25; // Business card/promo baseline minimum batch runs
+          minRequired = 250; // Force business card limits
         }
       }
 
-      if (qty >= minRequired) {
+      const baselineCheckQty = (brand && brand.startsWith('Business')) ? mktQty : qty;
+
+      if (baselineCheckQty >= minRequired) {
         submitBtn.disabled = false;
         submitBtn.className = "w-full bg-black hover:bg-slate-900 text-white font-bold py-4 rounded-xl text-sm tracking-wide shadow transition-all cursor-pointer";
-        submitBtn.innerText = "Submit Quote Request";
-        warning.innerText = "Order volume requirements matched ✓";
+        submitBtn.innerText = "Submit Project Request";
+        warning.innerText = "Order quantity requirements matched ✓";
         warning.className = "text-[11px] font-bold text-emerald-600";
       } else {
         submitBtn.disabled = true;
         submitBtn.className = "w-full bg-slate-100 text-slate-400 font-bold py-4 rounded-xl text-sm border border-slate-200 text-center shadow-inner cursor-not-allowed";
-        submitBtn.innerText = `Minimum run size criteria not met (${minRequired} required)`;
+        submitBtn.innerText = `Minimum run size criteria not met`;
         warning.className = "text-[11px] font-bold text-slate-800";
-        warning.innerText = `Adjust quantity count parameters to unlock printing structures.`;
+        warning.innerText = `Adjust count parameters to initialize batch runs.`;
       }
     }
 
     function handleFormSubmit(e) {
       e.preventDefault();
       const type = document.getElementById('input-type').value;
+      const brand = document.getElementById('input-brand').value;
       
       let s = 0, m = 0, l = 0, xl = 0, xxl = 0, totalQty = 0;
       if (type === 'Marketing Materials') {
@@ -597,11 +655,21 @@
         totalQty = s + m + l + xl + xxl;
       }
 
+      let orderNotes = document.getElementById('input-notes').value;
+      if (type === 'Marketing Materials') {
+        orderNotes += ` [Finish: ${document.getElementById('input-finish').value}]`;
+        if (brand.startsWith('Banners')) {
+          orderNotes += ` [Dimensions: ${document.getElementById('input-banner-w').value}x${document.getElementById('input-banner-h').value} ft]`;
+        }
+      }
+
+      const displayTotalText = document.getElementById('summary-total') ? parseFloat(document.getElementById('summary-total').innerText) : 0;
+
       const newOrder = {
         id: "HPC-" + Math.floor(1000 + Math.random() * 9000),
         customerName: document.getElementById('input-name').value,
         decorationType: type,
-        brand: document.getElementById('input-brand').value,
+        brand: brand,
         color: document.getElementById('input-color').value,
         dueDate: document.getElementById('input-date').value,
         frontColors: parseInt(document.getElementById('input-front').value) || 0,
@@ -609,9 +677,9 @@
         stitchCount: parseInt(document.getElementById('input-stitch').value) || 5000,
         logoOnFile: logoOnFile,
         sizes: { S: s, M: m, L: l, XL: xl, '2XL': xxl },
-        totalQuantity: totalQty,
-        estimatedTotal: parseFloat(document.getElementById('summary-total').innerText),
-        notes: document.getElementById('input-notes').value + (type === 'Marketing Materials' ? ` [Finish Config: ${document.getElementById('input-finish').value}]` : ''),
+        totalQuantity: (brand.startsWith('Business')) ? parseInt(document.getElementById('input-input-marketing-qty')) || parseInt(document.getElementById('input-card-tier').value) : totalQty,
+        estimatedTotal: displayTotalText,
+        notes: orderNotes,
         stage: 'pending',
         tasks: [false, false, false, false, false, false],
         artData: currentArtBase64
@@ -753,7 +821,7 @@
             </div>
             <div>
               <h4 class="font-bold text-sm text-slate-900 truncate leading-tight">${o.customerName}</h4>
-              <p class="text-xs text-slate-500 mt-1 font-medium">${o.totalQuantity}x Run Items</p>
+              <p class="text-xs text-slate-500 mt-1 font-medium">${o.totalQuantity ? o.totalQuantity + 'x Items' : 'Run Items Ordered'}</p>
               <span class="text-[10px] font-bold text-slate-400 block mt-0.5 uppercase tracking-wide bg-slate-100 px-2 py-0.5 rounded inline-block truncate max-w-full">${o.brand}</span>
             </div>
 
