@@ -20,7 +20,6 @@
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <!-- Dashboard button container is hidden for public users by default -->
         <div id="admin-nav-container" class="hidden bg-slate-900 p-1 rounded-xl flex border border-slate-800 shadow-inner">
           <button onclick="switchView('estimator')" id="nav-estimator" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black">Estimator</button>
           <button onclick="switchView('dashboard')" id="nav-dashboard" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white">Dashboard (<span id="queue-count">0</span>)</button>
@@ -38,7 +37,7 @@
   <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
     
     <!-- SUCCESS SCREEN FOR CUSTOMERS -->
-    <div id="view-success" class="hidden max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-4 shadow-sm my-12 UI-fadeIn">
+    <div id="view-success" class="hidden max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-4 shadow-sm my-12 animate-fadeIn">
       <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
       <h2 class="text-xl font-bold text-slate-900">Quote Request Submitted!</h2>
       <p class="text-sm text-slate-500 leading-relaxed">
@@ -76,7 +75,7 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Apparel Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Dropdown options injected by JavaScript -->
+                <!-- Dropdown options injected dynamically by JavaScript -->
               </select>
             </div>
           </div>
@@ -87,7 +86,7 @@
             We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
           </div>
 
-          <!-- DYNAMIC OTTOCAP PORTAL LOGIC BOX -->
+          <!-- DYNAMIC OTTOCAP PORTAL LINK BOX -->
           <div id="catalog-notice-ottocap" class="hidden p-4 bg-slate-900 text-white rounded-xl text-xs leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Options</span>
@@ -161,9 +160,9 @@
             </div>
           </div>
 
-          <!-- DYNAMIC CUSTOMER FRIENDLY TURNAROUND FEEDBACK BOX -->
+          <!-- TURNAROUND NOTIFICATION BOX -->
           <div id="date-turnaround-notice" class="p-3.5 rounded-xl border text-xs leading-normal transition-all hidden">
-            <!-- Populated dynamically via JavaScript below -->
+            <!-- Populated dynamically via JavaScript -->
           </div>
 
           <!-- QUANTITY MATRIX RUN -->
@@ -278,7 +277,6 @@
       validateTurnaroundTimeline();
     }
 
-    // RE-WORDED DYNAMIC TURNAROUND CALCULATION ENGINE
     function validateTurnaroundTimeline() {
       const dateInput = document.getElementById('input-date').value;
       const noticeBox = document.getElementById('date-turnaround-notice');
@@ -297,7 +295,6 @@
       noticeBox.classList.remove('hidden');
 
       if (daysDiff < 14) {
-        // Customer Friendly Soft Warning State
         noticeBox.className = "p-4 rounded-xl border border-sky-200 bg-sky-50 text-xs text-sky-800 leading-normal animate-fadeIn";
         noticeBox.innerHTML = `
           <span class="font-bold text-sky-950 block mb-0.5">⚡ Need it quick? Let's talk!</span>
@@ -352,6 +349,7 @@
       document.getElementById('art-preview-img').src = '';
     }
 
+    // FIXED FIELD SWITCH BUILD ENGINE
     function updateFormFields() {
       const type = document.getElementById('input-type').value;
       const brandSelect = document.getElementById('input-brand');
@@ -439,7 +437,7 @@
         'Gildan (Economical)': 6.25, 
         'Next Level (Mid-Tier)': 8.75, 
         'Bella+Canvas (Mid-Tier)': 8.75, 
-        'Specialty Blank (Heavyweight / Vintage Boxy)', 15.00, 
+        'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 
         'Other': 10.00 
       };
 
