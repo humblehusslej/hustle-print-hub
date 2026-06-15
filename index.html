@@ -6,15 +6,6 @@
   <title>Hussle Print Co. - Control Hub</title>
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @keyframes slowPulse {
-      0%, 100% { opacity: 0.2; }
-      50% { opacity: 0.5; }
-    }
-    .mockup-placement-pulse {
-      animation: slowPulse 2.5s infinite ease-in-out;
-    }
-  </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col">
 
@@ -50,7 +41,7 @@
       <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
       <h2 class="text-xl font-bold text-slate-900">Quote Request Submitted!</h2>
       <p class="text-sm text-slate-500 leading-relaxed">
-        Thank you! Your batch details and mockup artwork preferences have been uploaded securely into our design review pipeline. An operator from the **Hussle Print Co.** team will review your specifications and reach out shortly with your final digital proof.
+        Thank you! Your batch details and placement preferences have been uploaded securely into our design review pipeline. An operator from the **Hussle Print Co.** team will review your specifications and reach out shortly with your final digital proof.
       </p>
       <button onclick="resetPortalForNewQuote()" class="bg-black hover:bg-slate-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all">
         Submit Another Project
@@ -64,81 +55,6 @@
           <div class="text-xs text-slate-600 leading-relaxed">
             <span class="font-bold text-black block mb-0.5">Let's Craft Your Custom Batch</span>
             To deliver premium print calibration and wholesale pricing structures, custom gear is prepped in bulk runs. Minimum batch thresholds update dynamically depending on your stock style!
-          </div>
-        </div>
-
-        <!-- HIGH-VISIBILITY DESIGN STUDIO CANVAS -->
-        <div class="border border-slate-300 rounded-2xl overflow-hidden bg-slate-200/50 shadow-sm">
-          <div class="p-4 bg-white border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <span class="block text-xs font-black uppercase tracking-widest text-slate-800">📸 HUSSLE PRINT CO. - DESIGN STUDIO CANVAS</span>
-              <span class="block text-[11px] text-slate-500">Pick a mockup canvas style and tap design placement targets instantly</span>
-            </div>
-            <label class="cursor-pointer bg-black text-white hover:bg-slate-900 px-4 py-2.5 rounded-xl text-xs font-black tracking-wide shadow-sm transition-all text-center whitespace-nowrap">
-              <span>Upload Design Image</span>
-              <input type="file" id="input-art" accept="image/*" onchange="processArtworkFile(event)" class="hidden" />
-            </label>
-          </div>
-
-          <!-- MOCKUP CANVAS MODEL SELECTORS -->
-          <div class="px-4 py-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center gap-2 justify-center sm:justify-start">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Canvas Model:</span>
-            <button type="button" id="btn-model-shirt" onclick="switchMockupCanvasProductStyle('shirt')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-black text-white border-black">👕 T-Shirt</button>
-            <button type="button" id="btn-model-hoodie" onclick="switchMockupCanvasProductStyle('hoodie')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-white text-slate-600 border-slate-200 hover:bg-slate-100">🧥 Hoodie</button>
-            <button type="button" id="btn-model-cap" onclick="switchMockupCanvasProductStyle('cap')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-white text-slate-600 border-slate-200 hover:bg-slate-100">🧢 Snapback Cap</button>
-          </div>
-
-          <!-- PLACEMENT TARGET CONTROLS -->
-          <div class="px-4 py-2 bg-slate-100/80 border-b border-slate-200 flex flex-wrap items-center gap-1.5 justify-center sm:justify-start text-xs">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Logo Target Site:</span>
-            <button type="button" id="btn-place-front" onclick="setMockupGraphicPlacementZone('front')" class="apparel-place-btn px-2.5 py-1 rounded bg-black text-white font-bold text-[11px] border border-black transition-all">Front Center</button>
-            <button type="button" id="btn-place-chest" onclick="setMockupGraphicPlacementZone('chest')" class="apparel-place-btn px-2.5 py-1 rounded bg-white text-slate-600 font-bold text-[11px] border border-slate-200 hover:bg-slate-50 transition-all">Left Chest</button>
-            <button type="button" id="btn-place-back" onclick="setMockupGraphicPlacementZone('back')" class="apparel-place-btn px-2.5 py-1 rounded bg-white text-slate-600 font-bold text-[11px] border border-slate-200 hover:bg-slate-50 transition-all">Full Back</button>
-            
-            <button type="button" id="btn-place-capfront" onclick="setMockupGraphicPlacementZone('capfront')" class="cap-place-btn hidden px-2.5 py-1 rounded bg-white text-slate-600 font-bold text-[11px] border border-slate-200 hover:bg-slate-50 transition-all">Hat Front</button>
-            <button type="button" id="btn-place-capleft" onclick="setMockupGraphicPlacementZone('capleft')" class="cap-place-btn hidden px-2.5 py-1 rounded bg-white text-slate-600 font-bold text-[11px] border border-slate-200 hover:bg-slate-50 transition-all">Left Side</button>
-            <button type="button" id="btn-place-capright" onclick="setMockupGraphicPlacementZone('capright')" class="cap-place-btn hidden px-2.5 py-1 rounded bg-white text-slate-600 font-bold text-[11px] border border-slate-200 hover:bg-slate-50 transition-all">Right Side</button>
-          </div>
-          
-          <div class="p-8 flex flex-col items-center justify-center min-h-[340px] relative bg-slate-100">
-            <button type="button" id="btn-clear-mockup-art" onclick="clearUploadedArt()" class="hidden absolute top-4 right-4 z-20 bg-white border border-slate-200 text-slate-500 hover:text-black rounded-xl px-2.5 py-1.5 text-[11px] font-bold shadow-sm transition-all">
-              Reset Canvas ×
-            </button>
-
-            <!-- CANVAS INTERACTIVE WORKSPACE (STABILIZED LAYER VALUES) -->
-            <div id="mockup-frame-view-box" class="w-64 h-56 relative flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
-              
-              <!-- Shirt Frame -->
-              <svg id="canvas-svg-shirt" class="absolute inset-0 w-full h-full text-slate-300 fill-current z-10 transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
-                <path d="M18,2H14.5A2.5,2.5,0,0,0,12,4.5,2.5,2.5,0,0,0,9.5,2H6A2,2,0,0,0,4,4V9a1,1,0,0,0,1,1H6v11a1,1,0,0,0,1,1H17a1,1,0,0,0,1,-1V10h1a1,1,0,0,0,1,-1V4A2,2,0,0,0,18,2ZM7,8V4H9a4,4,0,0,1,6,0h2V8Z"/>
-              </svg>
-
-              <!-- Hoodie Frame -->
-              <svg id="canvas-svg-hoodie" class="hidden absolute inset-0 w-full h-full text-slate-300 fill-current z-10 transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
-                <path d="M12,2A3,3,0,0,0,9,5a3,3,0,0,0,1,2.24V8H6A2,2,0,0,0,4,10v10a2,2,0,0,0,2,2H18a2,2,0,0,0,2,-2V10a2,2,0,0,0,-2,-2H14V7.24A3,3,0,0,0,15,5,3,3,0,0,0,12,2ZM12,14a2,2,0,1,1,-2,-2A2,2,0,0,1,12,14Z"/>
-              </svg>
-
-              <!-- Cap Frame -->
-              <svg id="canvas-svg-cap" class="hidden absolute inset-0 w-full h-full text-slate-300 fill-current z-10 transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
-                <path d="M12,2A10,10,0,0,0,2,12a2,2,0,0,0,2,2h1a1,1,0,0,1,1,1v1a2,2,0,0,0,2,2h8a2,2,0,0,0,2,-2V15a1,1,0,0,1,1,-1h1a2,2,0,0,0,2,-2A10,10,0,0,0,12,2Zm5,11H7V10H17ZM2,17h20a1,1,0,0,1,0,2H2a1,1,0,0,1,0,-2Z"/>
-              </svg>
-
-              <!-- Marketing Frame Box -->
-              <div id="canvas-svg-card" class="hidden absolute inset-0 w-full h-full bg-slate-300 rounded-2xl border border-slate-400 z-10 shadow-md transition-colors duration-300 flex items-center justify-center">
-                <div class="w-[90%] h-[85%] border border-dashed border-white/40 rounded-xl flex items-center justify-center">
-                  <span class="text-[9px] font-black text-white/40 uppercase tracking-widest mockup-placement-pulse">Print bounds active</span>
-                </div>
-              </div>
-
-              <!-- GRAPHIC RENDER PLACEMENT CORE OVERLAYS (FORCED OVER THE TOP) -->
-              <div id="mockup-print-run-target" class="absolute inset-0 pointer-events-none z-30">
-                <div id="mockup-sight-ring" class="absolute w-14 h-14 rounded-full border-2 border-dashed border-white/90 bg-black/30 mockup-placement-pulse flex items-center justify-center transition-all duration-300" style="top: 36%; left: 39%;">
-                  <span class="text-[8px] font-bold text-white uppercase tracking-wider text-center leading-tight">Sight<br/>Zone</span>
-                </div>
-                <img id="mockup-live-graphic-render" src="" class="hidden absolute object-contain drop-shadow-2xl transition-all duration-300 z-40" style="top: 36%; left: 39%; width: 56px; height: 56px;" />
-              </div>
-
-            </div>
           </div>
         </div>
 
@@ -160,12 +76,49 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Product Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Loaded dynamically via JavaScript dropdown matrices -->
+                <!-- Loaded dynamically via JavaScript layout dropdown matrices -->
               </select>
             </div>
           </div>
 
-          <!-- SOURCING CATALOGS CODES NOTICES -->
+          <!-- CLEAN TEXT ARTWORK FILE SELECTION FIELD -->
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Logo Graphic Sourcing File</label>
+              <span id="art-preview-label" class="block text-[11px] text-slate-400 mt-0.5">No drawing vector attached</span>
+            </div>
+            <label class="cursor-pointer bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all text-center whitespace-nowrap">
+              <span>Select File</span>
+              <input type="file" id="input-art" accept="image/*" onchange="processArtworkFile(event)" class="hidden" />
+            </label>
+          </div>
+
+          <!-- CLEAN DYNAMIC SELECTION CHANNELS FOR PRINT AND EMBROIDERY PLACEMENTS -->
+          <div id="box-design-placement-hub" class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Design Layout Placement Location</label>
+            
+            <!-- 1. Screen Print Location Select Dropdown -->
+            <select id="placement-screenprint" class="w-full p-2.5 border rounded-lg bg-white text-sm text-slate-800 outline-none">
+              <option value="Full Front Layout Print">Standard Full Front Layout Print</option>
+              <option value="Left Chest Pocket Print">Standard Left Chest Print</option>
+              <option value="Full Center Back Print">Standard Full Back Print</option>
+              <option value="Right Sleeve Alignment">Right Sleeve Vertical Print</option>
+              <option value="Left Sleeve Alignment">Left Sleeve Vertical Print</option>
+              <option value="Custom Placement Spec Notes">Other Placement (Specify in Operator Notes)</option>
+            </select>
+
+            <!-- 2. Embroidery Location Select Dropdown -->
+            <select id="placement-embroidery" class="hidden w-full p-2.5 border rounded-lg bg-white text-sm text-slate-800 outline-none">
+              <option value="Hat Front Center Profile">Hat Front Center Profile</option>
+              <option value="Left Chest Crest Run">Garment Left Chest Pocket Crest</option>
+              <option value="Hat Left Panel Stitch">Hat Left Side Panel Arc</option>
+              <option value="Hat Right Panel Stitch">Hat Right Side Panel Arc</option>
+              <option value="Collar / Cuff Run Setup">Collar Ring / Cuff Line Script</option>
+              <option value="Custom Stitch Placement Notes">Other Location (Specify in Operator Notes)</option>
+            </select>
+          </div>
+
+          <!-- PUBLIC CATALOG SOURCING NOTICES -->
           <div id="catalog-notice-screenprint" class="p-4 bg-slate-50 border rounded-xl text-xs text-slate-600 leading-normal">
             <span class="font-bold text-black block mb-0.5">Looking for specific styles?</span>
             We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
@@ -182,7 +135,7 @@
             </a>
           </div>
 
-          <!-- DEPENDENT CONFIGURATIONS -->
+          <!-- METHOD DEPENDENT CONFIGURATIONS -->
           <div id="box-screenprint" class="grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl">
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Front Ink Colors (0 - 4)</label>
@@ -248,7 +201,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Asset Base Color</label>
-              <input type="text" id="input-color" required placeholder="e.g. Midnight Black" oninput="updateMockupCanvasFabricColor()" class="w-full px-4 py-2.5 border rounded-xl text-sm text-slate-800 outline-none focus:ring-1 focus:ring-black" />
+              <input type="text" id="input-color" required placeholder="e.g. Midnight Black" class="w-full px-4 py-2.5 border rounded-xl text-sm text-slate-800 outline-none focus:ring-1 focus:ring-black" />
             </div>
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Desired Completion Date</label>
@@ -370,16 +323,13 @@
 
   <script>
     let appOrders = [
-      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4, '3XL': 0, '4XL': 0 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks.', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
-      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment.', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
+      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4, '3XL': 0, '4XL': 0 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks. [Placement: Full Front Layout Print]', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
+      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
     ];
 
     let currentArtBase64 = '';
     let logoOnFile = false;
     let isAdminMode = false;
-
-    let currentMockupActiveStyle = 'shirt'; 
-    let currentMockupActiveZone = 'front';
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true') {
@@ -472,19 +422,12 @@
       const reader = new FileReader();
       reader.onload = function(e) {
         currentArtBase64 = e.target.result;
-        
-        const mockupImg = document.getElementById('mockup-live-graphic-render');
-        const sightRing = document.getElementById('mockup-sight-ring');
-        const clearBtn = document.getElementById('btn-clear-mockup-art');
-
-        if (mockupImg && sightRing) {
-          mockupImg.src = currentArtBase64;
-          mockupImg.classList.remove('hidden');
-          sightRing.classList.add('hidden'); 
-          if (clearBtn) clearBtn.classList.remove('hidden');
+        const previewLabel = document.getElementById('art-preview-label');
+        if (previewLabel) {
+          previewLabel.innerText = "✓ " + file.name + " uploaded successfully";
+          previewLabel.className = "block text-[11px] font-bold text-emerald-600 mt-0.5";
         }
-        applyMockupSizingCoordinatesEngine();
-        showToast('Design scaled and positioned onto mockup preview canvas');
+        showToast('Graphic logo file attached to order parameters');
         recalculateQuote();
       };
       reader.readAsDataURL(file);
@@ -493,128 +436,12 @@
     function clearUploadedArt() {
       currentArtBase64 = '';
       document.getElementById('input-art').value = '';
-      
-      const mockupImg = document.getElementById('mockup-live-graphic-render');
-      const sightRing = document.getElementById('mockup-sight-ring');
-      const clearBtn = document.getElementById('btn-clear-mockup-art');
-
-      if (mockupImg && sightRing) {
-        mockupImg.src = '';
-        mockupImg.classList.add('hidden');
-        sightRing.classList.remove('hidden'); 
-        if (clearBtn) clearBtn.classList.add('hidden');
+      const previewLabel = document.getElementById('art-preview-label');
+      if (previewLabel) {
+        previewLabel.innerText = "No drawing vector attached";
+        previewLabel.className = "block text-[11px] text-slate-400 mt-0.5";
       }
       recalculateQuote();
-    }
-
-    function switchMockupCanvasProductStyle(targetStyle) {
-      currentMockupActiveStyle = targetStyle;
-
-      const shirtSvg = document.getElementById('canvas-svg-shirt');
-      const hoodieSvg = document.getElementById('canvas-svg-hoodie');
-      const capSvg = document.getElementById('canvas-svg-cap');
-      const cardDiv = document.getElementById('canvas-svg-card');
-
-      if (shirtSvg) shirtSvg.classList.add('hidden');
-      if (hoodieSvg) hoodieSvg.classList.add('hidden');
-      if (capSvg) capSvg.classList.add('hidden');
-      if (cardDiv) cardDiv.classList.add('hidden');
-
-      document.getElementById('btn-model-shirt').className = "px-3 py-1.5 rounded-lg border text-xs font-bold transition-all " + (targetStyle === 'shirt' ? 'bg-black text-white border-black' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100');
-      document.getElementById('btn-model-hoodie').className = "px-3 py-1.5 rounded-lg border text-xs font-bold transition-all " + (targetStyle === 'hoodie' ? 'bg-black text-white border-black' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100');
-      document.getElementById('btn-model-cap').className = "px-3 py-1.5 rounded-lg border text-xs font-bold transition-all " + (targetStyle === 'cap' ? 'bg-black text-white border-black' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100');
-
-      const apparelButtons = document.querySelectorAll('.apparel-place-btn');
-      const capButtons = document.querySelectorAll('.cap-place-btn');
-
-      if (targetStyle === 'cap') {
-        apparelButtons.forEach(b => b.classList.add('hidden'));
-        capButtons.forEach(b => b.classList.remove('hidden'));
-        if (capSvg) capSvg.classList.remove('hidden');
-        currentMockupActiveZone = 'capfront';
-      } else {
-        capButtons.forEach(b => b.classList.add('hidden'));
-        apparelButtons.forEach(b => b.classList.remove('hidden'));
-        if (targetStyle === 'shirt' && shirtSvg) shirtSvg.classList.remove('hidden');
-        if (targetStyle === 'hoodie' && hoodieSvg) hoodieSvg.classList.remove('hidden');
-        currentMockupActiveZone = 'front';
-      }
-
-      updateMockupCanvasFabricColor();
-      applyMockupSizingCoordinatesEngine();
-    }
-
-    function setMockupGraphicPlacementZone(targetZone) {
-      currentMockupActiveZone = targetZone;
-
-      const allZoneButtons = document.querySelectorAll('.apparel-place-btn, .cap-place-btn');
-      allZoneButtons.forEach(btn => {
-        if (btn.id === 'btn-place-' + targetZone || btn.id === 'btn-place-' + targetZone.replace('cap','')) {
-          btn.className = btn.className.replace('bg-white text-slate-600 border-slate-200', 'bg-black text-white border-black');
-        } else {
-          btn.className = btn.className.replace('bg-black text-white border-black', 'bg-white text-slate-600 border-slate-200');
-        }
-      });
-
-      applyMockupSizingCoordinatesEngine();
-    }
-
-    function applyMockupSizingCoordinatesEngine() {
-      const ring = document.getElementById('mockup-sight-ring');
-      const art = document.getElementById('mockup-live-graphic-render');
-      if (!ring || !art) return;
-
-      let topVal = '36%', leftVal = '39%', widthVal = '56px', heightVal = '56px';
-
-      if (currentMockupActiveStyle === 'shirt' || currentMockupActiveStyle === 'hoodie') {
-        if (currentMockupActiveZone === 'chest') {
-          topVal = '34%'; leftVal = '55%'; widthVal = '30px'; heightVal = '32px';
-        } else if (currentMockupActiveZone === 'back') {
-          topVal = '28%'; leftVal = '33%'; widthVal = '84px'; heightVal = '84px';
-        }
-      } else if (currentMockupActiveStyle === 'cap') {
-        if (currentMockupActiveZone === 'capfront') {
-          topVal = '40%'; leftVal = '33%'; widthVal = '64px'; heightVal = '40px';
-        } else if (currentMockupActiveZone === 'capleft') {
-          topVal = '44%'; leftVal = '16%'; widthVal = '36px'; heightVal = '24px';
-        } else if (currentMockupActiveZone === 'capright') {
-          topVal = '44%'; leftVal = '60%'; widthVal = '36px'; heightVal = '24px';
-        }
-      } else if (currentMockupActiveStyle === 'marketing') {
-        topVal = '25%'; leftVal = '20%'; widthVal = '112px'; heightVal = '80px';
-      }
-
-      let targets = [ring, art];
-      targets.forEach(t => {
-        t.style.top = topVal;
-        t.style.left = leftVal;
-        t.style.width = widthVal;
-        t.style.height = heightVal;
-      });
-    }
-
-    function updateMockupCanvasFabricColor() {
-      const colorVal = document.getElementById('input-color').value.toLowerCase().trim();
-      const shirtSvg = document.getElementById('canvas-svg-shirt');
-      const hoodieSvg = document.getElementById('canvas-svg-hoodie');
-      const capSvg = document.getElementById('canvas-svg-cap');
-      const cardDiv = document.getElementById('canvas-svg-card');
-
-      let hexColor = '#cbd5e1'; 
-
-      if (colorVal.includes('black') || colorVal.includes('dark') || colorVal.includes('coal')) hexColor = '#1e293b';
-      else if (colorVal.includes('white') || colorVal.includes('cream')) hexColor = '#f8fafc';
-      else if (colorVal.includes('red') || colorVal.includes('maroon')) hexColor = '#b91c1c';
-      else if (colorVal.includes('blue') || colorVal.includes('navy')) hexColor = '#1d4ed8';
-      else if (colorVal.includes('green') || colorVal.includes('forest')) hexColor = '#15803d';
-      else if (colorVal.includes('gray') || colorVal.includes('grey') || colorVal.includes('slate')) hexColor = '#64748b';
-      else if (colorVal.includes('yellow') || colorVal.includes('gold')) hexColor = '#eab308';
-      else if (colorVal.includes('orange')) hexColor = '#ea580c';
-
-      if (shirtSvg) shirtSvg.style.color = hexColor;
-      if (hoodieSvg) hoodieSvg.style.color = hexColor;
-      if (capSvg) capSvg.style.color = hexColor;
-      if (cardDiv) cardDiv.style.backgroundColor = hexColor;
     }
 
     function updateFormFields() {
@@ -624,34 +451,22 @@
       
       brandSelect.innerHTML = '';
 
-      const shirtSvg = document.getElementById('canvas-svg-shirt');
-      const capSvg = document.getElementById('canvas-svg-cap');
-      const cardDiv = document.getElementById('canvas-svg-card');
-      const liveGraphic = document.getElementById('mockup-live-graphic-render');
+      // Manage design placement card menu channel toggles
+      const placementBox = document.getElementById('box-design-placement-hub');
+      const printPlacement = document.getElementById('placement-screenprint');
+      const embroideryPlacement = document.getElementById('placement-embroidery');
 
-      if (shirtSvg && capSvg && cardDiv) {
-        shirtSvg.classList.add('hidden');
-        capSvg.classList.add('hidden');
-        cardDiv.classList.add('hidden');
+      if (placementBox && printPlacement && embroideryPlacement) {
+        placementBox.classList.remove('hidden');
+        printPlacement.classList.add('hidden');
+        embroideryPlacement.classList.add('hidden');
 
         if (type === 'Screen Printing') {
-          shirtSvg.classList.remove('hidden');
-          if (liveGraphic) {
-            liveGraphic.className = "hidden absolute object-contain drop-shadow-2xl transition-all duration-300 z-40";
-            if (currentArtBase64) liveGraphic.classList.remove('hidden');
-          }
+          printPlacement.classList.remove('hidden');
         } else if (type === 'Embroidery') {
-          capSvg.classList.remove('hidden');
-          if (liveGraphic) {
-            liveGraphic.className = "hidden absolute object-contain drop-shadow-2xl transition-all duration-300 z-40";
-            if (currentArtBase64) liveGraphic.classList.remove('hidden');
-          }
-        } else if (type === 'Marketing Materials') {
-          cardDiv.classList.remove('hidden');
-          if (liveGraphic) {
-            liveGraphic.className = "hidden absolute object-contain drop-shadow-2xl transition-all duration-300 z-40";
-            if (currentArtBase64) liveGraphic.classList.remove('hidden');
-          }
+          embroideryPlacement.classList.remove('hidden');
+        } else {
+          placementBox.classList.add('hidden'); // Clear placement entirely for flat commercial media items
         }
       }
 
@@ -694,13 +509,6 @@
           brandSelect.appendChild(el);
         });
       } else if (type === 'Marketing Materials') {
-        currentMockupActiveStyle = 'marketing';
-        if(document.getElementById('canvas-svg-shirt')) document.getElementById('canvas-svg-shirt').classList.add('hidden');
-        if(document.getElementById('canvas-svg-hoodie')) document.getElementById('canvas-svg-hoodie').classList.add('hidden');
-        if(document.getElementById('canvas-svg-cap')) document.getElementById('canvas-svg-cap').classList.add('hidden');
-        if(document.getElementById('canvas-svg-card')) document.getElementById('canvas-svg-card').classList.remove('hidden');
-        applyMockupSizingCoordinatesEngine();
-
         document.getElementById('box-screenprint').classList.add('hidden');
         document.getElementById('box-embroidery').classList.add('hidden');
         document.getElementById('box-marketing').classList.remove('hidden');
@@ -737,10 +545,6 @@
       document.getElementById('marketing-volume-box').classList.add('hidden');
       if (ottocapNotice) ottocapNotice.classList.add('hidden');
 
-      const shirtSvg = document.getElementById('canvas-svg-shirt');
-      const capSvg = document.getElementById('canvas-svg-cap');
-      const liveGraphic = document.getElementById('mockup-live-graphic-render');
-
       if (type === 'Screen Printing') {
         document.getElementById('matrix-label').innerText = "Garment Sizing Volumes";
         document.getElementById('sizing-grid').classList.remove('hidden');
@@ -750,14 +554,12 @@
         if (ottocapNotice) ottocapNotice.classList.remove('hidden');
 
         if (brand && brand.startsWith('Hats')) {
-          switchMockupCanvasProductStyle('cap');
           document.getElementById('matrix-label').innerText = "Headwear Run Volume Configuration";
           document.getElementById('hat-osfa-notice').classList.remove('hidden');
           document.getElementById('marketing-volume-box').classList.remove('hidden');
           document.getElementById('volume-box-label').innerText = "Total Caps Needed in Batch";
           document.getElementById('label-unit-price').innerText = "Per-Hat (Finished)";
         } else {
-          if (currentMockupActiveStyle === 'cap') switchMockupCanvasProductStyle('shirt');
           document.getElementById('matrix-label').innerText = "Garment Sizing Volumes";
           document.getElementById('sizing-grid').classList.remove('hidden');
           document.getElementById('label-unit-price').innerText = "Per-Garment (Finished)";
@@ -781,7 +583,6 @@
           document.getElementById('volume-box-label').innerText = "Total Order Quantity";
         }
       }
-      updateMockupCanvasFabricColor();
       recalculateQuote();
     }
 
@@ -917,7 +718,15 @@
       }
 
       let orderNotes = document.getElementById('input-notes').value;
-      orderNotes += ` [Mockup Choice: ${currentMockupActiveStyle.toUpperCase()} - ${currentMockupActiveZone.toUpperCase()} Location]`;
+      
+      // LOG EXACT PLACEMENT CHANNELS INSTEAD OF VISUAL COORDINATES
+      if (type === 'Screen Printing') {
+        const val = document.getElementById('placement-screenprint').value;
+        orderNotes += ` [Placement Spec: ${val.toUpperCase()}]`;
+      } else if (type === 'Embroidery') {
+        const val = document.getElementById('placement-embroidery').value;
+        orderNotes += ` [Placement Spec: ${val.toUpperCase()}]`;
+      }
 
       if (type === 'Marketing Materials') {
         orderNotes += ` [Finish: ${document.getElementById('input-finish').value}]`;
@@ -957,7 +766,7 @@
       document.getElementById('view-estimator').classList.add('hidden');
       document.getElementById('portal-footer').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
-      showToast('Project registered successfully');
+      showToast('Project placement specifications submitted successfully');
     }
 
     function resetPortalForNewQuote() {
@@ -1018,6 +827,7 @@
               <span class="text-[10px] font-bold text-slate-400 block mt-0.5 uppercase tracking-wide bg-slate-100 px-2 py-0.5 rounded inline-block truncate max-w-full">${o.brand}</span>
             </div>
             ${cardThumbnailHtml}
+            <div class="text-[11px] bg-slate-50 border p-2 rounded text-slate-600 leading-normal italic font-medium break-words max-w-full">${o.notes}</div>
             <div class="grid grid-cols-2 gap-1 pt-1 border-t border-slate-100">
               ${taskButtons}
             </div>
