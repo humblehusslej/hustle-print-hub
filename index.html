@@ -7,16 +7,19 @@
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* High-Vis Custom Screen Print Halftone Dot Pattern Background */
-    .bg-print-halftone {
+    /* Premium Blended Gradient and Halftone Silk-Screen Background Matrix */
+    .bg-gradient-halftone {
+      min-h-screen: 100vh;
       background-color: #ffffff;
-      background-image: radial-gradient(#000000 12%, transparent 12%);
-      background-size: 16px 16px;
+      background-image: 
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.3), #ffffff 75%),
+        radial-gradient(#000000 15%, transparent 15%);
+      background-size: 100% 100%, 18px 16px;
       background-attachment: fixed;
     }
   </style>
 </head>
-<body class="bg-print-halftone text-black font-sans min-h-screen flex flex-col antialiased">
+<body class="bg-gradient-halftone text-black font-sans min-h-screen flex flex-col antialiased">
 
   <!-- TOP HUB NAVIGATION BAR -->
   <header class="bg-black text-white p-5 border-b-4 border-black sticky top-0 z-50 shadow-2xl">
