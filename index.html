@@ -149,7 +149,7 @@
             </div>
           </div>
 
-          <!-- TARGET PRODUCTION DATE FRAME WITH DYNAMIC TURNAROUND ENGINE -->
+          <!-- TARGET PRODUCTION DATE FRAME -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Garment Color</label>
@@ -161,9 +161,9 @@
             </div>
           </div>
 
-          <!-- FRIENDLY TURNAROUND COMPLIANCE NOTICE FEEDBACK BOX -->
+          <!-- DYNAMIC CUSTOMER FRIENDLY TURNAROUND FEEDBACK BOX -->
           <div id="date-turnaround-notice" class="p-3.5 rounded-xl border text-xs leading-normal transition-all hidden">
-            <!-- Populated dynamically via javascript validation states -->
+            <!-- Populated dynamically via JavaScript below -->
           </div>
 
           <!-- QUANTITY MATRIX RUN -->
@@ -265,7 +265,6 @@
       document.getElementById('queue-count').innerText = appOrders.length;
     }
 
-    // Auto-calculates default 2-week date anchors on initialization load
     function initializeDefaultDates() {
       const dateInput = document.getElementById('input-date');
       const today = new Date();
@@ -279,7 +278,7 @@
       validateTurnaroundTimeline();
     }
 
-    // New friendly turnaround calculation verification engine
+    // RE-WORDED DYNAMIC TURNAROUND CALCULATION ENGINE
     function validateTurnaroundTimeline() {
       const dateInput = document.getElementById('input-date').value;
       const noticeBox = document.getElementById('date-turnaround-notice');
@@ -292,21 +291,19 @@
       const today = new Date();
       today.setHours(0,0,0,0);
 
-      // Total millisecond span translation
       const timeDiff = selectedDate.getTime() - today.getTime();
       const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
       noticeBox.classList.remove('hidden');
 
       if (daysDiff < 14) {
-        // Under 2 weeks - Customer Friendly Warning State
-        noticeBox.className = "p-4 rounded-xl border border-amber-200 bg-amber-50 text-xs text-amber-800 leading-normal animate-fadeIn";
+        // Customer Friendly Soft Warning State
+        noticeBox.className = "p-4 rounded-xl border border-sky-200 bg-sky-50 text-xs text-sky-800 leading-normal animate-fadeIn";
         noticeBox.innerHTML = `
-          <span class="font-bold text-amber-900 block mb-0.5">⚠️ Expedited Timeline Flagged</span>
-          Requested completion is under our standard 2-week shop floor turnaround. Depending on our current production volume and mesh setup queues, your project <b>may be subject to an expedited rush fee</b> or final delivery adjustments upon operator review.
+          <span class="font-bold text-sky-950 block mb-0.5">⚡ Need it quick? Let's talk!</span>
+          We try our absolute best to never miss a deadline. Go ahead and submit your project specs—our team will look over our current production schedule right away and do everything we can to squeeze you in. Please note that projects needed inside our standard 2-week turnaround window <b>may be subject to an expedited rush order fee</b> to cover late-night setups, or timeline adjustments depending on stock availability.
         `;
       } else {
-        // Safe standard turnaround track
         noticeBox.className = "p-3.5 rounded-xl border border-emerald-100 bg-emerald-50/50 text-xs text-emerald-700 leading-normal";
         noticeBox.innerHTML = `
           <span class="font-bold text-emerald-800 block mb-0.5">✓ Standard Timeline Confirmed</span>
@@ -442,7 +439,7 @@
         'Gildan (Economical)': 6.25, 
         'Next Level (Mid-Tier)': 8.75, 
         'Bella+Canvas (Mid-Tier)': 8.75, 
-        'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 
+        'Specialty Blank (Heavyweight / Vintage Boxy)', 15.00, 
         'Other': 10.00 
       };
 
