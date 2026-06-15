@@ -37,8 +37,8 @@
 
   <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
     
-    <!-- SUCCESS SCREEN FOR CUSTOMERS (HIDDEN UNTIL SUBMISSION) -->
-    <div id="view-success" class="hidden max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-4 shadow-sm my-12 animate-fadeIn">
+    <!-- SUCCESS SCREEN FOR CUSTOMERS -->
+    <div id="view-success" class="hidden max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-4 shadow-sm my-12 UI-fadeIn">
       <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
       <h2 class="text-xl font-bold text-slate-900">Quote Request Submitted!</h2>
       <p class="text-sm text-slate-500 leading-relaxed">
@@ -76,7 +76,7 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Apparel Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Dropdown options injected by JavaScript on state change -->
+                <!-- Dropdown options injected by JavaScript -->
               </select>
             </div>
           </div>
@@ -87,8 +87,8 @@
             We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
           </div>
 
-          <!-- NEW DYNAMIC OTTOCAP PORTAL LOGIC BOX -->
-          <div id="catalog-notice-ottocap" class="hidden p-4 bg-slate-900 text-white rounded-xl text-xs leading-normal animate-fadeIn flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <!-- DYNAMIC OTTOCAP PORTAL LOGIC BOX -->
+          <div id="catalog-notice-ottocap" class="hidden p-4 bg-slate-900 text-white rounded-xl text-xs leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Options</span>
               Need help choosing your canvas? Click to browse real-time configurations, trucker meshes, snaps, and dad caps over at <span class="font-bold text-emerald-400">Ottocap.com</span>.
@@ -149,15 +149,21 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-4">
+          <!-- TARGET PRODUCTION DATE FRAME WITH DYNAMIC TURNAROUND ENGINE -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Garment Color</label>
               <input type="text" id="input-color" required placeholder="e.g. Midnight Black" class="w-full px-4 py-2.5 border rounded-xl text-sm text-slate-800 outline-none" />
             </div>
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Target Completion Date</label>
-              <input type="date" id="input-date" required class="w-full px-4 py-2.5 border rounded-xl text-sm text-slate-700 outline-none" />
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Desired Completion Date</label>
+              <input type="date" id="input-date" required onchange="validateTurnaroundTimeline()" class="w-full px-4 py-2.5 border rounded-xl text-sm text-slate-700 outline-none" />
             </div>
+          </div>
+
+          <!-- FRIENDLY TURNAROUND COMPLIANCE NOTICE FEEDBACK BOX -->
+          <div id="date-turnaround-notice" class="p-3.5 rounded-xl border text-xs leading-normal transition-all hidden">
+            <!-- Populated dynamically via javascript validation states -->
           </div>
 
           <!-- QUANTITY MATRIX RUN -->
@@ -230,7 +236,7 @@
 
   </main>
 
-  <!-- APP STATE MACHINERY (VANILLA JS SYSTEM STABILITY ENGINE) -->
+  <!-- APP STATE MACHINERY -->
   <script>
     let appOrders = [
       { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks.', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
@@ -257,6 +263,56 @@
     function saveState() {
       localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
       document.getElementById('queue-count').innerText = appOrders.length;
+    }
+
+    // Auto-calculates default 2-week date anchors on initialization load
+    function initializeDefaultDates() {
+      const dateInput = document.getElementById('input-date');
+      const today = new Date();
+      
+      const twoWeeksOut = new Date(today.getTime() + (14 * 24 * 60 * 60 * 1000));
+      const year = twoWeeksOut.getFullYear();
+      const month = String(twoWeeksOut.getMonth() + 1).padStart(2, '0');
+      const day = String(twoWeeksOut.getDate()).padStart(2, '0');
+      
+      dateInput.value = `${year}-${month}-${day}`;
+      validateTurnaroundTimeline();
+    }
+
+    // New friendly turnaround calculation verification engine
+    function validateTurnaroundTimeline() {
+      const dateInput = document.getElementById('input-date').value;
+      const noticeBox = document.getElementById('date-turnaround-notice');
+      if (!dateInput) {
+        noticeBox.classList.add('hidden');
+        return;
+      }
+
+      const selectedDate = new Date(dateInput + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      // Total millisecond span translation
+      const timeDiff = selectedDate.getTime() - today.getTime();
+      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+      noticeBox.classList.remove('hidden');
+
+      if (daysDiff < 14) {
+        // Under 2 weeks - Customer Friendly Warning State
+        noticeBox.className = "p-4 rounded-xl border border-amber-200 bg-amber-50 text-xs text-amber-800 leading-normal animate-fadeIn";
+        noticeBox.innerHTML = `
+          <span class="font-bold text-amber-900 block mb-0.5">⚠️ Expedited Timeline Flagged</span>
+          Requested completion is under our standard 2-week shop floor turnaround. Depending on our current production volume and mesh setup queues, your project <b>may be subject to an expedited rush fee</b> or final delivery adjustments upon operator review.
+        `;
+      } else {
+        // Safe standard turnaround track
+        noticeBox.className = "p-3.5 rounded-xl border border-emerald-100 bg-emerald-50/50 text-xs text-emerald-700 leading-normal";
+        noticeBox.innerHTML = `
+          <span class="font-bold text-emerald-800 block mb-0.5">✓ Standard Timeline Confirmed</span>
+          Your date clears our baseline 14-day production windows. No rush penalties apply.
+        `;
+      }
     }
 
     function switchView(target) {
@@ -346,7 +402,6 @@
       checkSelectedBrand();
     }
 
-    // Controls showing the black Ottocap link container ONLY when 'Hats' is the highlighted choice
     function checkSelectedBrand() {
       const type = document.getElementById('input-type').value;
       const brand = document.getElementById('input-brand').value;
@@ -469,7 +524,6 @@
       
       document.getElementById('estimator-form').reset();
       clearUploadedArt();
-      recalculateQuote();
       
       document.getElementById('view-estimator').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
@@ -480,6 +534,7 @@
       document.getElementById('view-success').classList.add('hidden');
       document.getElementById('view-estimator').classList.remove('hidden');
       updateFormFields();
+      initializeDefaultDates();
     }
 
     function toggleTask(orderId, taskIndex) {
@@ -615,7 +670,7 @@
     }
 
     updateFormFields();
-    document.getElementById('queue-count').innerText = appOrders.length;
+    initializeDefaultDates();
   </script>
 </body>
 </html>
