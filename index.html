@@ -8,8 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes slowPulse {
-      0%, 100__% { opacity: 0.2; }
-      50__% { opacity: 0.5; }
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.5; }
     }
     .mockup-placement-pulse {
       animation: slowPulse 2.5s infinite ease-in-out;
@@ -29,6 +29,7 @@
         </div>
       </div>
       <div class="flex items-center space-x-4">
+        <!-- Private admin queue navigation toggle dashboard -->
         <div id="admin-nav-container" class="hidden bg-slate-900 p-1 rounded-xl flex border border-slate-800 shadow-inner">
           <button onclick="switchView('estimator')" id="nav-estimator" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black">Estimator</button>
           <button onclick="switchView('dashboard')" id="nav-dashboard" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white">Dashboard (<span id="queue-count">0</span>)</button>
@@ -67,7 +68,7 @@
           </div>
         </div>
 
-        <!-- STABILIZED REBUILT SHOWROOM STUDIO PLATFORM CONTAINER -->
+        <!-- PERMANENT HIGHEST VISIBILITY SHOWROOM DESIGN studio PANEL -->
         <div class="border border-slate-300 rounded-2xl overflow-hidden bg-slate-200/50 shadow-sm">
           <div class="p-4 bg-white border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -80,15 +81,15 @@
             </label>
           </div>
 
-          <!-- REBUILT MODEL TOGGLE SELECTORS -->
+          <!-- MOCKUP CANVAS TOGGLES -->
           <div class="px-4 py-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center gap-2 justify-center sm:justify-start">
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Canvas Model:</span>
             <button type="button" id="btn-model-shirt" onclick="switchMockupCanvasProductStyle('shirt')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-black text-white border-black">👕 T-Shirt</button>
-            <button type="button" id="btn-model-hoodie" onclick="switchMockupCanvasProductStyle('hoodie')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-white text-slate-600 border-slate-200 hover:bg-slate-100">🧥 Hoodie</button>
+            <button type="button" id="btn-model-hoodie" onclick="switchMockupCanvasProductStyle('hoodie')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-white text-slate-600 border-slate-200 hover:bg-slate-100"><i></i>🧥 Hoodie</button>
             <button type="button" id="btn-model-cap" onclick="switchMockupCanvasProductStyle('cap')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all bg-white text-slate-600 border-slate-200 hover:bg-slate-100">🧢 Snapback Cap</button>
           </div>
 
-          <!-- PLACEMENT ZONE SELECTION CONTROLS -->
+          <!-- PLACEMENT ZONE CONTROLS -->
           <div class="px-4 py-2 bg-slate-100/80 border-b border-slate-200 flex flex-wrap items-center gap-1.5 justify-center sm:justify-start text-xs">
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Logo Target Site:</span>
             <button type="button" id="btn-place-front" onclick="setMockupGraphicPlacementZone('front')" class="apparel-place-btn px-2.5 py-1 rounded bg-black text-white font-bold text-[11px] border border-black transition-all">Front Center</button>
@@ -101,11 +102,11 @@
           </div>
           
           <div class="p-8 flex flex-col items-center justify-center min-h-[340px] relative bg-slate-100">
-            <button type="button" id="btn-clear-mockup-art" onclick="clearUploadedArt()" class="hidden absolute top-4 right-4 z-30 bg-white border border-slate-200 text-slate-500 hover:text-black rounded-xl px-2.5 py-1.5 text-[11px] font-bold shadow-sm transition-all">
+            <button type="button" id="btn-clear-mockup-art" onclick="clearUploadedArt()" class="hidden absolute top-4 right-4 z-20 bg-white border border-slate-200 text-slate-500 hover:text-black rounded-xl px-2.5 py-1.5 text-[11px] font-bold shadow-sm transition-all">
               Reset Canvas ×
             </button>
 
-            <!-- CANVAS LAYERING ENGINE (Z-INDEX LAYERS BALANCED TO PREVENT DISAPPEARING) -->
+            <!-- REAL-TIME ACTIVE LAYER CONTROLLER (Z-INDEX ASSIGNED HIGH TO AVOID OVERLAPS) -->
             <div id="mockup-frame-view-box" class="w-64 h-56 relative flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
               
               <!-- T-Shirt Graphic Canvas -->
@@ -130,12 +131,12 @@
                 </div>
               </div>
 
-              <!-- PLACEMENT GRAPHIC RENDER TARGET LAYER (FORCED AT HIGHER Z-INDEX TO SNAP ON TOP) -->
+              <!-- TARGET LAYER FOR IMAGES (FIXED TYPO CODES FOR ALIGNMENT RUNS) -->
               <div id="mockup-print-run-target" class="absolute inset-0 pointer-events-none z-30">
-                <div id="mockup-sight-ring" class="absolute w-14 h-14 rounded-full border-2 border-dashed border-white/90 bg-black/30 mockup-placement-pulse flex items-center justify-center transition-all duration-300" style="top: 36__%; left: 39__%;">
+                <div id="mockup-sight-ring" class="absolute w-14 h-14 rounded-full border-2 border-dashed border-white/90 bg-black/30 mockup-placement-pulse flex items-center justify-center transition-all duration-300" style="top: 36%; left: 39%;">
                   <span class="text-[8px] font-bold text-white uppercase tracking-wider text-center leading-tight">Sight<br/>Zone</span>
                 </div>
-                <img id="mockup-live-graphic-render" src="" class="hidden absolute object-contain drop-shadow-2xl transition-all duration-300 z-40" style="top: 36__%; left: 39__%; width: 56px; height: 56px;" />
+                <img id="mockup-live-graphic-render" src="" class="hidden absolute object-contain drop-shadow-2xl transition-all duration-300 z-40" style="top: 36%; left: 39%; width: 56px; height: 56px;" />
               </div>
 
             </div>
@@ -155,7 +156,7 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Product Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Loaded dynamically via JavaScript layout dropdown filters -->
+                <!-- Managed dynamically via JavaScript dropdown filters -->
               </select>
             </div>
           </div>
@@ -219,7 +220,7 @@
             </div>
           </div>
 
-          <!-- BANNER MEASUREMENT CALCULATIONS -->
+          <!-- BANNER MEASUREMENT MATRIX -->
           <div id="box-banner-dimensions" class="hidden grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl animate-fadeIn">
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Banner Width (Feet)</label>
@@ -254,23 +255,21 @@
           <!-- TURNAROUND NOTIFICATION BOX -->
           <div id="date-turnaround-notice" class="p-3.5 rounded-xl border text-xs leading-normal transition-all hidden"></div>
 
-          <!-- EXPANDED QUANTITY SIZING TRACKER MATRIX RUN (UPGRADED TO INCLUDE 3XL & 4XL SECTIONS) -->
+          <!-- DYNAMIC ALL TIER SIZES ROW (S-4XL ALL STABILIZED) -->
           <div class="p-4 bg-slate-50 border rounded-xl space-y-3">
             <div class="flex justify-between items-center">
               <label id="matrix-label" class="text-xs font-bold text-slate-600 uppercase tracking-wider">Garment Sizing Volumes</label>
               <span id="min-warning" class="text-[11px] font-bold text-slate-800">Add 12 total garments to initialize batch</span>
             </div>
             
-            <!-- Upgraded Sizing Layout Core Grid -->
             <div id="sizing-grid" class="grid grid-cols-7 gap-1.5">
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">S</span><input type="number" id="size-s" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">M</span><input type="number" id="size-m" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">L</span><input type="number" id="size-l" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">XL</span><input type="number" id="size-xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">2XL</span><input type="number" id="size-2xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
-              <!-- Added plus size options requested -->
-              <div class="bg-white border border-slate-300 rounded-xl p-2 text-center shadow-sm focus-within:border-black"><span class="text-[10px] font-bold text-slate-500 block mb-0.5">3XL</span><input type="number" id="size-3xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none bg-transparent" /></div>
-              <div class="bg-white border border-slate-300 rounded-xl p-2 text-center shadow-sm focus-within:border-black"><span class="text-[10px] font-bold text-slate-500 block mb-0.5">4XL</span><input type="number" id="size-4xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none bg-transparent" /></div>
+              <div class="bg-white border border-slate-300 rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-500 block mb-0.5">3XL</span><input type="number" id="size-3xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none bg-transparent" /></div>
+              <div class="bg-white border border-slate-300 rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-500 block mb-0.5">4XL</span><input type="number" id="size-4xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none bg-transparent" /></div>
             </div>
 
             <!-- Headwear Config Flag -->
@@ -460,7 +459,7 @@
       }
     }
 
-    // LAYER LAYER RE-ORDER ENGINE (FORCES USER GRAPHIC TO RENDER OVER SVG PATHS)
+    // CORE MOCKUP CONTROLLER WITH Z-INDEX LAYERS ALIGNED OVER SVG CODES
     function processArtworkFile(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -510,7 +509,6 @@
       const hoodieSvg = document.getElementById('canvas-svg-hoodie');
       const capSvg = document.getElementById('canvas-svg-cap');
       const cardDiv = document.getElementById('canvas-svg-card');
-      const liveGraphic = document.getElementById('mockup-live-graphic-render');
 
       if (shirtSvg) shirtSvg.classList.add('hidden');
       if (hoodieSvg) hoodieSvg.classList.add('hidden');
@@ -556,7 +554,6 @@
       applyMockupSizingCoordinatesEngine();
     }
 
-    // ACCURATE PLACEMENT COORDINATES MAPS
     function applyMockupSizingCoordinatesEngine() {
       const ring = document.getElementById('mockup-sight-ring');
       const art = document.getElementById('mockup-live-graphic-render');
@@ -750,7 +747,7 @@
       recalculateQuote();
     }
 
-    function syncCardPackCalculations() {
+    function syncCardPackQuantityValues() {
       const tier = document.getElementById('input-card-tier').value;
       document.getElementById('input-marketing-qty').value = tier;
       recalculateQuote();
@@ -922,7 +919,7 @@
       document.getElementById('view-estimator').classList.add('hidden');
       document.getElementById('portal-footer').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
-      showToast('Project setup and mockup coordinates logged');
+      showToast('Project setup and mockup preferences logged');
     }
 
     function resetPortalForNewQuote() {
@@ -1002,7 +999,9 @@
 
         document.getElementById(`col-${o.stage}`).innerHTML += cardHtml;
       });
-      document.getElementById('queue-count').innerText = appOrders.length;
+      if(document.getElementById('queue-count')) {
+        document.getElementById('queue-count').innerText = appOrders.length;
+      }
     }
 
     updateFormFields();
