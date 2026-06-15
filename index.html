@@ -191,6 +191,11 @@
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">XL</span><input type="number" id="size-xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">2XL</span><input type="number" id="size-2xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
             </div>
+
+            <div id="hat-osfa-notice" class="hidden bg-white border border-slate-200 p-4 rounded-xl text-xs text-slate-600 animate-fadeIn">
+              <span class="font-bold text-black block mb-0.5">Size Run Configuration:</span>
+              Headwear runs out via professional wholesale <b>One Size Fits All (OSFA) / Adjustable Snapbacks</b>. Sizing breakdown matrices are disabled. Please use the counter box below to specify your batch run size volume!
+            </div>
             
             <div id="marketing-volume-box" class="hidden bg-white border rounded-xl p-3 shadow-sm flex items-center justify-between">
               <span id="volume-box-label" class="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Order Quantity</span>
@@ -200,11 +205,11 @@
 
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Special Operator Notes / Requirements</label>
-            <textarea id="input-notes" rows="3" placeholder="Specify layout details, clothing dimensions, thread overlays, or specific item codes..." class="w-full px-4 py-2.5 border rounded-xl outline-none text-sm resize-none focus:ring-1 focus:ring-black text-slate-800"></textarea>
+            <textarea id="input-notes" rows="3" placeholder="Specify clothing placement dimensions, thread setups, or custom copy specifications..." class="w-full px-4 py-2.5 border rounded-xl outline-none text-sm resize-none focus:ring-1 focus:ring-black text-slate-800"></textarea>
           </div>
 
-          <button type="submit" id="submit-btn" disabled class="w-full bg-black hover:bg-slate-900 text-white font-bold py-4 rounded-xl text-sm tracking-wide shadow transition-all cursor-pointer">
-            Submit Project Request
+          <button type="submit" id="submit-btn" disabled class="w-full bg-slate-100 text-slate-400 font-bold py-4 rounded-xl text-sm border border-slate-200 text-center shadow-inner cursor-not-allowed">
+            Request Quote (Minimum requirement not met)
           </button>
         </form>
       </div>
@@ -241,4 +246,103 @@
       </div>
       <div class="border rounded-2xl p-4 min-h-[500px] flex flex-col bg-slate-200/40 border-slate-300">
         <div class="flex justify-between items-center border-b pb-2 mb-4"><span class="text-xs font-extrabold uppercase tracking-wider text-slate-800">In Production</span></div>
-        <div id="col-production" class="space-y-3 flex
+        <div id="col-production" class="space-y-3 flex-1"></div>
+      </div>
+      <div class="border rounded-2xl p-4 min-h-[500px] flex flex-col bg-slate-900/10 border-slate-400">
+        <div class="flex justify-between items-center border-b pb-2 mb-4"><span class="text-xs font-extrabold uppercase tracking-wider text-slate-900">Ready / Complete</span></div>
+        <div id="col-ready" class="space-y-3 flex-1"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="portal-footer" class="bg-black text-slate-400 text-xs py-8 mt-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-6 text-center sm:text-left">
+      <div class="space-y-1">
+        <span class="font-bold text-white text-sm block">Hussle Print Co.</span>
+        <p class="text-[11px] text-slate-500">Premium Screen Printing, Embroidery & Commercial Media Solutions</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 font-medium">
+        <div>
+          <span class="text-[10px] uppercase text-slate-500 block font-bold tracking-wider">Main Shop Desk</span>
+          <a href="tel:8067824224" class="text-white hover:underline text-xs">806-782-4224</a>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase text-slate-500 block font-bold tracking-wider">Office Email</span>
+          <a href="mailto:thehumblehussle@gmail.com" class="text-white hover:underline text-xs">thehumblehussle@gmail.com</a>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase text-slate-500 block font-bold tracking-wider">Production Headquarters</span>
+          <span class="text-slate-300 text-xs block">5113 34th Street</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-black text-white px-5 py-3 rounded-xl border border-slate-800 flex items-center space-x-3 shadow-2xl">
+    <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+    <span id="toast-text" class="text-xs font-bold uppercase tracking-wide">Action Processed</span>
+  </div>
+
+  <script>
+    let appOrders = [
+      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks.', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
+      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment.', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
+    ];
+
+    let currentArtBase64 = '';
+    let logoOnFile = false;
+    let isAdminMode = false;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'true') {
+      isAdminMode = true;
+      document.getElementById('admin-nav-container').classList.remove('hidden');
+      document.getElementById('hub-subtitle').innerText = "Production Command Hub";
+    }
+
+    if (localStorage.getItem('hpc_static_orders')) {
+      appOrders = JSON.parse(localStorage.getItem('hpc_static_orders'));
+    } else {
+      localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
+    }
+
+    function saveState() {
+      localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
+      document.getElementById('queue-count').innerText = appOrders.length;
+    }
+
+    function initializeDefaultDates() {
+      const dateInput = document.getElementById('input-date');
+      const today = new Date();
+      const twoWeeksOut = new Date(today.getTime() + (14 * 24 * 60 * 60 * 1000));
+      const year = twoWeeksOut.getFullYear();
+      const month = String(twoWeeksOut.getMonth() + 1).padStart(2, '0');
+      const day = String(twoWeeksOut.getDate()).padStart(2, '0');
+      dateInput.value = `${year}-${month}-${day}`;
+      validateTurnaroundTimeline();
+    }
+
+    function validateTurnaroundTimeline() {
+      const dateInput = document.getElementById('input-date').value;
+      const noticeBox = document.getElementById('date-turnaround-notice');
+      if (!dateInput) {
+        noticeBox.classList.add('hidden');
+        return;
+      }
+
+      const selectedDate = new Date(dateInput + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      const timeDiff = selectedDate.getTime() - today.getTime();
+      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      noticeBox.classList.remove('hidden');
+
+      if (daysDiff < 14) {
+        noticeBox.className = "p-4 rounded-xl border border-sky-200 bg-sky-50 text-xs text-sky-800 leading-normal animate-fadeIn";
+        noticeBox.innerHTML = `
+          <span class="font-bold text-sky-950 block mb-0.5">⚡ Need it quick? Let's talk!</span>
+          We try our absolute best to never miss a deadline. Go ahead and submit your project specs—our team will look over our current production schedule right away and do everything we can to squeeze you in. Please note that projects needed inside our standard 2-week turnaround window <b>may be subject to an expedited rush order fee</b> to cover late-night setups, or timeline adjustments depending on stock availability.
+        `;
+      } else {
