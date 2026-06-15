@@ -76,12 +76,12 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Product Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Loaded dynamically via JavaScript layout dropdown matrices -->
+                <!-- Loaded dynamically via JavaScript dropdown matrices -->
               </select>
             </div>
           </div>
 
-          <!-- CLEAN TEXT ARTWORK FILE SELECTION FIELD -->
+          <!-- COMPACT ARTWORK UPLOAD LINE -->
           <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Logo Graphic Sourcing File</label>
@@ -93,11 +93,11 @@
             </label>
           </div>
 
-          <!-- CLEAN DYNAMIC SELECTION CHANNELS FOR PRINT AND EMBROIDERY PLACEMENTS -->
+          <!-- CLEAN DROPDOWN LOGO PLACEMENT OPTIONS (NO CANVAS BOX OR VISUAL PLACEMENTS) -->
           <div id="box-design-placement-hub" class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Design Layout Placement Location</label>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Logo Print/Stitch Location</label>
             
-            <!-- 1. Screen Print Location Select Dropdown -->
+            <!-- Screen Print Location Select Dropdown -->
             <select id="placement-screenprint" class="w-full p-2.5 border rounded-lg bg-white text-sm text-slate-800 outline-none">
               <option value="Full Front Layout Print">Standard Full Front Layout Print</option>
               <option value="Left Chest Pocket Print">Standard Left Chest Print</option>
@@ -107,7 +107,7 @@
               <option value="Custom Placement Spec Notes">Other Placement (Specify in Operator Notes)</option>
             </select>
 
-            <!-- 2. Embroidery Location Select Dropdown -->
+            <!-- Embroidery Location Select Dropdown -->
             <select id="placement-embroidery" class="hidden w-full p-2.5 border rounded-lg bg-white text-sm text-slate-800 outline-none">
               <option value="Hat Front Center Profile">Hat Front Center Profile</option>
               <option value="Left Chest Crest Run">Garment Left Chest Pocket Crest</option>
@@ -306,15 +306,15 @@
       </div>
       <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 font-medium">
         <div>
-          <span class="text-[10px] uppercase text-slate-500 block font-bold tracking-wider">Main Shop Desk</span>
+          <span class="text-[10px] uppercase text-slate-500 block tracking-wider font-bold">Main Shop Desk</span>
           <a href="tel:8067824224" class="text-white hover:underline text-xs">806-782-4224</a>
         </div>
         <div>
-          <span class="text-[10px] uppercase text-slate-500 block font-bold tracking-wider">Office Email</span>
+          <span class="text-[10px] uppercase text-slate-500 block tracking-wider font-bold">Office Email</span>
           <a href="mailto:thehumblehussle@gmail.com" class="text-white hover:underline text-xs">thehumblehussle@gmail.com</a>
         </div>
         <div>
-          <span class="text-[10px] uppercase text-slate-500 block font-bold tracking-wider">Production Headquarters</span>
+          <span class="text-[10px] uppercase text-slate-500 block tracking-wider font-bold">Production Headquarters</span>
           <span class="text-slate-300 text-xs block">5113 34th Street</span>
         </div>
       </div>
@@ -451,7 +451,6 @@
       
       brandSelect.innerHTML = '';
 
-      // Manage design placement card menu channel toggles
       const placementBox = document.getElementById('box-design-placement-hub');
       const printPlacement = document.getElementById('placement-screenprint');
       const embroideryPlacement = document.getElementById('placement-embroidery');
@@ -466,7 +465,7 @@
         } else if (type === 'Embroidery') {
           embroideryPlacement.classList.remove('hidden');
         } else {
-          placementBox.classList.add('hidden'); // Clear placement entirely for flat commercial media items
+          placementBox.classList.add('hidden'); 
         }
       }
 
@@ -719,7 +718,6 @@
 
       let orderNotes = document.getElementById('input-notes').value;
       
-      // LOG EXACT PLACEMENT CHANNELS INSTEAD OF VISUAL COORDINATES
       if (type === 'Screen Printing') {
         const val = document.getElementById('placement-screenprint').value;
         orderNotes += ` [Placement Spec: ${val.toUpperCase()}]`;
@@ -764,9 +762,9 @@
       clearUploadedArt();
       
       document.getElementById('view-estimator').classList.add('hidden');
-      document.getElementById('portal-footer').classList.add('hidden');
+      document.getElementById('portal-footer').classList.remove('hidden');
       document.getElementById('view-success').classList.remove('hidden');
-      showToast('Project placement specifications submitted successfully');
+      showToast('Project registered successfully');
     }
 
     function resetPortalForNewQuote() {
