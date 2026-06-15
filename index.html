@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hussle Print Co. - Control Hub</title>
+  <title>Humble Hussle Print Shop - Control Hub</title>
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Premium Blended Gradient and Halftone Silk-Screen Background Matrix */
     .bg-gradient-halftone {
-      min-h-screen: 100vh;
+      min-height: 100vh;
       background-color: #ffffff;
       background-image: 
         linear-gradient(to bottom, rgba(255, 255, 255, 0.3), #ffffff 75%),
@@ -21,13 +21,13 @@
 </head>
 <body class="bg-gradient-halftone text-black font-sans min-h-screen flex flex-col antialiased">
 
-  <!-- TOP HUB NAVIGATION BAR -->
+  <!-- TOP HUB NAVIGATION BAR (UPDATED TO HUMBLE HUSSLE PRINT SHOP) -->
   <header class="bg-black text-white p-5 border-b-4 border-black sticky top-0 z-50 shadow-2xl">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center space-x-3">
         <div class="bg-white text-black px-4 py-1.5 font-black text-2xl rounded-none transform -rotate-2 border-2 border-white shadow-[3px_3px_0px_0px_rgba(255,255,255,0.2)] tracking-tighter">H</div>
         <div>
-          <h1 class="text-xl font-black tracking-tighter uppercase">Hussle Print Co.</h1>
+          <h1 class="text-xl font-black tracking-tighter uppercase">Humble Hussle Print Shop</h1>
           <p id="hub-subtitle" class="text-[10px] text-zinc-400 font-black uppercase tracking-widest">Project Estimator Portal</p>
         </div>
       </div>
@@ -53,7 +53,7 @@
       <div class="w-14 h-14 bg-black text-white rounded-none flex items-center justify-center mx-auto text-2xl font-black border-2 border-black">✓</div>
       <h2 class="text-2xl font-black uppercase tracking-tighter">Quote Submitted!</h2>
       <p class="text-sm text-zinc-600 leading-relaxed font-bold">
-        Thank you! Your batch details and placement preferences have been uploaded securely into our design review pipeline. An operator from the **Hussle Print Co.** team will review your specifications and reach out shortly with your final digital proof.
+        Thank you! Your batch details and placement preferences have been uploaded securely into our design review pipeline. An operator from the **Humble Hussle** team will review your specifications and reach out shortly with your final digital proof.
       </p>
       <button onclick="resetPortalForNewQuote()" class="bg-black hover:bg-zinc-900 text-white font-black px-6 py-3 rounded-none text-xs uppercase tracking-widest transition-all border-2 border-black shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]">
         Submit Another Project
@@ -163,8 +163,8 @@
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs">
               <span class="font-black uppercase tracking-wide text-black">Logo Sizing File History Run</span>
               <div class="flex space-x-2">
-                <button type="button" id="btn-file-yes" onclick="setLogoOnFile(true)" class="px-4 py-1.5 rounded-none border-4 border-black text-[11px] font-black uppercase tracking-wider bg-zinc-100">Yes</button>
-                <button type="button" id="btn-file-no" onclick="setLogoOnFile(false)" class="px-4 py-1.5 rounded-none border-4 border-black text-[11px] font-black uppercase tracking-wider bg-black text-white">No ($30 setup)</button>
+                <button type="button" id="btn-file-yes" onclick="setLogoOnFile(true)" class="px-4 py-1.5 rounded-none border-4 border-black text-[11px] font-black uppercase tracking-wider bg-black text-white">Yes</button>
+                <button type="button" id="btn-file-no" onclick="setLogoOnFile(false)" class="px-4 py-1.5 rounded-none border-4 border-black text-[11px] font-black uppercase tracking-wider bg-zinc-100">No ($30 setup)</button>
               </div>
             </div>
             <div>
@@ -313,7 +313,7 @@
   <footer id="portal-footer" class="bg-black text-zinc-400 text-xs py-8 mt-auto border-t-4 border-black">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-6 text-center sm:text-left">
       <div class="space-y-1">
-        <span class="font-black text-white text-sm uppercase tracking-wide block">Hussle Print Co.</span>
+        <span class="font-black text-white text-sm uppercase tracking-wide block">Humble Hussle Print Shop</span>
         <p class="text-[11px] text-zinc-500 font-bold">Premium Screen Printing, Embroidery & Commercial Media Solutions</p>
       </div>
       <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 font-black">
@@ -832,7 +832,7 @@
               <span class="text-zinc-500">${o.dueDate}</span>
             </div>
             <div>
-              <h4 class="font-black text-sm text-black truncate leading-tight uppercase">${o.customerName}</h4>
+              <h4 class="font-black text-sm text-black truncate leading-tight uppercase tracking-tight">${o.customerName}</h4>
               <p class="text-xs text-zinc-500 mt-1 font-bold uppercase">${o.totalQuantity}x Items Run</p>
               <span class="text-[10px] font-black text-zinc-400 block mt-0.5 uppercase tracking-wide bg-zinc-100 px-2 py-0.5 rounded inline-block truncate max-w-full">${o.brand}</span>
             </div>
