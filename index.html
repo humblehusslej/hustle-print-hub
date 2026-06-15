@@ -7,13 +7,12 @@
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Continuous pulse animation for active mockup asset targets */
     @keyframes slowPulse {
-      0%, 100% { opacity: 0.15; }
-      50% { opacity: 0.35; }
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.5; }
     }
     .mockup-placement-pulse {
-      animation: slowPulse 3s infinite ease-in-out;
+      animation: slowPulse 2.5s infinite ease-in-out;
     }
   </style>
 </head>
@@ -86,7 +85,7 @@
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Product Base Stock</label>
               <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Managed dynamically via JavaScript drop injection arrays -->
+                <!-- Loaded dynamically via JavaScript dropdown matrices -->
               </select>
             </div>
           </div>
@@ -108,56 +107,57 @@
             </a>
           </div>
 
-          <!-- ARTWORK UPLOAD & LIVE INTERACTIVE PRINT STUDIO MOCKUP SCREEN -->
-          <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-100/50">
+          <!-- BRAND NEW DEDICATED VISUAL MOCKUP STUDIO BLOCK -->
+          <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-100/60 shadow-inner">
             <div class="p-4 bg-white border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <span class="block text-xs font-bold uppercase tracking-wider text-slate-700">Live Custom Design Studio</span>
-                <span class="block text-[11px] text-slate-400">Attach high-res graphic logs to visualize layout mockups instantly</span>
+                <span class="block text-xs font-bold uppercase tracking-wider text-slate-800">⚡ Live Custom Mockup Engine</span>
+                <span class="block text-[11px] text-slate-400">Attach your logo file below to instantly generate a layout blueprint</span>
               </div>
               <label class="cursor-pointer bg-black text-white hover:bg-slate-900 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all text-center whitespace-nowrap">
-                <span>Select Layout Artwork</span>
+                <span>Upload Logo Graphic</span>
                 <input type="file" id="input-art" accept="image/*" onchange="processArtworkFile(event)" class="hidden" />
               </label>
             </div>
             
-            <!-- CENTRAL PREVIEW VISUALIZER MAP -->
-            <div class="p-6 flex flex-col items-center justify-center min-h-[280px] relative">
+            <!-- DYNAMIC DISPLAY SCREEN AREA -->
+            <div class="p-8 flex flex-col items-center justify-center min-h-[300px] relative">
               
-              <!-- CLEAR FLOATING OVERLAY TRIGGER -->
-              <button type="button" id="btn-clear-mockup-art" onclick="clearUploadedArt()" class="hidden absolute top-4 right-4 z-20 bg-white border text-slate-500 hover:text-black rounded-xl px-2.5 py-1.5 text-[11px] font-bold shadow-sm flex items-center space-x-1.5 transition-all">
-                <span>Wipe Blueprint</span><span>×</span>
+              <!-- CLEAR Blueprints OVERLAY RUN TRIGGER -->
+              <button type="button" id="btn-clear-mockup-art" onclick="clearUploadedArt()" class="hidden absolute top-4 right-4 z-20 bg-white border border-slate-200 text-slate-500 hover:text-black rounded-xl px-2.5 py-1.5 text-[11px] font-bold shadow-sm flex items-center space-x-1.5 transition-all">
+                <span>Reset Canvas</span><span>×</span>
               </button>
 
-              <!-- MOCKUP CANVAS GENERATOR BOARD -->
-              <div class="w-48 h-48 relative flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
+              <div class="w-56 h-56 relative flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
                 
-                <!-- VARIABLE CANVAS VECTOR BACKGROUND SILHOUETTES -->
-                <!-- 1. Shirt (Screenprint Baseline) -->
-                <svg id="canvas-svg-shirt" class="absolute inset-0 w-full h-full text-slate-300 fill-current drop-shadow-md" viewBox="0 0 24 24">
+                <!-- BACKGROUND CANVAS SHAPE MATRICES -->
+                <!-- Shirt Silhouette (Screenprint Target) -->
+                <svg id="canvas-svg-shirt" class="absolute inset-0 w-full h-full text-slate-300 fill-current transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
                   <path d="M18,2H14.5A2.5,2.5,0,0,0,12,4.5,2.5,2.5,0,0,0,9.5,2H6A2,2,0,0,0,4,4V9a1,1,0,0,0,1,1H6v11a1,1,0,0,0,1,1H17a1,1,0,0,0,1,-1V10h1a1,1,0,0,0,1,-1V4A2,2,0,0,0,18,2ZM7,8V4H9a4,4,0,0,1,6,0h2V8Z"/>
                 </svg>
 
-                <!-- 2. Cap (Embroidery Headwear Context) -->
-                <svg id="canvas-svg-cap" class="hidden absolute inset-0 w-full h-full text-slate-300 fill-current drop-shadow-md" viewBox="0 0 24 24">
+                <!-- Snapback Hat Silhouette (Embroidery Target) -->
+                <svg id="canvas-svg-cap" class="hidden absolute inset-0 w-full h-full text-slate-300 fill-current transition-colors duration-300 drop-shadow-md" viewBox="0 0 24 24">
                   <path d="M12,2A10,10,0,0,0,2,12a2,2,0,0,0,2,2h1a1,1,0,0,1,1,1v1a2,2,0,0,0,2,2h8a2,2,0,0,0,2,-2V15a1,1,0,0,1,1,-1h1a2,2,0,0,0,2,-2A10,10,0,0,0,12,2Zm5,11H7V10H17ZM2,17h20a1,1,0,0,1,0,2H2a1,1,0,0,1,0,-2Z"/>
                 </svg>
 
-                <!-- 3. Box Media Template Card (Marketing Assets Scope) -->
-                <div id="canvas-svg-card" class="hidden absolute inset-0 w-full h-full bg-slate-300 rounded-xl border border-slate-400/60 shadow-sm flex items-center justify-center">
-                  <div class="w-[90%] h-[85%] border-2 border-dashed border-slate-400/40 rounded-lg flex items-center justify-center">
-                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest mockup-placement-pulse">Full-Bleed Print Field</span>
+                <!-- Digital Media Card Div Card Block (Marketing Target) -->
+                <div id="canvas-svg-card" class="hidden absolute inset-0 w-full h-full bg-slate-300 rounded-2xl border-2 border-slate-400/40 shadow-md flex items-center justify-center transition-colors duration-300">
+                  <div class="w-[90%] h-[85%] border-2 border-dashed border-slate-400/50 rounded-xl flex items-center justify-center">
+                    <span class="text-[10px] font-black text-slate-400/80 uppercase tracking-widest mockup-placement-pulse">Print Coverage Bounds</span>
                   </div>
                 </div>
 
-                <!-- FLOATING OVERLAY TARGET RUN ZONE FOR TRANSLUCENT CUSTOM GRAPHICS -->
+                <!-- OVERLAY ALIGNMENT CENTER ENGINE FOR TRANSLUCENT CUSTOM GRAPHICS -->
                 <div id="mockup-print-run-target" class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                  <!-- System placeholder sight marker rings -->
-                  <div id="mockup-sight-ring" class="w-16 h-16 rounded-full border-2 border-dashed border-white/60 bg-black/10 mockup-placement-pulse flex items-center justify-center">
-                    <span class="text-[8px] font-bold text-white/50 uppercase tracking-wider text-center">Place<br/>Logo</span>
+                  
+                  <!-- Target Placement Scope Sight Ring -->
+                  <div id="mockup-sight-ring" class="w-20 h-20 rounded-full border-2 border-dashed border-white/80 bg-black/10 mockup-placement-pulse flex flex-col items-center justify-center">
+                    <span class="text-[9px] font-bold text-white uppercase tracking-wider text-center leading-tight">Live<br/>Mockup</span>
                   </div>
-                  <!-- Dynamically sized print placement placeholder tag -->
-                  <img id="mockup-live-graphic-render" src="" class="hidden object-contain transition-all" />
+                  
+                  <!-- This img handles the actual live sizing adjustments -->
+                  <img id="mockup-live-graphic-render" src="" class="hidden object-contain drop-shadow-lg transition-all" />
                 </div>
 
               </div>
@@ -206,7 +206,7 @@
             </div>
           </div>
 
-          <!-- INTEGRATED BANNER SQUARE FOOTAGE CALCULATOR CONTAINERS -->
+          <!-- INTEGRATED BANNER SQUARE FOOTAGE ESTIMATOR BOXES -->
           <div id="box-banner-dimensions" class="hidden grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl animate-fadeIn">
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Banner Width (Feet)</label>
@@ -218,10 +218,9 @@
             </div>
           </div>
 
-          <!-- BUSINESS CARD TIERS -->
           <div id="box-card-packs" class="hidden p-4 bg-slate-50 border rounded-xl animate-fadeIn">
             <label class="text-xs font-bold text-slate-500 block mb-1">Select Print Quantity Tier Pack</label>
-            <select id="input-card-tier" onchange="syncCardPackCalculations()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800 outline-none">
+            <select id="input-card-tier" onchange="syncCardPackQuantityValues()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800 outline-none">
               <option value="250">Starter Run Batch (250 Cards - $60)</option>
               <option value="500">Commercial Standard Batch (500 Cards - $120)</option>
             </select>
@@ -242,14 +241,14 @@
           <!-- TURNAROUND NOTIFICATION BOX -->
           <div id="date-turnaround-notice" class="p-3.5 rounded-xl border text-xs leading-normal transition-all hidden"></div>
 
-          <!-- QUANTITY SELECTION MATRIX RUN -->
+          <!-- ADAPTIVE QUANTITY TRACKER MATRIX -->
           <div class="p-4 bg-slate-50 border rounded-xl space-y-3">
             <div class="flex justify-between items-center">
               <label id="matrix-label" class="text-xs font-bold text-slate-600 uppercase tracking-wider">Garment Sizing Volumes</label>
               <span id="min-warning" class="text-[11px] font-bold text-slate-800">Add 12 total garments to initialize batch</span>
             </div>
             
-            <!-- Standard Clothing Sizing Grid Run -->
+            <!-- Standard Clothing Sizing Grid -->
             <div id="sizing-grid" class="grid grid-cols-5 gap-2">
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">S</span><input type="number" id="size-s" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">M</span><input type="number" id="size-m" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
@@ -258,13 +257,13 @@
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">2XL</span><input type="number" id="size-2xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
             </div>
 
-            <!-- Static Headwear OSFA Notification -->
+            <!-- Dynamic Hat Framework Notice -->
             <div id="hat-osfa-notice" class="hidden bg-white border border-slate-200 p-4 rounded-xl text-xs text-slate-600 animate-fadeIn">
               <span class="font-bold text-black block mb-0.5">Size Run Configuration:</span>
               Headwear items run out via professional wholesale <b>One Size Fits All (OSFA) / Adjustable Snapbacks</b>. Specific size distribution grids are locked.
             </div>
             
-            <!-- Contextual non-apparel count box tracking -->
+            <!-- Marketing Sizing Count CONNECTOR -->
             <div id="marketing-volume-box" class="hidden bg-white border rounded-xl p-3 shadow-sm flex items-center justify-between">
               <span id="volume-box-label" class="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Order Quantity</span>
               <input type="number" id="input-marketing-qty" min="1" value="12" oninput="recalculateQuote()" class="text-right font-bold text-sm outline-none border-b w-24 focus:border-black" />
@@ -440,7 +439,7 @@
       }
     }
 
-    // LIVE ARTWORK INTERACTIVE PROTOTYPING ENGINE
+    // LIVE ARTWORK PROTOTYPING POSITION ENGINE
     function processArtworkFile(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -449,7 +448,6 @@
       reader.onload = function(e) {
         currentArtBase64 = e.target.result;
         
-        // Render layers inside dynamic silhouette maps immediately
         const mockupImg = document.getElementById('mockup-live-graphic-render');
         const sightRing = document.getElementById('mockup-sight-ring');
         const clearBtn = document.getElementById('btn-clear-mockup-art');
@@ -457,10 +455,10 @@
         if (mockupImg && sightRing) {
           mockupImg.src = currentArtBase64;
           mockupImg.classList.remove('hidden');
-          sightRing.classList.add('hidden'); // Clear out setup placeholder sights
+          sightRing.classList.add('hidden'); 
           if (clearBtn) clearBtn.classList.remove('hidden');
         }
-        showToast('Design layered onto visual mockup prototype');
+        showToast('Design layered onto visual mockup preview canvas');
         recalculateQuote();
       };
       reader.readAsDataURL(file);
@@ -477,23 +475,22 @@
       if (mockupImg && sightRing) {
         mockupImg.src = '';
         mockupImg.classList.add('hidden');
-        sightRing.classList.remove('hidden'); // Restore layout target markers
-        if (clearBtn) clearBtn.classList.add('hidden');
+        sightRing.classList.remove('hidden'); 
+        if (clearBtn) clearBtn.add('hidden');
       }
       recalculateQuote();
     }
 
-    // INTERACTIVE REAL-TIME COLOR SYNCRONIZER
+    // INTERACTIVE REAL-TIME CANVAS FABRIC SHIFTING AGENT
     function updateMockupCanvasFabricColor() {
       const colorVal = document.getElementById('input-color').value.toLowerCase().trim();
       const shirtSvg = document.getElementById('canvas-svg-shirt');
       const capSvg = document.getElementById('canvas-svg-cap');
       const cardDiv = document.getElementById('canvas-svg-card');
 
-      // Default fallbacks if color fields are untouched
       let hexColor = '#cbd5e1'; 
 
-      if (colorVal.includes('black') || colorVal.includes('dark')) hexColor = '#1e293b';
+      if (colorVal.includes('black') || colorVal.includes('dark') || colorVal.includes('coal')) hexColor = '#1e293b';
       else if (colorVal.includes('white') || colorVal.includes('cream')) hexColor = '#f8fafc';
       else if (colorVal.includes('red') || colorVal.includes('maroon')) hexColor = '#b91c1c';
       else if (colorVal.includes('blue') || colorVal.includes('navy')) hexColor = '#1d4ed8';
@@ -514,7 +511,7 @@
       
       brandSelect.innerHTML = '';
 
-      // Reset design visualizer canvas layers based on medium type changes
+      // Reset design visualizer canvas layers strictly based on medium configuration shifts
       const shirtSvg = document.getElementById('canvas-svg-shirt');
       const capSvg = document.getElementById('canvas-svg-cap');
       const cardDiv = document.getElementById('canvas-svg-card');
@@ -614,7 +611,6 @@
       const brand = brandSelect ? brandSelect.value : '';
       const ottocapNotice = document.getElementById('catalog-notice-ottocap');
 
-      // Reset baseline view containers
       document.getElementById('box-banner-dimensions').classList.add('hidden');
       document.getElementById('box-card-packs').classList.add('hidden');
       document.getElementById('sizing-grid').classList.add('hidden');
@@ -622,7 +618,6 @@
       document.getElementById('marketing-volume-box').classList.add('hidden');
       if (ottocapNotice) ottocapNotice.classList.add('hidden');
 
-      // Sync active silhouettes if sub-items shift (like shifting off caps onto jackets)
       const shirtSvg = document.getElementById('canvas-svg-shirt');
       const capSvg = document.getElementById('canvas-svg-cap');
       const liveGraphic = document.getElementById('mockup-live-graphic-render');
@@ -719,7 +714,7 @@
       document.getElementById('summary-brand').innerText = brand ? brand.split(' ')[0] : 'Gildan';
 
       const spRetail = { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)': 8.75, 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other Sourced Apparel': 10.00 };
-      const embRetail = { 'Hats (Adjustable / Flexfit)': 10.00, 'Polos (Professional Blank)': 15.00, 'Hoodies (Midweight Layering)': 22.00, 'Jackets (Outerwear Protection)': 42.00, 'Other Sourced Embroidery': 12.00 };
+      const embRetail = { 'Hats (Adjustable / Flexfit)': 10.00, 'Polos (Professional Blank)', text: 'Polos (Professional Classic)', 'Hoodies (Midweight Layering)': 22.00, 'Jackets (Outerwear Protection)': 42.00, 'Other Sourced Embroidery': 12.00 };
 
       let blankRetail = 0;
       let decoFee = 0;
