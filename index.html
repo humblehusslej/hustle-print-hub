@@ -75,11 +75,27 @@
             </div>
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Apparel Base Stock</label>
-              <!-- Dinamically switching options between Screen Print and Embroidery catalogs -->
-              <select id="input-brand" onchange="recalculateQuote()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <!-- Dropdown options injected by JavaScript on state boot load below -->
+              <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
+                <!-- Dropdown options injected by JavaScript on state change -->
               </select>
             </div>
+          </div>
+
+          <!-- PUBLIC CATALOG SOURCING NOTICES -->
+          <div id="catalog-notice-screenprint" class="p-4 bg-slate-50 border rounded-xl text-xs text-slate-600 leading-normal">
+            <span class="font-bold text-black block mb-0.5">Looking for specific styles?</span>
+            We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
+          </div>
+
+          <!-- NEW DYNAMIC OTTOCAP PORTAL LOGIC BOX -->
+          <div id="catalog-notice-ottocap" class="hidden p-4 bg-slate-900 text-white rounded-xl text-xs leading-normal animate-fadeIn flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Options</span>
+              Need help choosing your canvas? Click to browse real-time configurations, trucker meshes, snaps, and dad caps over at <span class="font-bold text-emerald-400">Ottocap.com</span>.
+            </div>
+            <a href="https://ottocap.com" target="_blank" rel="noopener noreferrer" class="bg-white text-black hover:bg-slate-100 font-extrabold px-3 py-2 rounded-lg text-[10px] uppercase tracking-wide whitespace-nowrap text-center transition-all">
+              Browse Ottocap Catalog ↗
+            </a>
           </div>
 
           <!-- ARTWORK UPLOAD INTEGRATION CONTAINER -->
@@ -161,7 +177,7 @@
 
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Special Operator Production Notes</label>
-            <textarea id="input-notes" rows="3" placeholder="Specify color overlays, exact placement inches, or special thread brands..." class="w-full px-4 py-2.5 border rounded-xl outline-none text-sm resize-none focus:ring-1 focus:ring-black text-slate-800"></textarea>
+            <textarea id="input-notes" rows="3" placeholder="Specify color overlays, style code numbers (e.g., Ottocap 104-1238), exact layout inches..." class="w-full px-4 py-2.5 border rounded-xl outline-none text-sm resize-none focus:ring-1 focus:ring-black text-slate-800"></textarea>
           </div>
 
           <button type="submit" id="submit-btn" disabled class="w-full bg-slate-100 text-slate-400 font-bold py-4 rounded-xl text-sm border border-slate-200 text-center shadow-inner cursor-not-allowed">
@@ -225,7 +241,6 @@
     let logoOnFile = false;
     let isAdminMode = false;
 
-    // Check URL parameters for the secret admin tag
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true') {
       isAdminMode = true;
@@ -288,14 +303,14 @@
       const type = document.getElementById('input-type').value;
       const brandSelect = document.getElementById('input-brand');
       
-      // Clear current catalog options cleanly
       brandSelect.innerHTML = '';
 
       if (type === 'Screen Printing') {
         document.getElementById('box-screenprint').classList.remove('hidden');
         document.getElementById('box-embroidery').classList.add('hidden');
+        document.getElementById('catalog-notice-screenprint').classList.remove('hidden');
+        document.getElementById('catalog-notice-ottocap').classList.add('hidden');
         
-        // Load Screen Print apparel catalog
         const spOptions = [
           { value: 'Gildan (Economical)', text: 'Gildan (Economical Tier)' },
           { value: 'Next Level (Mid-Tier)', text: 'Next Level (Mid-Tier)' },
@@ -312,8 +327,8 @@
       } else {
         document.getElementById('box-screenprint').classList.add('hidden');
         document.getElementById('box-embroidery').classList.remove('hidden');
+        document.getElementById('catalog-notice-screenprint').classList.add('hidden');
         
-        // NEW UPGRADED EMBROIDERY BLANK STATIONS
         const embOptions = [
           { value: 'Hats (Adjustable / Flexfit)', text: 'Hats (Adjustable / Flexfit)' },
           { value: 'Polos (Professional Blank)', text: 'Polos (Professional Classic)' },
@@ -327,6 +342,20 @@
           el.text = opt.text;
           brandSelect.appendChild(el);
         });
+      }
+      checkSelectedBrand();
+    }
+
+    // Controls showing the black Ottocap link container ONLY when 'Hats' is the highlighted choice
+    function checkSelectedBrand() {
+      const type = document.getElementById('input-type').value;
+      const brand = document.getElementById('input-brand').value;
+      const ottocapNotice = document.getElementById('catalog-notice-ottocap');
+
+      if (type === 'Embroidery' && brand && brand.startsWith('Hats')) {
+        ottocapNotice.classList.remove('hidden');
+      } else {
+        ottocapNotice.classList.add('hidden');
       }
       recalculateQuote();
     }
@@ -354,7 +383,6 @@
       document.getElementById('summary-qty').innerText = qty + " garments";
       document.getElementById('summary-brand').innerText = brand ? brand.split(' ')[0] : 'Gildan';
 
-      // Advanced pricing logic maps calibrated for the new custom setups
       const spRetail = { 
         'Gildan (Economical)': 6.25, 
         'Next Level (Mid-Tier)': 8.75, 
@@ -451,6 +479,7 @@
     function resetPortalForNewQuote() {
       document.getElementById('view-success').classList.add('hidden');
       document.getElementById('view-estimator').classList.remove('hidden');
+      updateFormFields();
     }
 
     function toggleTask(orderId, taskIndex) {
@@ -585,7 +614,6 @@
       document.getElementById('queue-count').innerText = appOrders.length;
     }
 
-    // Run custom builders on startup boot
     updateFormFields();
     document.getElementById('queue-count').innerText = appOrders.length;
   </script>
