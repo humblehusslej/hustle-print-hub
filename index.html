@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <!-- Private admin control center wrapper toggle -->
+        <!-- Private Admin Queue Navigation Container Element -->
         <div id="admin-nav-container" class="hidden bg-slate-900 p-1 rounded-xl flex border border-slate-800 shadow-inner">
           <button onclick="switchView('estimator')" id="nav-estimator" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black">Estimator</button>
           <button onclick="switchView('dashboard')" id="nav-dashboard" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white">Dashboard (<span id="queue-count">0</span>)</button>
@@ -28,6 +28,12 @@
       </div>
     </div>
   </header>
+
+  <!-- NOTIFICATION TOAST BOX ENGINE -->
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-black text-white px-5 py-3 rounded-xl border border-slate-800 flex items-center space-x-3 shadow-2xl">
+    <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+    <span id="toast-text" class="text-xs font-bold uppercase tracking-wide">Action Processed</span>
+  </div>
 
   <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
     
@@ -62,53 +68,27 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Decoration Style / Category</label>
-              <select id="input-type" onchange="syncFormViewLayoutEngine()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
+              <select id="input-type" onchange="updateFormFields()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
                 <option value="Screen Printing">Screen Printing</option>
                 <option value="Embroidery">Custom Embroidery</option>
                 <option value="Marketing Materials">Marketing Materials</option>
               </select>
             </div>
-            
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Product Base Stock</label>
-              
-              <!-- SCREEN PRINT STATIC SELECTION MENU -->
-              <select id="brand-screenprint" onchange="recalculateQuote()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <option value="Gildan (Economical)">Gildan (Economical Tier)</option>
-                <option value="Next Level (Mid-Tier)">Next Level (Mid-Tier)</option>
-                <option value="Bella+Canvas (Mid-Tier)">Bella+Canvas (Mid-Tier)</option>
-                <option value="Specialty Blank (Heavyweight / Vintage Boxy)">Specialty Blank (Heavyweight)</option>
-                <option value="Other Sourced Apparel">Other / Custom Catalog Request</option>
-              </select>
-
-              <!-- EMBROIDERY STATIC SELECTION MENU -->
-              <select id="brand-embroidery" onchange="syncEmbroideryHatView()" class="hidden w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <option value="Hats (Adjustable / Flexfit)">Hats (Adjustable / Flexfit)</option>
-                <option value="Polos (Professional Blank)">Polos (Professional Classic)</option>
-                <option value="Hoodies (Midweight Layering)">Hoodies (Cozy Midweight Fleeces)</option>
-                <option value="Jackets (Outerwear Protection)">Jackets (Premium Outerwear Layer)</option>
-                <option value="Other Sourced Embroidery">Other / Custom Blank Catalog Spec</option>
-              </select>
-
-              <!-- MARKETING MATERIALS STATIC SELECTION MENU -->
-              <select id="brand-marketing" onchange="syncMarketingBannerView()" class="hidden w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
-                <option value="Banners (Outdoor Heavy Vinyl)">Banners (Grommeted Outdoor Vinyl - $5/sq ft)</option>
-                <option value="Business Cards (Premium Heavy 16pt)">Business Cards (Premium Heavy 16pt)</option>
-                <option value="Metal Signage (Aluminum Panels)">Metal Signage (Heavy Aluminum Panels)</option>
-                <option value="Car Magnets (Vehicle Strength)">Car Magnets (.030 Vehicle Strength)</option>
-                <option value="Promo Items (Mugs, Accessories)">Promo Items (Pens, Mugs, Custom Accessories)</option>
-                <option value="Other Sourced Media Specs">Other / Custom Media Request</option>
+              <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border rounded-xl bg-white text-sm text-slate-800 outline-none">
+                <!-- Managed securely by JavaScript drop injection array matrices below -->
               </select>
             </div>
           </div>
 
-          <!-- SOURCING CATALOGS NOTICES -->
+          <!-- PUBLIC CATALOG SOURCING NOTICES -->
           <div id="catalog-notice-screenprint" class="p-4 bg-slate-50 border rounded-xl text-xs text-slate-600 leading-normal">
             <span class="font-bold text-black block mb-0.5">Looking for specific styles?</span>
             We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
           </div>
 
-          <!-- DYNAMIC OTTOCAP PORTAL LOGIC BOX -->
+          <!-- DYNAMIC OTTOCAP CATALOG LINK PORTAL CONTAINER -->
           <div id="catalog-notice-ottocap" class="hidden p-4 bg-slate-900 text-white rounded-xl text-xs leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 animate-fadeIn">
             <div>
               <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Options</span>
@@ -139,7 +119,7 @@
             </div>
           </div>
 
-          <!-- CONFIGURATION SUB-ELEMENT BLOCKS -->
+          <!-- METHOD DEPENDENT CONFIGURATIONS -->
           <div id="box-screenprint" class="grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl">
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Front Ink Colors (0 - 4)</label>
@@ -170,17 +150,7 @@
             </div>
           </div>
 
-          <div id="box-marketing" class="hidden grid grid-cols-1 gap-4 p-4 bg-slate-50 border rounded-xl">
-            <div>
-              <label class="text-xs font-bold text-slate-500 block mb-1">Asset Finish / Material Coating</label>
-              <select id="input-finish" onchange="recalculateQuote()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800">
-                <option value="Standard/Coated Matched">Standard Finish Coating</option>
-                <option value="Premium Heavyweight Matte">Premium Heavy Matte Texture</option>
-                <option value="Heavy-Duty Outdoor Weatherproof">Heavy-Duty Outdoor Weatherproof</option>
-              </select>
-            </div>
-          </div>
-
+          <!-- INTEGRATED BANNER SQUARE FOOTAGE CALCULATOR CONTAINERS -->
           <div id="box-banner-dimensions" class="hidden grid grid-cols-2 gap-4 p-4 bg-slate-50 border rounded-xl animate-fadeIn">
             <div>
               <label class="text-xs font-bold text-slate-500 block mb-1">Banner Width (Feet)</label>
@@ -192,9 +162,10 @@
             </div>
           </div>
 
+          <!-- BUSINESS CARD TIERS -->
           <div id="box-card-packs" class="hidden p-4 bg-slate-50 border rounded-xl animate-fadeIn">
             <label class="text-xs font-bold text-slate-500 block mb-1">Select Print Quantity Tier Pack</label>
-            <select id="input-card-tier" onchange="syncCardPackQuantityValues()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800 outline-none">
+            <select id="input-card-tier" onchange="syncCardPackCalculations()" class="w-full p-2 border bg-white rounded-lg text-sm text-slate-800 outline-none">
               <option value="250">Starter Run Batch (250 Cards - $60)</option>
               <option value="500">Commercial Standard Batch (500 Cards - $120)</option>
             </select>
@@ -212,17 +183,17 @@
             </div>
           </div>
 
-          <!-- TURNAROUND NOTIFICATION BOX -->
+          <!-- TURNAROUND NOTIFICATION ALERT BADGE -->
           <div id="date-turnaround-notice" class="p-3.5 rounded-xl border text-xs leading-normal transition-all hidden"></div>
 
-          <!-- QUANTITY TRACKER MATRIX -->
+          <!-- QUANTITY SELECTION MATRIX RUN -->
           <div class="p-4 bg-slate-50 border rounded-xl space-y-3">
             <div class="flex justify-between items-center">
               <label id="matrix-label" class="text-xs font-bold text-slate-600 uppercase tracking-wider">Garment Sizing Volumes</label>
               <span id="min-warning" class="text-[11px] font-bold text-slate-800">Add 12 total garments to initialize batch</span>
             </div>
             
-            <!-- Standard Clothing Sizing Grid -->
+            <!-- Standard Garment Grid Run -->
             <div id="sizing-grid" class="grid grid-cols-5 gap-2">
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">S</span><input type="number" id="size-s" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">M</span><input type="number" id="size-m" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
@@ -231,13 +202,13 @@
               <div class="bg-white border rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-slate-400 block mb-0.5">2XL</span><input type="number" id="size-2xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm outline-none" /></div>
             </div>
 
-            <!-- Static One-Size Cap Notice -->
+            <!-- Static Headwear OSFA Notification -->
             <div id="hat-osfa-notice" class="hidden bg-white border border-slate-200 p-4 rounded-xl text-xs text-slate-600 animate-fadeIn">
               <span class="font-bold text-black block mb-0.5">Size Run Configuration:</span>
-              Headwear items run out via professional wholesale <b>One Size Fits All (OSFA) / Adjustable Snapbacks</b>. Specific size distribution grids are locked.
+              Headwear items run out via professional wholesale <b>One Size Fits All (OSFA) / Adjustable Snapbacks</b>. Specific size distribution grids are locked. Use the run box below to specify layout counts!
             </div>
             
-            <!-- Non-Sizing volume tracking counter -->
+            <!-- Contextual non-apparel general count item input tracker -->
             <div id="marketing-volume-box" class="hidden bg-white border rounded-xl p-3 shadow-sm flex items-center justify-between">
               <span id="volume-box-label" class="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Order Quantity</span>
               <input type="number" id="input-marketing-qty" min="1" value="12" oninput="recalculateQuote()" class="text-right font-bold text-sm outline-none border-b w-24 focus:border-black" />
@@ -246,16 +217,16 @@
 
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Special Operator Notes / Requirements</label>
-            <textarea id="input-notes" rows="3" placeholder="Specify clothing placement parameters, background material colors, or specialized layout sizing codes..." class="w-full px-4 py-2.5 border rounded-xl outline-none text-sm resize-none focus:ring-1 focus:ring-black text-slate-800"></textarea>
+            <textarea id="input-notes" rows="3" placeholder="Specify clothing placement dimensions, specialized hard textures, thread setups, or custom catalog style markers..." class="w-full px-4 py-2.5 border rounded-xl outline-none text-sm resize-none focus:ring-1 focus:ring-black text-slate-800"></textarea>
           </div>
 
-          <button type="submit" id="submit-btn" disabled class="w-full bg-black text-white font-bold py-4 rounded-xl text-sm tracking-wide shadow transition-all cursor-pointer">
+          <button type="submit" id="submit-btn" disabled class="w-full bg-slate-100 text-slate-400 font-bold py-4 rounded-xl text-sm border border-slate-200 text-center shadow-inner cursor-not-allowed">
             Submit Project Request
           </button>
         </form>
       </div>
 
-      <!-- INVOICE SIDE SUMMARY PANEL -->
+      <!-- SIDE INVOICE SUMMARY PANEL -->
       <div class="space-y-4">
         <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl border border-slate-800">
           <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 pb-2 border-b border-slate-800">Live Invoice Summary</h3>
@@ -322,12 +293,6 @@
       </div>
     </div>
   </footer>
-
-  <!-- NOTIFICATION TOAST BOX ENGINE -->
-  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-black text-white px-5 py-3 rounded-xl border border-slate-800 flex items-center space-x-3 shadow-2xl">
-    <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-    <span id="toast-text" class="text-xs font-bold uppercase tracking-wide">Action Processed</span>
-  </div>
 
   <script>
     let appOrders = [
@@ -405,12 +370,16 @@
         document.getElementById('view-estimator').classList.remove('hidden');
         document.getElementById('portal-footer').classList.remove('hidden');
         document.getElementById('view-success').classList.add('hidden');
+        document.getElementById('view-dashboard').classList.add('hidden');
         document.getElementById('nav-estimator').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black";
         document.getElementById('nav-dashboard').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white";
       } else if (target === 'dashboard') {
         document.getElementById('view-estimator').classList.add('hidden');
         document.getElementById('view-success').classList.add('hidden');
         document.getElementById('portal-footer').classList.add('hidden');
+        document.getElementById('view-dashboard').classList.remove('hidden');
+        document.getElementById('nav-dashboard').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-white text-black";
+        document.getElementById('nav-estimator').className = "px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all text-slate-400 hover:text-white";
         renderDashboard();
       }
     }
@@ -436,105 +405,131 @@
       document.getElementById('art-preview-img').src = '';
     }
 
-    // NEW SOLID VISIBILITY LAYOUT CONTROLLER (Scraps innerHTML wiped lists entirely)
-    function syncFormViewLayoutEngine() {
+    // ORIGINAL RESTORED INJECTION ENGINE (Repaired with safe try-catch wrapper blocks)
+    function updateFormFields() {
       const type = document.getElementById('input-type').value;
+      const brandSelect = document.getElementById('input-brand');
+      if (!brandSelect) return;
       
-      // Select Box Targets
-      const spSelect = document.getElementById('brand-screenprint');
-      const embSelect = document.getElementById('brand-embroidery');
-      const mktSelect = document.getElementById('brand-marketing');
-
-      // Hide all brand stocks safely by default
-      spSelect.classList.add('hidden');
-      embSelect.classList.add('hidden');
-      mktSelect.classList.add('hidden');
-
-      // Hide conditional blocks safely
-      document.getElementById('box-screenprint').classList.add('hidden');
-      document.getElementById('box-embroidery').classList.add('hidden');
-      document.getElementById('box-marketing').classList.add('hidden');
-      document.getElementById('catalog-notice-screenprint').classList.add('hidden');
+      brandSelect.innerHTML = '';
 
       if (type === 'Screen Printing') {
-        spSelect.classList.remove('hidden');
         document.getElementById('box-screenprint').classList.remove('hidden');
+        document.getElementById('box-embroidery').classList.add('hidden');
+        document.getElementById('box-marketing').classList.add('hidden');
         document.getElementById('catalog-notice-screenprint').classList.remove('hidden');
-        recalculateQuote();
+        
+        const spOptions = [
+          { value: 'Gildan (Economical)', text: 'Gildan (Economical Tier)' },
+          { value: 'Next Level (Mid-Tier)', text: 'Next Level (Mid-Tier)' },
+          { value: 'Bella+Canvas (Mid-Tier)', text: 'Bella+Canvas (Mid-Tier)' },
+          { value: 'Specialty Blank (Heavyweight / Vintage Boxy)', text: 'Specialty Blank (Heavyweight)' },
+          { value: 'Other Sourced Apparel', text: 'Other / Custom Catalog Request' }
+        ];
+        spOptions.forEach(opt => {
+          let el = document.createElement('option');
+          el.value = opt.value;
+          el.text = opt.text;
+          brandSelect.appendChild(el);
+        });
       } else if (type === 'Embroidery') {
-        embSelect.classList.remove('hidden');
+        document.getElementById('box-screenprint').classList.add('hidden');
         document.getElementById('box-embroidery').classList.remove('hidden');
-        syncEmbroideryHatView();
+        document.getElementById('box-marketing').classList.add('hidden');
+        document.getElementById('catalog-notice-screenprint').classList.add('hidden');
+
+        const embOptions = [
+          { value: 'Hats (Adjustable / Flexfit)', text: 'Hats (Adjustable / Flexfit)' },
+          { value: 'Polos (Professional Blank)', text: 'Polos (Professional Classic)' },
+          { value: 'Hoodies (Midweight Layering)', text: 'Hoodies (Cozy Midweight Fleeces)' },
+          { value: 'Jackets (Outerwear Protection)', text: 'Jackets (Premium Outerwear Layer)' },
+          { value: 'Other Sourced Embroidery', text: 'Other / Custom Blank Catalog Spec' }
+        ];
+        embOptions.forEach(opt => {
+          let el = document.createElement('option');
+          el.value = opt.value;
+          el.text = opt.text;
+          brandSelect.appendChild(el);
+        });
       } else if (type === 'Marketing Materials') {
-        mktSelect.classList.remove('hidden');
+        document.getElementById('box-screenprint').classList.add('hidden');
+        document.getElementById('box-embroidery').classList.add('hidden');
         document.getElementById('box-marketing').classList.remove('hidden');
-        syncMarketingBannerView();
+        document.getElementById('catalog-notice-screenprint').classList.add('hidden');
+
+        const mktOptions = [
+          { value: 'Banners (Outdoor Heavy Vinyl)', text: 'Banners (Grommeted Outdoor Vinyl - $5/sq ft)' },
+          { value: 'Business Cards (Premium Heavy 16pt)', text: 'Business Cards (Premium Heavy 16pt Packs)' },
+          { value: 'Metal Signage (Aluminum Panels)', text: 'Metal Signage (Heavy Aluminum Panels)' },
+          { value: 'Car Magnets (Vehicle Strength)', text: 'Car Magnets (.030 Vehicle Strength)' },
+          { value: 'Promo Items (Mugs, Accessories)', text: 'Promo Items (Pens, Mugs, Custom Accessories)' },
+          { value: 'Other Sourced Media Specs', text: 'Other / Custom Media Request' }
+        ];
+        mktOptions.forEach(opt => {
+          let el = document.createElement('option');
+          el.value = opt.value;
+          el.text = opt.text;
+          brandSelect.appendChild(el);
+        });
       }
-    }
-
-    // Alias wrapper to align initial architecture setup loops
-    function updateFormFields() {
-      syncFormViewLayoutEngine();
-    }
-
-    function syncEmbroideryHatView() {
-      const brand = document.getElementById('brand-embroidery').value;
-      const ottocapNotice = document.getElementById('catalog-notice-ottocap');
-
-      // Wipe layout view toggles clean
-      document.getElementById('sizing-grid').classList.add('hidden');
-      document.getElementById('hat-osfa-notice').classList.add('hidden');
-      document.getElementById('marketing-volume-box').classList.add('hidden');
-      if(ottocapNotice) ottocapNotice.classList.add('hidden');
-
-      if (brand && brand.startsWith('Hats')) {
-        if(ottocapNotice) ottocapNotice.classList.remove('hidden');
-        document.getElementById('matrix-label').innerText = "Headwear Run Volume Configuration";
-        document.getElementById('hat-osfa-notice').classList.remove('hidden');
-        document.getElementById('marketing-volume-box').classList.remove('hidden');
-        document.getElementById('volume-box-label').innerText = "Total Caps Needed in Batch";
-        document.getElementById('label-unit-price').innerText = "Per-Hat (Finished)";
-      } else {
-        document.getElementById('matrix-label').innerText = "Garment Sizing Volumes";
-        document.getElementById('sizing-grid').classList.remove('hidden');
-        document.getElementById('label-unit-price').innerText = "Per-Garment (Finished)";
-      }
-      recalculateQuote();
-    }
-
-    function syncMarketingBannerView() {
-      const brand = document.getElementById('brand-marketing').value;
-
-      document.getElementById('box-banner-dimensions').classList.add('hidden');
-      document.getElementById('box-card-packs').classList.add('hidden');
-      document.getElementById('sizing-grid').classList.add('hidden');
-      document.getElementById('hat-osfa-notice').classList.add('hidden');
-      document.getElementById('marketing-volume-box').classList.remove('hidden');
-      
-      document.getElementById('matrix-label').innerText = "Print Asset Volume Run Setup";
-      document.getElementById('label-unit-price').innerText = "Per-Unit Wholesale Cost";
-
-      if (brand && brand.startsWith('Banners')) {
-        document.getElementById('box-banner-dimensions').classList.remove('hidden');
-        document.getElementById('volume-box-label').innerText = "Total Banners Needed";
-      } else if (brand && brand.startsWith('Business')) {
-        document.getElementById('box-card-packs').classList.remove('hidden');
-        document.getElementById('marketing-volume-box').classList.add('hidden');
-        syncCardPackQuantityValues();
-        return;
-      } else {
-        document.getElementById('volume-box-label').innerText = "Total Order Quantity";
-      }
-      recalculateQuote();
+      checkSelectedBrand();
     }
 
     function checkSelectedBrand() {
       const type = document.getElementById('input-type').value;
-      if (type === 'Embroidery') syncEmbroideryHatView();
-      if (type === 'Marketing Materials') syncMarketingBannerView();
+      const brandSelect = document.getElementById('input-brand');
+      const brand = brandSelect ? brandSelect.value : '';
+      const ottocapNotice = document.getElementById('catalog-notice-ottocap');
+
+      // Clear structural visibility triggers safely
+      document.getElementById('box-banner-dimensions').classList.add('hidden');
+      document.getElementById('box-card-packs').classList.add('hidden');
+      document.getElementById('sizing-grid').classList.add('hidden');
+      document.getElementById('hat-osfa-notice').classList.add('hidden');
+      document.getElementById('marketing-volume-box').classList.add('hidden');
+      if (ottocapNotice) ottocapNotice.classList.add('hidden');
+
+      if (type === 'Screen Printing') {
+        document.getElementById('matrix-label').innerText = "Garment Sizing Volumes";
+        document.getElementById('sizing-grid').classList.remove('hidden');
+      } 
+      
+      else if (type === 'Embroidery') {
+        if (brand && brand.startsWith('Hats')) {
+          if (ottocapNotice) ottocapNotice.classList.remove('hidden');
+          document.getElementById('matrix-label').innerText = "Headwear Run Volume Configuration";
+          document.getElementById('hat-osfa-notice').classList.remove('hidden');
+          document.getElementById('marketing-volume-box').classList.remove('hidden');
+          document.getElementById('volume-box-label').innerText = "Total Caps Needed in Batch";
+          document.getElementById('label-unit-price').innerText = "Per-Hat (Finished)";
+        } else {
+          document.getElementById('matrix-label').innerText = "Garment Sizing Volumes";
+          document.getElementById('sizing-grid').classList.remove('hidden');
+          document.getElementById('label-unit-price').innerText = "Per-Garment (Finished)";
+        }
+      } 
+      
+      else if (type === 'Marketing Materials') {
+        document.getElementById('matrix-label').innerText = "Print Asset Volume Run Setup";
+        document.getElementById('marketing-volume-box').classList.remove('hidden');
+        document.getElementById('label-unit-price').innerText = "Per-Unit Wholesale Cost";
+
+        if (brand && brand.startsWith('Banners')) {
+          document.getElementById('box-banner-dimensions').classList.remove('hidden');
+          document.getElementById('volume-box-label').innerText = "Total Banners Needed";
+        } else if (brand && brand.startsWith('Business')) {
+          document.getElementById('box-card-packs').classList.remove('hidden');
+          document.getElementById('marketing-volume-box').classList.add('hidden'); 
+          syncCardPackCalculations();
+          return;
+        } else {
+          document.getElementById('volume-box-label').innerText = "Total Order Quantity";
+        }
+      }
+      recalculateQuote();
     }
 
-    function syncCardPackQuantityValues() {
+    function syncCardPackCalculations() {
       const tier = document.getElementById('input-card-tier').value;
       document.getElementById('input-marketing-qty').value = tier;
       recalculateQuote();
@@ -549,13 +544,9 @@
 
     function recalculateQuote() {
       const type = document.getElementById('input-type').value;
+      const brandSelect = document.getElementById('input-brand');
+      const brand = brandSelect ? brandSelect.value : '';
       
-      // Dynamically target whichever static menu block is currently visible
-      let brand = '';
-      if (type === 'Screen Printing') brand = document.getElementById('brand-screenprint').value;
-      if (type === 'Embroidery') brand = document.getElementById('brand-embroidery').value;
-      if (type === 'Marketing Materials') brand = document.getElementById('brand-marketing').value;
-
       const frontColors = parseInt(document.getElementById('input-front').value) || 0;
       const backColors = parseInt(document.getElementById('input-back').value) || 0;
       const stitchCount = parseInt(document.getElementById('input-stitch').value) || 5000;
@@ -577,7 +568,7 @@
 
       const spRetail = { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)': 8.75, 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other Sourced Apparel': 10.00 };
       const embRetail = { 'Hats (Adjustable / Flexfit)': 10.00, 'Polos (Professional Blank)': 15.00, 'Hoodies (Midweight Layering)': 22.00, 'Jackets (Outerwear Protection)': 42.00, 'Other Sourced Embroidery': 12.00 };
-      
+
       let blankRetail = 0;
       let decoFee = 0;
       let isCustomQuoteItem = false;
@@ -650,11 +641,8 @@
     function handleFormSubmit(e) {
       e.preventDefault();
       const type = document.getElementById('input-type').value;
-      
-      let brand = '';
-      if (type === 'Screen Printing') brand = document.getElementById('brand-screenprint').value;
-      if (type === 'Embroidery') brand = document.getElementById('brand-embroidery').value;
-      if (type === 'Marketing Materials') brand = document.getElementById('brand-marketing').value;
+      const brandSelect = document.getElementById('input-brand');
+      const brand = brandSelect ? brandSelect.value : '';
       
       let s = 0, m = 0, l = 0, xl = 0, xxl = 0, totalQty = 0;
       if (type === 'Marketing Materials' || (type === 'Embroidery' && brand && brand.startsWith('Hats'))) {
@@ -714,7 +702,7 @@
       document.getElementById('view-success').classList.add('hidden');
       document.getElementById('view-estimator').classList.remove('hidden');
       document.getElementById('portal-footer').classList.remove('hidden');
-      syncFormViewLayoutEngine();
+      updateFormFields();
       initializeDefaultDates();
     }
 
@@ -728,12 +716,70 @@
     }
 
     function renderDashboard() {
-      // Stub wrapper to support master view routing checks cleanly
+      document.getElementById('col-pending').innerHTML = '';
+      document.getElementById('col-prepress').innerHTML = '';
+      document.getElementById('col-production').innerHTML = '';
+      document.getElementById('col-ready').innerHTML = '';
+
+      appOrders.forEach(o => {
+        const labels = o.decorationType === 'Marketing Materials' ?
+          ['Design Approved', 'Stock Loaded', 'Bleed Verified', 'Color Profiled', 'Plotter Prepped', 'Packaged & QA'] :
+          (o.decorationType === 'Screen Printing' ? 
+            ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] :
+            ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Master Proofed', 'Threads Prepped']);
+
+        let taskButtons = '';
+        labels.forEach((label, index) => {
+          const isDone = o.tasks[index];
+          taskButtons += `
+            <button onclick="toggleTask('${o.id}', ${index})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border flex items-center space-x-2 transition-all ${isDone ? 'bg-black text-white border-black shadow-sm' : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border-slate-200'}">
+              <span>${isDone ? '✓' : '○'}</span><span class="truncate">${label}</span>
+            </button>
+          `;
+        });
+
+        let cardThumbnailHtml = o.artData ? 
+          `<div class="mt-2 border rounded-lg bg-slate-50 p-1 flex justify-center items-center h-16 w-full">
+            <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
+           </div>` : '';
+
+        const isLastStage = o.stage === 'ready';
+        const cardHtml = `
+          <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+            <div class="flex justify-between items-center text-[10px] font-bold">
+              <span class="bg-slate-900 text-white px-2 py-0.5 rounded">${o.id}</span>
+              <span class="text-slate-400 font-semibold">${o.dueDate}</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 truncate leading-tight">${o.customerName}</h4>
+              <p class="text-xs text-slate-500 mt-1 font-medium">${o.totalQuantity ? o.totalQuantity + 'x Items' : 'Run Items Ordered'}</p>
+              <span class="text-[10px] font-bold text-slate-400 block mt-0.5 uppercase tracking-wide bg-slate-100 px-2 py-0.5 rounded inline-block truncate max-w-full">${o.brand}</span>
+            </div>
+
+            ${cardThumbnailHtml}
+
+            <div class="grid grid-cols-2 gap-1 pt-1 border-t border-slate-100">
+              ${taskButtons}
+            </div>
+
+            <div class="pt-2 border-t flex justify-between items-center text-xs">
+              <div>
+                <span class="text-[9px] text-slate-400 block uppercase font-bold tracking-wider">Total Value</span>
+                <span class="text-xs font-extrabold text-slate-900">${o.estimatedTotal ? '$' + o.estimatedTotal.toFixed(2) : 'Quote Pending'}</span>
+              </div>
+            </div>
+            
+            ${!isLastStage ? `<button onclick="advanceJob('${o.id}')" class="w-full bg-black hover:bg-slate-900 text-white font-bold py-2 rounded-lg text-xs transition-colors flex items-center justify-center space-x-1">Advance Stage →</button>` : ''}
+          </div>
+        `;
+
+        document.getElementById(`col-${o.stage}`).innerHTML += cardHtml;
+      });
       document.getElementById('queue-count').innerText = appOrders.length;
     }
 
-    // Launch sequencing calibration triggers
-    syncFormViewLayoutEngine();
+    // Initialize layout builders cleanly on application startup run
+    updateFormFields();
     initializeDefaultDates();
   </script>
 </body>
