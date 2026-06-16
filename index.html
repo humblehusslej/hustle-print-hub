@@ -92,14 +92,14 @@
         <div class="border border-zinc-200 p-3 bg-zinc-50 rounded-lg space-y-2">
           <label class="block text-xs font-bold uppercase tracking-wider text-zinc-600">Quick Size Run Distribution</label>
           <div class="grid grid-cols-4 gap-2 text-center text-xs font-bold text-zinc-500">
-            <div><span>S</span><input type="number" id="m-size-s" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-885 outline-none focus:border-black" /></div>
-            <div><span>M</span><input type="number" id="m-size-m" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-885 outline-none focus:border-black" /></div>
-            <div><span>L</span><input type="number" id="m-size-l" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-885 outline-none focus:border-black" /></div>
-            <div><span>XL</span><input type="number" id="m-size-xl" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-885 outline-none focus:border-black" /></div>
-            <div><span>2XL</span><input type="number" id="m-size-2xl" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-885 outline-none focus:border-black" /></div>
-            <div><span>3XL</span><input type="number" id="m-size-3xl" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-885 outline-none focus:border-black" /></div>
-            <div><span>4XL</span><input type="number" id="m-size-4xl" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-885 outline-none focus:border-black" /></div>
-            <div><span>Flat Qty</span><input type="number" id="m-size-flat" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-885 outline-none focus:border-black" /></div>
+            <div><span>S</span><input type="number" id="m-size-s" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-800 outline-none focus:border-black" /></div>
+            <div><span>M</span><input type="number" id="m-size-m" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-800 outline-none focus:border-black" /></div>
+            <div><span>L</span><input type="number" id="m-size-l" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-800 outline-none focus:border-black" /></div>
+            <div><span>XL</span><input type="number" id="m-size-xl" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-800 outline-none focus:border-black" /></div>
+            <div><span>2XL</span><input type="number" id="m-size-2xl" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-800 outline-none focus:border-black" /></div>
+            <div><span>3XL</span><input type="number" id="m-size-3xl" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-800 outline-none focus:border-black" /></div>
+            <div><span>4XL</span><input type="number" id="m-size-4xl" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-800 outline-none focus:border-black" /></div>
+            <div><span>Flat Qty</span><input type="number" id="m-size-flat" min="0" placeholder="0" class="w-full text-center border p-1.5 border-zinc-300 rounded bg-white text-zinc-800 outline-none focus:border-black" /></div>
           </div>
         </div>
 
@@ -228,15 +228,17 @@
           </div>
         </div>
 
-        <!-- RIGHT COLUMN SIDE-DECK -->
+        <!-- RIGHT COLUMN SIDE-DECK: LEAD ASSIGNMENTS & OUTREACH STACK -->
         <div class="space-y-4">
+          <!-- PANEL A: MANUAL LEAD INTAKE AND OUTREACH LOG LIST -->
           <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
             <div class="border-b pb-2 flex justify-between items-center">
               <span class="text-xs font-extrabold uppercase tracking-wide text-red-600 block">📞 Needs Call / Outreach</span>
               <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded-full" id="count-outreach">0</span>
             </div>
             
-            <div class="bg-zinc-100 border-2 border-zinc-300 p-3 rounded-xl space-y-2.5 shadow-inner">
+            <!-- HIGH-CONTRAST INLINE HOT LEAD ENTRY MODIFIED WITH YOUTH SIZE ALLOCATIONS -->
+            <div class="bg-zinc-100 border-2 border-zinc-300 p-3 rounded-xl space-y-2.5 shadow-inner text-zinc-800">
               <button onclick="toggleInlineLeadForm()" class="w-full text-left text-[11px] font-extrabold uppercase text-zinc-800 tracking-wide flex justify-between items-center">
                 <span>➕ Log Manual Hot Lead</span>
                 <span id="lead-form-indicator" class="text-xs text-zinc-400">▼</span>
@@ -245,16 +247,47 @@
               <div id="inline-lead-form" class="hidden space-y-2 pt-2 border-t-2 border-dashed border-zinc-300">
                 <input type="text" id="lead-name" placeholder="Contact Name" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
                 <input type="text" id="lead-business" placeholder="Business / Organization" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
-                <input type="tel" id="lead-phone" placeholder="Phone Number" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
-                <input type="email" id="lead-email" placeholder="Email Address" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                
+                <div class="grid grid-cols-2 gap-1.5">
+                  <input type="tel" id="lead-phone" placeholder="Phone" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                  <input type="email" id="lead-email" placeholder="Email" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                </div>
+
+                <!-- ADDED ADVANCED INLINE ADULT & YOUTH SIZE MATRICES TO SIDEBAR LEAD LOGS -->
+                <div class="border border-zinc-300 p-2 bg-white rounded-lg space-y-2">
+                  <div class="space-y-1">
+                    <span class="text-[9px] font-black uppercase text-zinc-400 tracking-wide block">Adult Sizes (S-4XL)</span>
+                    <div class="grid grid-cols-7 gap-1 text-[9px] text-center font-bold text-zinc-400">
+                      <div>S<input type="number" id="l-size-s" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>M<input type="number" id="l-size-m" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>L<input type="number" id="l-size-l" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>XL<input type="number" id="l-size-xl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>2X<input type="number" id="l-size-2xl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>3X<input type="number" id="l-size-3xl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>4X<input type="number" id="l-size-4xl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                    </div>
+                  </div>
+                  <div class="pt-1.5 border-t border-dashed border-zinc-200 space-y-1">
+                    <span class="text-[9px] font-black uppercase text-zinc-400 tracking-wide block">Youth Sizes (YXS-YXL)</span>
+                    <div class="grid grid-cols-5 gap-1 text-[9px] text-center font-bold text-zinc-400">
+                      <div>YXS<input type="number" id="l-size-yxs" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>YS<input type="number" id="l-size-ys" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>YM<input type="number" id="l-size-ym" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>YL<input type="number" id="l-size-yl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>YXL<input type="number" id="l-size-yxl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                    </div>
+                  </div>
+                </div>
+
                 <textarea id="lead-notes" rows="2" placeholder="Scribble client needs or pricing details..." class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none resize-none focus:border-black"></textarea>
                 <button onclick="submitManualOutreachLead()" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs font-extrabold py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">Save Lead Note</button>
               </div>
             </div>
 
-            <div id="box-followup-outreach" class="space-y-3 text-xs font-medium text-zinc-500 max-h-[380px] overflow-y-auto pt-1"></div>
+            <div id="box-followup-outreach" class="space-y-3 text-xs font-medium text-zinc-500 max-h-[420px] overflow-y-auto pt-1"></div>
           </div>
 
+          <!-- PANEL B: AWAITING PAYMENT -->
           <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
             <div class="border-b pb-2 flex justify-between items-center">
               <span class="text-xs font-extrabold uppercase tracking-wide text-amber-600 block">⏳ Awaiting Payment Ledger</span>
@@ -308,7 +341,6 @@
     let isAdminMode = false;
     let clickCountTracker = 0;
 
-    // INDEPENDENT OBJECT DATA STRUCTURE HOLDING SEPARATE ADULT AND YOUTH ALLOCATIONS
     let customerManifestItems = [
       { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 } }
     ];
@@ -377,8 +409,7 @@
     function updateSizeValueField(id, sizeGroup, sizeKey, val) {
       const row = customerManifestItems.find(item => item.id === id);
       if (!row) return;
-      const count = Math.max(0, parseInt(val) || 0);
-      row[sizeGroup][sizeKey] = count;
+      row[sizeGroup][sizeKey] = Math.max(0, parseInt(val) || 0);
       calculateManifestTotals();
     }
 
@@ -460,11 +491,8 @@
               </div>
             ` : ''}
 
-            <!-- EXPANDED COMPACT SEPARATED ADULT & YOUTH SIZES GRID SECTION -->
             ${(isSP || isEMB) ? `
               <div class="border border-zinc-200 rounded-xl p-3 bg-zinc-50/50 space-y-3">
-                
-                <!-- ROW A: ADULT SIZES MATRIX -->
                 <div>
                   <span class="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block mb-1">Adult Size Breakdown</span>
                   <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5 text-center text-[10px] font-bold text-zinc-500">
@@ -478,7 +506,6 @@
                   </div>
                 </div>
 
-                <!-- ROW B: NEW YOUTH APPAREL SIZES MATRIX -->
                 <div class="pt-2 border-t border-dashed border-zinc-200">
                   <span class="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block mb-1">Youth Size Breakdown</span>
                   <div class="grid grid-cols-5 gap-1.5 text-center text-[10px] font-bold text-zinc-500">
@@ -489,7 +516,6 @@
                     <div><span>YXL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YXL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
                   </div>
                 </div>
-
               </div>
             ` : ''}
 
@@ -505,7 +531,6 @@
                 <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Total Quantity Override</label><input type="number" min="1" value="${item.flatQtyOverride || 250}" oninput="updateManualFlatQtyField('${item.id}', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
               </div>
             ` : ''}
-
           </div>
         `;
         syncBrandDropdownPlaceholder(item.id, item.brand);
@@ -547,7 +572,6 @@
         if (item.decorationType === 'Marketing Materials') {
           itemSumQty = item.flatQtyOverride || 250;
         } else {
-          // Cumulative tally extraction across adult and youth matrices combined
           itemSumQty = (item.adultSizes.S || 0) + (item.adultSizes.M || 0) + (item.adultSizes.L || 0) + (item.adultSizes.XL || 0) + (item.adultSizes['2XL'] || 0) + (item.adultSizes['3XL'] || 0) + (item.adultSizes['4XL'] || 0) +
                        (item.youthSizes.YXS || 0) + (item.youthSizes.YS || 0) + (item.youthSizes.YM || 0) + (item.youthSizes.YL || 0) + (item.youthSizes.YXL || 0);
         }
@@ -684,15 +708,59 @@
       else box.classList.add('hidden');
     }
 
+    // UPDATED MANUALLY TYPE INTAKE COMPILING RECONCILED SIZES BINDINGS
     function submitManualOutreachLead() {
       const name = document.getElementById('lead-name').value.trim();
       const biz = document.getElementById('lead-business').value.trim();
       const phone = document.getElementById('lead-phone').value.trim();
       const email = document.getElementById('lead-email').value.trim();
       const notes = document.getElementById('lead-notes').value.trim();
+      
       if (!name) return;
-      appManualLeads.unshift({ uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000), name, businessName: biz || 'Individual', phone: phone || 'None', email: email || 'None', customerNotes: notes || 'None' });
-      saveState(); document.getElementById('lead-name').value = ''; document.getElementById('lead-business').value = ''; document.getElementById('lead-phone').value = ''; document.getElementById('lead-email').value = ''; document.getElementById('lead-notes').value = '';
+
+      // Extract raw inputs to calculate accurate totals for manual desk notes
+      const as = parseInt(document.getElementById('l-size-s').value) || 0;
+      const am = parseInt(document.getElementById('l-size-m').value) || 0;
+      const al = parseInt(document.getElementById('l-size-l').value) || 0;
+      const axl = parseInt(document.getElementById('l-size-xl').value) || 0;
+      const axx = parseInt(document.getElementById('l-size-2xl').value) || 0;
+      const a3x = parseInt(document.getElementById('l-size-3xl').value) || 0;
+      const a4x = parseInt(document.getElementById('l-size-4xl').value) || 0;
+      
+      const yxs = parseInt(document.getElementById('l-size-yxs').value) || 0;
+      const ys = parseInt(document.getElementById('l-size-ys').value) || 0;
+      const ym = parseInt(document.getElementById('l-size-ym').value) || 0;
+      const yl = parseInt(document.getElementById('l-size-yl').value) || 0;
+      const yxl = parseInt(document.getElementById('l-size-yxl').value) || 0;
+
+      const totalCalculatedLeadQty = as + am + al + axl + axx + a3x + a4x + yxs + ys + ym + yl + yxl;
+
+      appManualLeads.unshift({
+        uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000),
+        name: name,
+        businessName: biz || 'Individual Account',
+        phone: phone || 'No Phone Logged',
+        email: email || 'No Email Logged',
+        customerNotes: notes || 'No specs logged yet.',
+        totalLeadQty: totalCalculatedLeadQty,
+        adultSummary: `S:${as} M:${am} L:${al} XL:${axl} 2X:${axx} 3X:${a3x} 4X:${a4x}`,
+        youthSummary: `YXS:${yxs} YS:${ys} YM:${ym} YL:${yl} YXL:${yxl}`
+      });
+
+      saveState();
+      
+      // Wipe clean manual rows
+      document.getElementById('lead-name').value = ''; document.getElementById('lead-business').value = '';
+      document.getElementById('lead-phone').value = ''; document.getElementById('lead-email').value = '';
+      document.getElementById('lead-notes').value = '';
+      document.getElementById('l-size-s').value = ''; document.getElementById('l-size-m').value = '';
+      document.getElementById('l-size-l').value = ''; document.getElementById('l-size-xl').value = '';
+      document.getElementById('l-size-2xl').value = ''; document.getElementById('l-size-3xl').value = '';
+      document.getElementById('l-size-4xl').value = '';
+      document.getElementById('l-size-yxs').value = ''; document.getElementById('l-size-ys').value = '';
+      document.getElementById('l-size-ym').value = ''; document.getElementById('l-size-yl').value = '';
+      document.getElementById('l-size-yxl').value = '';
+
       toggleInlineLeadForm(); renderDashboard(); showToast('✓ Lead updated');
     }
 
@@ -748,9 +816,48 @@
       const paymentBox = document.getElementById('box-followup-payment'); paymentBox.innerHTML = '';
       let outC = 0, payC = 0;
 
+      // POPULATE UPGRADED LEAD CARDS WITH COMPREHENSIVE RECONCILED YOUTH SIZE LABELS
       appManualLeads.forEach(lead => {
         outC++;
-        outreachBox.innerHTML += `<div class="p-2.5 border rounded-xl bg-white space-y-1.5 relative"><button onclick="purgeLeadRecord('${lead.uid}')" class="absolute top-1 right-2 text-zinc-300 text-xs font-bold">×</button><div class="font-extrabold text-zinc-900 leading-tight">${lead.name}</div><div class="text-[11px] bg-amber-50 border border-amber-200 p-2 text-amber-900 rounded-lg italic">${lead.customerNotes}</div><div class="text-[10px] font-bold text-red-600">📞 ${lead.phone} | ✉️ ${lead.email}</div></div>`;
+        
+        let leadSizeSummaryHtml = '';
+        if(lead.totalLeadQty && lead.totalLeadQty > 0) {
+          leadSizeSummaryHtml = `
+            <div class="p-1.5 bg-zinc-100 rounded-lg text-[10px] space-y-0.5 font-mono text-zinc-500 border border-zinc-200">
+              <span class="font-bold text-zinc-700 block text-[9px] uppercase tracking-wider">📦 Sizing Run Total: ${lead.totalLeadQty} pcs</span>
+              <div class="truncate">A: ${lead.adultSummary || '0'}</div>
+              <div class="truncate text-red-700 font-bold">Y: ${lead.youthSummary || '0'}</div>
+            </div>
+          `;
+        }
+
+        outreachBox.innerHTML += `
+          <div class="p-3 border border-zinc-200 bg-white rounded-xl shadow-xs space-y-2 flex flex-col justify-between">
+            <div class="space-y-1">
+              <div class="flex justify-between items-start gap-1">
+                <span class="font-extrabold text-zinc-900 leading-tight text-sm">${lead.name}</span>
+                <span class="text-[9px] bg-zinc-100 border text-zinc-400 font-mono px-1 rounded uppercase">${lead.uid}</span>
+              </div>
+              <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider truncate">${lead.businessName}</div>
+            </div>
+            
+            ${leadSizeSummaryHtml}
+
+            <div class="text-[11px] bg-amber-50/60 border border-amber-200 text-amber-900 p-2.5 font-medium leading-normal rounded-xl select-text italic">
+              ${lead.customerNotes}
+            </div>
+
+            <div class="pt-2 border-t border-zinc-100 flex items-center justify-between gap-2">
+              <div class="flex gap-2 text-[10px] font-bold">
+                <a href="tel:${lead.phone}" class="text-red-600 hover:underline">📞 Call</a>
+                <a href="mailto:${lead.email}" class="text-zinc-500 hover:underline">✉️ Email</a>
+              </div>
+              <button onclick="purgeLeadRecord('${lead.uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded text-[9px] border border-red-100 transition-colors uppercase tracking-wider">
+                Delete
+              </button>
+            </div>
+          </div>
+        `;
       });
 
       appOrders.forEach(o => {
