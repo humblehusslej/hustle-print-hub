@@ -130,236 +130,70 @@
     <!-- SUCCESS SCREEN FOR CUSTOMERS -->
     <div id="view-success" class="hidden max-w-xl mx-auto bg-white border border-zinc-200 rounded-2xl p-8 text-center space-y-5 shadow-sm my-12 animate-fadeIn">
       <div class="w-12 h-12 bg-zinc-900 text-white rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
-      <h2 class="text-xl font-extrabold uppercase tracking-tight">Quote Submitted!</h2>
+      <h2 class="text-xl font-extrabold uppercase tracking-tight">Manifest Submitted!</h2>
       <p class="text-sm text-zinc-500 leading-relaxed font-medium">
-        Thank you! Your batch details and placement preferences have been uploaded securely into our design review pipeline. An operator from the **Humble Hussle** team will review your specifications and reach out shortly with your final digital proof.
+        Thank you! Your combined project specifications and logo storage details have been uploaded securely. An operator from the **Humble Hussle** team will review your multi-item bundle and reach out shortly with your proofs.
       </p>
       <button onclick="resetPortalForNewQuote()" class="bg-black hover:bg-zinc-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
-        Submit Another Project
+        Build Another Package
       </button>
     </div>
 
     <!-- SECTION 1: CUSTOMER ESTIMATOR PORTAL -->
     <div id="view-estimator" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-      <div class="lg:col-span-2 bg-white border border-zinc-200 rounded-2xl shadow-sm p-6 space-y-6">
-        <div class="p-4 bg-zinc-50 border border-zinc-100 rounded-xl flex items-start space-x-3">
-          <div class="text-xs font-medium text-zinc-600 leading-relaxed">
-            <span class="font-bold text-zinc-900 block uppercase tracking-wide mb-0.5">Let's Craft Your Custom Batch</span>
-            To deliver premium print calibration and wholesale pricing structures, custom gear is prepped in bulk runs. Minimum batch thresholds update dynamically depending on your stock style!
-          </div>
-        </div>
-
-        <form id="estimator-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Customer Name / Organization</label>
-            <input type="text" id="input-name" required placeholder="e.g. Humble Cafe" class="w-full px-4 py-2.5 border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
-          </div>
-
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- CUSTOMER MASTER PROFILE BLOCK -->
+        <div class="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6 space-y-4">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-800 border-b pb-2">📋 Customer Account Details</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Decoration Style / Category</label>
-              <select id="input-type" onchange="updateFormFields()" class="w-full p-2.5 border border-zinc-200 rounded-xl bg-white text-sm text-zinc-700 font-semibold outline-none cursor-pointer focus:border-black">
-                <option value="Screen Printing">Screen Printing</option>
-                <option value="Embroidery">Custom Embroidery</option>
-                <option value="Marketing Materials">Marketing Materials</option>
-              </select>
+              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Your Name / Business</label>
+              <input type="text" id="input-name" required placeholder="e.g. Lubbock Coffee Co." class="w-full px-4 py-2 border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
             </div>
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Product Base Stock</label>
-              <select id="input-brand" onchange="checkSelectedBrand()" class="w-full p-2.5 border border-zinc-200 rounded-xl bg-white text-sm text-zinc-700 font-semibold outline-none cursor-pointer focus:border-black">
-                <!-- Loaded dynamically via JavaScript layout dropdown matrices -->
-              </select>
+              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Target Completion Date</label>
+              <input type="date" id="input-date" required onchange="validateTurnaroundTimeline()" class="w-full px-4 py-2 border border-zinc-200 rounded-xl text-sm font-medium text-zinc-700 outline-none focus:border-black" />
             </div>
           </div>
-
-          <!-- COMPACT ARTWORK UPLOAD LINE -->
-          <div class="p-4 bg-zinc-50 border border-zinc-100 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-zinc-755">Logo Graphic Sourcing File</label>
-              <span id="art-preview-label" class="block text-[11px] text-zinc-400 font-medium mt-0.5">No drawing vector attached</span>
-            </div>
-            <label class="cursor-pointer bg-white border border-zinc-300 text-zinc-700 hover:bg-zinc-50 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all text-center whitespace-nowrap">
-              <span>Select File</span>
-              <input type="file" id="input-art" accept="image/*" onchange="processArtworkFile(event)" class="hidden" />
-            </label>
-          </div>
-
-          <!-- DROPDOWN LOGO PLACEMENT OPTIONS -->
-          <div id="box-design-placement-hub" class="p-4 bg-zinc-50 border border-zinc-100 rounded-xl space-y-2">
-            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-500">Logo Print/Stitch Location</label>
-            
-            <!-- Screen Print Location Select Dropdown -->
-            <select id="placement-screenprint" class="w-full p-2.5 border border-zinc-200 rounded-lg bg-white text-sm font-medium text-zinc-700 outline-none cursor-pointer focus:border-black">
-              <option value="Full Front Layout Print">Standard Full Front Layout Print</option>
-              <option value="Left Chest Pocket Print">Standard Left Chest Print</option>
-              <option value="Full Center Back Print">Standard Full Back Print</option>
-              <option value="Right Sleeve Alignment">Right Sleeve Vertical Print</option>
-              <option value="Left Sleeve Alignment">Left Sleeve Vertical Print</option>
-              <option value="Custom Placement Spec Notes">Other Placement (Specify in Operator Notes)</option>
-            </select>
-
-            <!-- Embroidery Location Select Dropdown -->
-            <select id="placement-embroidery" class="hidden w-full p-2.5 border border-zinc-200 rounded-lg bg-white text-sm font-medium text-zinc-700 outline-none cursor-pointer focus:border-black">
-              <option value="Hat Front Center Profile">Hat Front Center Profile</option>
-              <option value="Left Chest Crest Run">Garment Left Chest Pocket Crest</option>
-              <option value="Hat Left Panel Stitch">Hat Left Side Panel Arc</option>
-              <option value="Hat Right Panel Stitch">Hat Right Side Panel Arc</option>
-              <option value="Collar / Cuff Run Setup">Collar Ring / Cuff Line Script</option>
-              <option value="Custom Stitch Placement Notes">Other Location (Specify in Operator Notes)</option>
-            </select>
-          </div>
-
-          <!-- PUBLIC CATALOG SOURCING NOTICES -->
-          <div id="catalog-notice-screenprint" class="p-4 bg-zinc-50 border border-zinc-100 rounded-xl text-xs text-zinc-500 leading-relaxed font-medium">
-            <span class="font-bold text-zinc-800 block mb-0.5">Looking for specific styles?</span>
-            We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
-          </div>
-
-          <!-- DYNAMIC OTTOCAP CATALOG BANNER LINK -->
-          <div id="catalog-notice-ottocap" class="hidden p-4 bg-zinc-900 text-white rounded-xl text-xs leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-sm animate-fadeIn">
-            <div class="font-medium">
-              <span class="font-bold uppercase tracking-wider text-white block mb-0.5">Explore Wholesale Headwear Options</span>
-              Need help choosing your canvas? Click to browse real-time configurations, trucker meshes, snaps, and dad caps over at <span class="font-bold text-zinc-300 underline">Ottocap.com</span>.
-            </div>
-            <a href="https://ottocap.com" target="_blank" rel="noopener noreferrer" class="bg-white text-black hover:bg-zinc-100 font-bold px-3 py-2 rounded-lg text-[10px] uppercase tracking-wide whitespace-nowrap text-center transition-all shadow-sm">
-              Browse Catalog ↗
-            </a>
-          </div>
-
-          <!-- METHOD DEPENDENT CONFIGURATIONS -->
-          <div id="box-screenprint" class="grid grid-cols-2 gap-4 p-4 bg-zinc-50 border border-zinc-100 rounded-xl">
-            <div>
-              <label class="text-xs font-bold text-zinc-500 block mb-1">Front Ink Colors (0 - 4)</label>
-              <input type="number" id="input-front" min="0" max="4" value="1" oninput="recalculateQuote()" class="w-full p-2 border border-zinc-200 rounded-lg text-sm font-semibold text-zinc-800 outline-none focus:border-black" />
-            </div>
-            <div>
-              <label class="text-xs font-bold text-zinc-500 block mb-1">Back Ink Colors (0 - 4)</label>
-              <input type="number" id="input-back" min="0" max="4" value="0" oninput="recalculateQuote()" class="w-full p-2 border border-zinc-200 rounded-lg text-sm font-semibold text-zinc-800 outline-none focus:border-black" />
-            </div>
-          </div>
-
-          <div id="box-embroidery" class="hidden p-4 bg-zinc-50 border border-zinc-100 rounded-xl space-y-4">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs">
-              <span class="font-bold text-zinc-600">Logo Sizing File History Run</span>
-              <div class="flex space-x-2">
-                <button type="button" id="btn-file-yes" onclick="setLogoOnFile(true)" class="px-4 py-1.5 rounded-lg border border-zinc-300 text-[11px] font-bold bg-zinc-900 text-white">Yes</button>
-                <button type="button" id="btn-file-no" onclick="setLogoOnFile(false)" class="px-4 py-1.5 rounded-lg border border-zinc-200 text-[11px] font-bold bg-zinc-100 text-zinc-700">No ($30 setup)</button>
-              </div>
-            </div>
-            <div>
-              <label class="text-xs font-bold text-zinc-500 block mb-1">Stitch Density Setup Run</label>
-              <select id="input-stitch" onchange="recalculateQuote()" class="w-full p-2 border border-zinc-200 bg-white rounded-lg text-sm font-semibold text-zinc-800 cursor-pointer outline-none focus:border-black">
-                <option value="5000">Small Left Chest Logo / Hat Front (5k Stitches)</option>
-                <option value="8000">Standard Pattern Profiling (8k Stitches)</option>
-                <option value="12000">Detailed Mid-Size Layout (12k Stitches)</option>
-                <option value="15000">Intricate Full Back Crest Run (15k Stitches)</option>
-              </select>
-            </div>
-          </div>
-
-          <div id="box-marketing" class="hidden grid grid-cols-1 gap-4 p-4 bg-zinc-50 border border-zinc-100 rounded-xl">
-            <div>
-              <label class="text-xs font-bold text-zinc-500 block mb-1">Asset Finish / Material Coating</label>
-              <select id="input-finish" onchange="recalculateQuote()" class="w-full p-2 border border-zinc-200 bg-white rounded-lg text-sm font-semibold text-zinc-800 cursor-pointer outline-none focus:border-black">
-                <option value="Standard/Coated Matched">Standard Finish Coating</option>
-                <option value="Premium Heavyweight Matte">Premium Heavy Matte Texture</option>
-                <option value="Heavy-Duty Outdoor Weatherproof">Heavy-Duty Outdoor Weatherproof</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- BANNER MEASUREMENTS -->
-          <div id="box-banner-dimensions" class="hidden grid grid-cols-2 gap-4 p-4 bg-zinc-50 border border-zinc-100 rounded-xl animate-fadeIn">
-            <div>
-              <label class="text-xs font-bold text-zinc-500 block mb-1">Banner Width (Feet)</label>
-              <input type="number" id="input-banner-w" min="1" value="4" oninput="recalculateQuote()" class="w-full p-2 border border-zinc-200 rounded-lg font-semibold text-zinc-800 outline-none focus:border-black" />
-            </div>
-            <div>
-              <label class="text-xs font-bold text-zinc-500 block mb-1">Banner Height (Feet)</label>
-              <input type="number" id="input-banner-h" min="1" value="2" oninput="recalculateQuote()" class="w-full p-2 border border-zinc-200 rounded-lg font-semibold text-zinc-800 outline-none focus:border-black" />
-            </div>
-          </div>
-
-          <div id="box-card-packs" class="hidden p-4 bg-zinc-50 border border-zinc-100 rounded-xl animate-fadeIn">
-            <label class="text-xs font-bold text-zinc-500 block mb-1">Select Print Quantity Tier Pack</label>
-            <select id="input-card-tier" onchange="syncCardPackQuantityValues()" class="w-full p-2 border border-zinc-200 bg-white rounded-lg text-sm font-semibold text-zinc-800 cursor-pointer outline-none focus:border-black">
-              <option value="250">Starter Run Batch (250 Cards - $60)</option>
-              <option value="500">Commercial Standard Batch (500 Cards - $120)</option>
-            </select>
-          </div>
-
-          <!-- PRODUCTION DATE FRAME -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Asset Base Color</label>
-              <input type="text" id="input-color" required placeholder="e.g. Midnight Black" class="w-full px-4 py-2.5 border border-zinc-200 rounded-xl text-sm font-medium text-zinc-800 outline-none focus:border-black" />
-            </div>
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Desired Completion Date</label>
-              <input type="date" id="input-date" required onchange="validateTurnaroundTimeline()" class="w-full px-4 py-2.5 border border-zinc-200 rounded-xl text-sm font-medium text-zinc-700 outline-none focus:border-black" />
-            </div>
-          </div>
-
           <!-- TURNAROUND NOTIFICATION BOX -->
           <div id="date-turnaround-notice" class="p-4 rounded-xl border font-medium text-xs leading-relaxed transition-all hidden"></div>
+        </div>
 
-          <!-- QUANTITY TRACKER MATRIX BOARD -->
-          <div class="p-4 bg-zinc-50 border border-zinc-100 rounded-xl space-y-3">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-              <label id="matrix-label" class="text-xs font-bold uppercase tracking-wider text-zinc-500">Garment Sizing Volumes</label>
-              <span id="min-warning" class="text-[11px] font-bold text-zinc-400 uppercase tracking-wide">Add 12 total garments to initialize batch</span>
-            </div>
-            
-            <div id="sizing-grid" class="grid grid-cols-4 sm:grid-cols-7 gap-2">
-              <div class="bg-white border border-zinc-200 rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-zinc-400 block mb-0.5">S</span><input type="number" id="size-s" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm text-zinc-800 outline-none" /></div>
-              <div class="bg-white border border-zinc-200 rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-zinc-400 block mb-0.5">M</span><input type="number" id="size-m" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm text-zinc-800 outline-none" /></div>
-              <div class="bg-white border border-zinc-200 rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-zinc-400 block mb-0.5">L</span><input type="number" id="size-l" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm text-zinc-800 outline-none" /></div>
-              <div class="bg-white border border-zinc-200 rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-zinc-400 block mb-0.5">XL</span><input type="number" id="size-xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm text-zinc-800 outline-none" /></div>
-              <div class="bg-white border border-zinc-200 rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-zinc-400 block mb-0.5">2XL</span><input type="number" id="size-2xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm text-zinc-800 outline-none" /></div>
-              <div class="bg-white border border-zinc-200 rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-zinc-400 block mb-0.5">3XL</span><input type="number" id="size-3xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm text-zinc-800 outline-none bg-transparent" /></div>
-              <div class="bg-white border border-zinc-200 rounded-xl p-2 text-center shadow-sm"><span class="text-[10px] font-bold text-zinc-400 block mb-0.5">4XL</span><input type="number" id="size-4xl" min="0" placeholder="0" oninput="recalculateQuote()" class="w-full text-center font-bold text-sm text-zinc-800 outline-none bg-transparent" /></div>
-            </div>
+        <!-- DYNAMIC MANIFEST CONTAINER TANK -->
+        <div class="space-y-4" id="manifest-lines-tank">
+          <!-- Item rows injected cleanly here via javascript loop arrays -->
+        </div>
 
-            <!-- Headwear Config Flag -->
-            <div id="hat-osfa-notice" class="hidden bg-white border border-zinc-200 p-4 rounded-xl text-xs text-zinc-500 font-medium leading-relaxed animate-fadeIn">
-              <span class="font-bold text-zinc-800 uppercase tracking-wide block mb-0.5">Size Run Configuration:</span>
-              Headwear items run out via professional wholesale <b>One Size Fits All (OSFA) / Adjustable Snapbacks</b>. Specific size distribution grids are locked.
-            </div>
-            
-            <!-- Marketing Sizing Count CONNECTOR -->
-            <div id="marketing-volume-box" class="hidden bg-white border border-zinc-200 p-3 rounded-xl shadow-sm flex items-center justify-between">
-              <span id="volume-box-label" class="text-xs font-bold uppercase tracking-wide text-zinc-400">Total Order Quantity</span>
-              <input type="number" id="input-marketing-qty" min="1" value="12" oninput="recalculateQuote()" class="text-right font-bold text-sm outline-none border-b border-zinc-300 w-24 text-zinc-800 focus:border-black" />
-            </div>
-          </div>
+        <!-- ADD LINE COMPONENT CONTAINER ROW -->
+        <button onclick="addBlankManifestItemLine()" class="w-full bg-white hover:bg-zinc-50 text-zinc-800 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider border border-zinc-300 border-dashed transition-all text-center flex items-center justify-center space-x-2 shadow-xs">
+          <span>➕ Add Component Line to This Batch</span>
+        </button>
 
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Special Operator Notes / Requirements</label>
-            <textarea id="input-notes" rows="3" placeholder="Specify clothing placement dimensions, thread setups, or custom copy specifications..." class="w-full px-4 py-3 border border-zinc-200 rounded-xl outline-none font-medium text-sm resize-none text-zinc-800 focus:border-black"></textarea>
-          </div>
+        <!-- SUBMIT ORDER CALL ACTION BUTTON -->
+        <button onclick="fireManifestSubmission(event)" id="submit-btn" class="w-full bg-zinc-900 hover:bg-black text-white font-bold py-4 rounded-xl text-sm uppercase tracking-wider shadow-sm transition-all text-center cursor-pointer">
+          Submit Package Manifest for Review Run
+        </button>
 
-          <button type="submit" id="submit-btn" disabled class="w-full bg-zinc-100 text-zinc-400 font-bold py-4 rounded-xl text-sm border border-zinc-200 text-center shadow-inner cursor-not-allowed uppercase tracking-wider">
-            Request Quote (Minimum run not met)
-          </button>
-        </form>
       </div>
 
       <!-- SIDE TALLY BOARD -->
-      <div class="space-y-4">
-        <div class="bg-zinc-950 text-white rounded-2xl p-6 shadow-xl border border-zinc-800">
-          <h3 class="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-4 pb-2 border-b border-zinc-800">Live Invoice Summary</h3>
-          <div class="space-y-3 text-xs font-medium">
-            <div class="flex justify-between"><span class="text-zinc-400 uppercase tracking-wide">Total Run Items:</span><span id="summary-qty" class="font-bold text-white">0 items</span></div>
-            <div class="flex justify-between"><span class="text-zinc-400 uppercase tracking-wide">Product Base:</span><span id="summary-brand" class="font-bold text-zinc-200">Gildan</span></div>
-            <div class="flex justify-between border-t border-zinc-800 pt-3">
-              <div>
-                <span id="label-unit-price" class="text-[10px] uppercase text-zinc-400 block font-bold tracking-widest">Per-Garment</span>
-                <span class="text-2xl font-black text-white" id="rate-wrapper">$<span id="summary-rate">0.00</span></span>
-              </div>
-              <div class="text-right">
-                <span class="text-[10px] uppercase text-zinc-400 block font-bold tracking-widest">Project Value</span>
-                <span class="text-2xl font-black text-emerald-400 pb-0.5" id="total-wrapper">$<span id="summary-total">0.00</span></span>
-              </div>
+      <div class="space-y-4 sticky top-24">
+        <div class="bg-zinc-950 text-white rounded-2xl p-6 shadow-xl border border-zinc-800 space-y-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-zinc-400 pb-2 border-b border-zinc-800">Combined Package Invoice</h3>
+          
+          <div id="side-manifest-summary-rows" class="space-y-2 text-xs font-medium max-h-[250px] overflow-y-auto divide-y divide-zinc-900 pr-1">
+            <!-- Summary breakdown strings print out here -->
+          </div>
+
+          <div class="border-t border-zinc-800 pt-3 flex justify-between items-end">
+            <div>
+              <span class="text-[10px] uppercase text-zinc-400 block font-bold tracking-widest">Total Batch Quantity</span>
+              <span class="text-xl font-extrabold text-white" id="summary-total-qty">0 Items</span>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] uppercase text-zinc-400 block font-bold tracking-widest">Estimated Value</span>
+              <span class="text-2xl font-black text-emerald-400" id="summary-total-cost">$0.00</span>
             </div>
           </div>
         </div>
@@ -394,16 +228,14 @@
           </div>
         </div>
 
-        <!-- RIGHT COLUMN SIDE-DECK: LEAD ASSIGNMENTS & OUTREACH STACK -->
+        <!-- RIGHT COLUMN SIDE-DECK -->
         <div class="space-y-4">
-          <!-- PANEL A: MANUAL LEAD INTAKE AND OUTREACH LOG LIST -->
           <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
             <div class="border-b pb-2 flex justify-between items-center">
               <span class="text-xs font-extrabold uppercase tracking-wide text-red-600 block">📞 Needs Call / Outreach</span>
               <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded-full" id="count-outreach">0</span>
             </div>
             
-            <!-- HIGH-CONTRAST INLINE HOT LEAD ENTRY MATRICES -->
             <div class="bg-zinc-100 border-2 border-zinc-300 p-3 rounded-xl space-y-2.5 shadow-inner">
               <button onclick="toggleInlineLeadForm()" class="w-full text-left text-[11px] font-extrabold uppercase text-zinc-800 tracking-wide flex justify-between items-center">
                 <span>➕ Log Manual Hot Lead</span>
@@ -411,11 +243,11 @@
               </button>
               
               <div id="inline-lead-form" class="hidden space-y-2 pt-2 border-t-2 border-dashed border-zinc-300">
-                <input type="text" id="lead-name" placeholder="Contact Name" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black focus:ring-1 focus:ring-black" />
-                <input type="text" id="lead-business" placeholder="Business / Organization" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black focus:ring-1 focus:ring-black" />
-                <input type="tel" id="lead-phone" placeholder="Phone Number" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black focus:ring-1 focus:ring-black" />
-                <input type="email" id="lead-email" placeholder="Email Address" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black focus:ring-1 focus:ring-black" />
-                <textarea id="lead-notes" rows="2" placeholder="Scribble client needs or pricing details..." class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none resize-none focus:border-black focus:ring-1 focus:ring-black"></textarea>
+                <input type="text" id="lead-name" placeholder="Contact Name" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                <input type="text" id="lead-business" placeholder="Business / Organization" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                <input type="tel" id="lead-phone" placeholder="Phone Number" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                <input type="email" id="lead-email" placeholder="Email Address" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                <textarea id="lead-notes" rows="2" placeholder="Scribble client needs or pricing details..." class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none resize-none focus:border-black"></textarea>
                 <button onclick="submitManualOutreachLead()" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs font-extrabold py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">Save Lead Note</button>
               </div>
             </div>
@@ -423,7 +255,6 @@
             <div id="box-followup-outreach" class="space-y-3 text-xs font-medium text-zinc-500 max-h-[380px] overflow-y-auto pt-1"></div>
           </div>
 
-          <!-- PANEL B: AWAITING PAYMENT -->
           <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
             <div class="border-b pb-2 flex justify-between items-center">
               <span class="text-xs font-extrabold uppercase tracking-wide text-amber-600 block">⏳ Awaiting Payment Ledger</span>
@@ -447,7 +278,6 @@
             <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-red-600"></span><span class="text-red-600">Priority Rush (&lt;5 Days)</span></span>
           </div>
         </div>
-        
         <div id="visual-calendar-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5"></div>
       </div>
 
@@ -463,34 +293,25 @@
         <p class="text-[11px] text-zinc-500 font-medium">Premium Screen Printing, Embroidery & Commercial Media Solutions</p>
       </div>
       <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 font-medium">
-        <div>
-          <span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Main Shop Desk</span>
-          <a href="tel:8067824224" class="text-white hover:underline text-xs">806-782-4224</a>
-        </div>
-        <div>
-          <span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Office Email</span>
-          <a href="mailto:thehumblehussle@gmail.com" class="text-white hover:underline text-xs">thehumblehussle@gmail.com</a>
-        </div>
-        <div>
-          <span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Shop Headquarters</span>
-          <span class="text-zinc-300 text-xs block">5113 34th Street</span>
-        </div>
+        <div><span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Main Shop Desk</span><a href="tel:8067824224" class="text-white hover:underline text-xs">806-782-4224</a></div>
+        <div><span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Office Email</span><a href="mailto:thehumblehussle@gmail.com" class="text-white hover:underline text-xs">thehumblehussle@gmail.com</a></div>
+        <div><span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Shop Headquarters</span><span class="text-zinc-300 text-xs block">5113 34th Street</span></div>
       </div>
     </div>
   </footer>
 
   <script>
     let appOrders = [
-      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4, '3XL': 0, '4XL': 0 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks. [Placement: Full Front Layout Print]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '' },
-      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-06-18', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], invoiceSent: false, isPaid: false, artData: '' }
+      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Screen printed standard bulk shirts setup run.', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '' }
     ];
-
     let appManualLeads = [];
-
-    let currentArtBase64 = '';
-    let logoOnFile = false;
     let isAdminMode = false;
     let clickCountTracker = 0;
+
+    // CUSTOMER COMBINATION BUNDLE STATE MEMORY BANK TANK
+    let customerManifestItems = [
+      { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Midnight Black', qty: 24, frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout' }
+    ];
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true') {
@@ -503,22 +324,13 @@
       });
     }
 
-    if (localStorage.getItem('hpc_static_orders')) {
-      appOrders = JSON.parse(localStorage.getItem('hpc_static_orders'));
-    } else {
-      localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
-    }
-
-    if (localStorage.getItem('hpc_manual_leads')) {
-      appManualLeads = JSON.parse(localStorage.getItem('hpc_manual_leads'));
-    }
+    if (localStorage.getItem('hpc_static_orders')) appOrders = JSON.parse(localStorage.getItem('hpc_static_orders'));
+    if (localStorage.getItem('hpc_manual_leads')) appManualLeads = JSON.parse(localStorage.getItem('hpc_manual_leads'));
 
     function saveState() {
       localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
       localStorage.setItem('hpc_manual_leads', JSON.stringify(appManualLeads));
-      if (document.getElementById('queue-count')) {
-        document.getElementById('queue-count').innerText = appOrders.length;
-      }
+      if (document.getElementById('queue-count')) document.getElementById('queue-count').innerText = appOrders.length;
     }
 
     function initializeDefaultDates() {
@@ -532,56 +344,289 @@
         dateInput.value = `${year}-${month}-${day}`;
         validateTurnaroundTimeline();
       }
-      
-      const manualDateInput = document.getElementById('manual-date');
-      if (manualDateInput) {
-        manualDateInput.value = `${year}-${month}-${day}`;
-      }
+      if (document.getElementById('manual-date')) document.getElementById('manual-date').value = `${year}-${month}-${day}`;
     }
 
     function validateTurnaroundTimeline() {
       const dateInput = document.getElementById('input-date').value;
       const noticeBox = document.getElementById('date-turnaround-notice');
       if (!dateInput || !noticeBox) return;
-
       const selectedDate = new Date(dateInput + 'T00:00:00');
-      const today = new Date();
-      today.setHours(0,0,0,0);
-
-      const timeDiff = selectedDate.getTime() - today.getTime();
-      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      const today = new Date(); today.setHours(0,0,0,0);
+      const daysDiff = Math.ceil((selectedDate.getTime() - today.getTime()) / (1000 * 3600 * 24));
       noticeBox.classList.remove('hidden');
-
       if (daysDiff < 14) {
-        noticeBox.className = "p-4 rounded-xl border border-zinc-200 bg-white text-xs text-zinc-800 font-medium leading-relaxed shadow-sm animate-fadeIn";
-        noticeBox.innerHTML = `
-          <span class="font-bold text-zinc-950 block mb-1">⚡ Expedited Timeline Surcharge Bound</span>
-          We try our absolute best to never miss a deadline. Go ahead and submit your project specs—our team will look over our current production schedule right away and do everything we can to squeeze you in. Please note that projects needed inside our standard 2-week turnaround window <b>may be subject to an expedited rush order fee</b> to cover late-night setups, or timeline adjustments depending on stock availability.
-        `;
+        noticeBox.className = "p-4 rounded-xl border border-zinc-200 bg-white text-xs text-zinc-800 font-medium shadow-sm animate-fadeIn";
+        noticeBox.innerHTML = `<span class="font-bold text-zinc-950 block mb-1">⚡ Rush Timeline Surcharge Applied</span>Phone orders inside 2 weeks are subject to a priority fee layout structure.`;
       } else {
-        noticeBox.className = "p-4 rounded-xl border border-zinc-900 bg-zinc-900 text-white text-xs font-semibold leading-relaxed shadow-sm";
-        noticeBox.innerHTML = `
-          <span class="font-bold uppercase tracking-wider block mb-0.5">✓ Standard Timeline Confirmed</span>
-          Your date clears our baseline 14-day production windows. No rush penalties apply.
+        noticeBox.className = "p-4 rounded-xl border border-zinc-900 bg-zinc-900 text-white text-xs font-semibold shadow-sm";
+        noticeBox.innerHTML = `<span class="font-bold block mb-0.5">✓ Standard Timeline Cleared</span>No rush penalties active.`;
+      }
+    }
+
+    // MULTI ITEM CLIENT MANIFEST ENGINES
+    function addBlankManifestItemLine() {
+      const uniqueId = 'item-' + Date.now();
+      customerManifestItems.push({
+        id: uniqueId, decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'White', qty: 12, frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: ''
+      });
+      renderManifestInputsGrid();
+    }
+
+    function removeManifestItemLine(id) {
+      if (customerManifestItems.length <= 1) {
+        alert('Your order manifest must contain at least one production configuration row.');
+        return;
+      }
+      customerManifestItems = customerManifestItems.filter(item => item.id !== id);
+      renderManifestInputsGrid();
+    }
+
+    function updateManifestItemField(id, key, value) {
+      const row = customerManifestItems.find(item => item.id === id);
+      if (!row) return;
+      
+      if (key === 'logoOnFile') {
+        row[key] = (value === 'true');
+      } else if (key === 'qty' || key === 'frontColors' || key === 'backColors' || key === 'stitchCount') {
+        row[key] = parseInt(value) || 0;
+      } else {
+        row[key] = value;
+      }
+      calculateManifestTotals();
+    }
+
+    function renderManifestInputsGrid() {
+      const tank = document.getElementById('manifest-lines-tank');
+      if (!tank) return;
+      tank.innerHTML = '';
+
+      customerManifestItems.forEach((item, index) => {
+        const isSP = item.decorationType === 'Screen Printing';
+        const isEMB = item.decorationType === 'Embroidery';
+        const isMKT = item.decorationType === 'Marketing Materials';
+
+        tank.innerHTML += `
+          <div class="bg-white border border-zinc-200 rounded-2xl shadow-sm p-5 space-y-4 animate-fadeIn relative">
+            <div class="flex justify-between items-center border-b pb-2">
+              <span class="text-xs font-extrabold text-zinc-400 uppercase tracking-wider">Item Component Line #${index + 1}</span>
+              <button onclick="removeManifestItemLine('${item.id}')" class="text-xs text-red-500 hover:text-red-700 font-bold">Scrub Line ×</button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Method Style</label>
+                <select onchange="updateManifestItemField('${item.id}', 'decorationType', this.value); syncBrandDropdownPlaceholder('${item.id}')" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-bold text-zinc-700 outline-none">
+                  <option value="Screen Printing" ${isSP ? 'selected' : ''}>Screen Printing</option>
+                  <option value="Embroidery" ${isEMB ? 'selected' : ''}>Custom Embroidery</option>
+                  <option value="Marketing Materials" ${isMKT ? 'selected' : ''}>Marketing Asset</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Canvas / Stock</label>
+                <select id="brand-select-${item.id}" onchange="updateManifestItemField('${item.id}', 'brand', this.value)" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-medium text-zinc-700 outline-none">
+                   <!-- Swapped seamlessly inside renderer step -->
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Base Finish Color</label>
+                <input type="text" value="${item.color}" oninput="updateManifestItemField('${item.id}', 'color', this.value)" class="w-full p-2 border border-zinc-200 rounded-xl text-xs font-medium text-zinc-800" placeholder="e.g. Navy Blue" />
+              </div>
+            </div>
+
+            <!-- UNIFIED LOGO STORAGE INTERACTIVE TOGGLE BUTTON HUB -->
+            ${(isSP || isEMB) ? `
+              <div class="p-3 bg-zinc-50 border border-zinc-100 rounded-xl flex items-center justify-between gap-2 text-xs">
+                <span class="font-bold text-zinc-600">Do we already have your layout design logo file on file?</span>
+                <div class="flex space-x-1">
+                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'true')" class="px-3 py-1 rounded-lg text-[11px] font-bold border transition-all ${item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-500 border-zinc-200'}">Yes</button>
+                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'false')" class="px-3 py-1 rounded-lg text-[11px] font-bold border transition-all ${!item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-500 border-zinc-200'}">No (+$30 setup)</button>
+                </div>
+              </div>
+            ` : ''}
+
+            <!-- SPECS SLOTS CORRESPONDING TO TARGET CATEGORIES -->
+            ${isSP ? `
+              <div class="grid grid-cols-3 gap-3 p-3 bg-zinc-50 border border-zinc-100 rounded-xl">
+                <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Front Inks</label><input type="number" min="1" max="4" value="${item.frontColors}" oninput="updateManifestItemField('${item.id}', 'frontColors', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
+                <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Back Inks</label><input type="number" min="0" max="4" value="${item.backColors}" oninput="updateManifestItemField('${item.id}', 'backColors', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
+                <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Total Quantity</label><input type="number" min="12" value="${item.qty}" oninput="updateManifestItemField('${item.id}', 'qty', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
+              </div>
+            ` : ''}
+
+            ${isEMB ? `
+              <div class="grid grid-cols-2 gap-3 p-3 bg-zinc-50 border border-zinc-100 rounded-xl">
+                <div>
+                  <label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Density Run Setup</label>
+                  <select onchange="updateManifestItemField('${item.id}', 'stitchCount', this.value)" class="w-full p-1.5 border border-zinc-200 bg-white rounded-lg text-xs font-medium text-zinc-700 outline-none">
+                    <option value="5000" ${item.stitchCount === 5000 ? 'selected' : ''}>Small Logo Crest (5k Stitches)</option>
+                    <option value="8000" ${item.stitchCount === 8000 ? 'selected' : ''}>Standard Pattern Run (8k Stitches)</option>
+                    <option value="12000" ${item.stitchCount === 12000 ? 'selected' : ''}>Detailed Back Run (12k Stitches)</option>
+                  </select>
+                </div>
+                <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Total Quantity</label><input type="number" min="12" value="${item.qty}" oninput="updateManifestItemField('${item.id}', 'qty', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
+              </div>
+            ` : ''}
+
+            ${isMKT ? `
+              <div class="grid grid-cols-2 gap-3 p-3 bg-zinc-50 border border-zinc-100 rounded-xl">
+                <div>
+                  <label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Asset Coating Spec</label>
+                  <select onchange="updateManifestItemField('${item.id}', 'sText', this.value)" class="w-full p-1.5 border border-zinc-200 bg-white rounded-lg text-xs font-medium text-zinc-700 outline-none">
+                    <option value="Standard Finish">Standard Matte Coat Finish</option>
+                    <option value="Premium Heavy Matte">Premium Heavy Matte Stock</option>
+                    <option value="Weatherproof Outdoor">Weatherproof Heavy Gauge Poly</option>
+                  </select>
+                </div>
+                <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Total Volume Count</label><input type="number" min="1" value="${item.qty}" oninput="updateManifestItemField('${item.id}', 'qty', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
+              </div>
+            ` : ''}
+
+          </div>
         `;
+        syncBrandDropdownPlaceholder(item.id, item.brand);
+      });
+      calculateManifestTotals();
+    }
+
+    function syncBrandDropdownPlaceholder(id, selectedValue) {
+      const row = customerManifestItems.find(item => item.id === id);
+      const dropdown = document.getElementById(`brand-select-${id}`);
+      if (!dropdown || !row) return;
+
+      dropdown.innerHTML = '';
+      let options = [];
+      if (row.decorationType === 'Screen Printing') {
+        options = ['Gildan (Economical Tier)', 'Next Level (Midweight)', 'Bella+Canvas (Premium Soft)', 'Specialty Blank (Heavyweight Vintage)'];
+      } else if (row.decorationType === 'Embroidery') {
+        options = ['Hats (Adjustable Snapback)', 'Polos (Professional Classic)', 'Hoodies (Cozy Heavy Fleece)', 'Jackets (Outerwear Protection)'];
+      } else {
+        options = ['Banners (Outdoor Vinyl Run)', 'Business Cards (16pt Bulk Pack)', 'Metal Aluminum Signage'];
+      }
+
+      options.forEach(opt => {
+        let el = document.createElement('option');
+        el.value = opt; el.text = opt;
+        if (opt === selectedValue) el.selected = true;
+        dropdown.appendChild(el);
+      });
+    }
+
+    function calculateManifestTotals() {
+      const summaryBox = document.getElementById('side-manifest-summary-rows');
+      if (!summaryBox) return;
+      summaryBox.innerHTML = '';
+
+      let completeBatchQty = 0;
+      let completeBatchCost = 0;
+
+      customerManifestItems.forEach((item, idx) => {
+        let lineRate = 0;
+        if (item.decorationType === 'Screen Printing') {
+          let base = item.brand.includes('Specialty') ? 15.00 : item.brand.includes('Bella') ? 8.75 : 6.25;
+          let inkGrid = [0, 6.50, 7.50, 8.50, 9.50];
+          let deco = (inkGrid[Math.min(4, item.frontColors)] || 0) + (inkGrid[Math.min(4, item.backColors)] || 0);
+          lineRate = base + deco;
+        } else if (item.decorationType === 'Embroidery') {
+          let base = item.brand.includes('Jackets') ? 42.00 : item.brand.includes('Hoodies') ? 22.00 : 10.00;
+          let tierRun = item.qty < 24 ? 4.00 : 2.50;
+          lineRate = base + tierRun + ((item.stitchCount / 1000) * 1.50);
+        } else {
+          lineRate = item.brand.includes('Business') ? 0.30 : item.brand.includes('Banners') ? 35.00 : 75.00;
+        }
+
+        let lineCost = item.qty * lineRate;
+        if ((item.decorationType === 'Screen Printing' || item.decorationType === 'Embroidery') && !item.logoOnFile) {
+          lineCost += 30.00; // Inject master digitization matrix setup charge
+        }
+
+        completeBatchQty += item.qty;
+        completeBatchCost += lineCost;
+
+        summaryBox.innerHTML += `
+          <div class="py-2 flex justify-between items-start gap-1">
+            <div>
+              <span class="font-extrabold text-white block">Line #${idx + 1}: ${item.decorationType}</span>
+              <span class="text-[10px] text-zinc-400 block">${item.qty}x ${item.brand.split(' ')[0]} (${item.logoOnFile ? 'Logo In File' : 'New Setup Fee'})</span>
+            </div>
+            <span class="font-bold text-zinc-300">$${lineCost.toFixed(2)}</span>
+          </div>
+        `;
+      });
+
+      document.getElementById('summary-total-qty').innerText = completeBatchQty + " Items";
+      document.getElementById('summary-total-cost').innerText = "$" + completeBatchCost.toFixed(2);
+    }
+
+    function fireManifestSubmission(e) {
+      e.preventDefault();
+      const clientName = document.getElementById('input-name').value.trim();
+      if (!clientName) {
+        alert('Please map a Customer Account Name to finalize deployment.');
+        return;
+      }
+
+      customerManifestItems.forEach(item => {
+        let compiledNotes = `Component Run Item. Color: ${item.color}. Setup Parameters Sourced Live.`;
+        if (item.decorationType === 'Screen Printing') compiledNotes += ` [Inks: ${item.frontColors}F/${item.backColors}B]`;
+        if (item.decorationType === 'Embroidery') compiledNotes += ` [Stitches: ${item.stitchCount}]`;
+
+        const systemicCard = {
+          id: "HPC-" + Math.floor(1000 + Math.random() * 9000),
+          customerName: clientName,
+          decorationType: item.decorationType,
+          brand: item.brand,
+          color: item.color,
+          dueDate: document.getElementById('input-date').value,
+          totalQuantity: item.qty,
+          estimatedTotal: item.qty * 12.50, // Compiled clean approximation
+          notes: compiledNotes + ` [Logo Logged on File: ${item.logoOnFile ? 'YES' : 'NO'}]`,
+          stage: 'pending',
+          tasks: [false, false, false, false, false, false],
+          invoiceSent: false, isPaid: false, artData: ''
+        };
+        appOrders.unshift(systemicCard);
+      });
+
+      saveState();
+      document.getElementById('input-name').value = '';
+      customerManifestItems = [{ id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Black', qty: 24, frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '' }];
+      
+      document.getElementById('view-estimator').classList.add('hidden');
+      document.getElementById('view-success').classList.remove('hidden');
+      showToast('✓ Multi-item manifest package uploaded safely');
+    }
+
+    function resetPortalForNewQuote() {
+      document.getElementById('view-success').classList.add('hidden');
+      document.getElementById('view-estimator').classList.remove('hidden');
+      renderManifestInputsGrid();
+      initializeDefaultDates();
+    }
+
+    function showToast(text) {
+      const t = document.getElementById('toast');
+      if (t) {
+        document.getElementById('toast-text').innerText = text;
+        t.classList.remove('hidden');
+        setTimeout(() => t.classList.add('hidden'), 3500);
       }
     }
 
     function switchView(target) {
       if (!isAdminMode && target === 'dashboard') return;
-      
       if (target === 'estimator') {
         document.getElementById('view-estimator').classList.remove('hidden');
-        document.getElementById('portal-footer').classList.remove('hidden');
         document.getElementById('view-success').classList.add('hidden');
         document.getElementById('view-dashboard').classList.add('hidden');
+        document.getElementById('portal-footer').classList.remove('hidden');
         document.getElementById('nav-estimator').className = "px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded bg-white text-black";
         document.getElementById('nav-dashboard').className = "px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded text-zinc-400 hover:text-white";
       } else if (target === 'dashboard') {
         document.getElementById('view-estimator').classList.add('hidden');
         document.getElementById('view-success').classList.add('hidden');
-        document.getElementById('portal-footer').classList.add('hidden');
         document.getElementById('view-dashboard').classList.remove('hidden');
+        document.getElementById('portal-footer').classList.add('hidden');
         document.getElementById('nav-dashboard').className = "px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded bg-white text-black";
         document.getElementById('nav-estimator').className = "px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded text-zinc-400 hover:text-white";
         renderDashboard();
@@ -600,25 +645,14 @@
       }
     }
 
-    function openManualJobModal() {
-      document.getElementById('manual-job-modal').classList.remove('hidden');
-    }
-    
-    function closeManualJobModal() {
-      document.getElementById('manual-job-modal').classList.add('hidden');
-      document.getElementById('manual-form').reset();
-    }
+    function openManualJobModal() { document.getElementById('manual-job-modal').classList.remove('hidden'); }
+    function closeManualJobModal() { document.getElementById('manual-job-modal').classList.add('hidden'); document.getElementById('manual-form').reset(); }
 
     function toggleInlineLeadForm() {
       const box = document.getElementById('inline-lead-form');
       const ind = document.getElementById('lead-form-indicator');
-      if (box.classList.contains('hidden')) {
-        box.classList.remove('hidden');
-        ind.innerText = '▲';
-      } else {
-        box.classList.add('hidden');
-        ind.innerText = '▼';
-      }
+      if (box.classList.contains('hidden')) { box.classList.remove('hidden'); ind.innerText = '▲'; } 
+      else { box.classList.add('hidden'); ind.innerText = '▼'; }
     }
 
     function submitManualOutreachLead() {
@@ -627,184 +661,56 @@
       const phone = document.getElementById('lead-phone').value.trim();
       const email = document.getElementById('lead-email').value.trim();
       const notes = document.getElementById('lead-notes').value.trim();
-
-      if (!name) {
-        alert('Please fill out at least a Contact Name to store an active lead card.');
-        return;
-      }
-
-      const freshLead = {
-        uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000),
-        name: name,
-        businessName: biz || 'Individual Account',
-        phone: phone || 'No Phone Logged',
-        email: email || 'No Email Logged',
-        customerNotes: notes || 'No custom layout requests logged yet.'
-      };
-
-      appManualLeads.unshift(freshLead);
+      if (!name) { alert('Fill out name slot.'); return; }
+      appManualLeads.unshift({ uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000), name, businessName: biz || 'Individual', phone: phone || 'None', email: email || 'None', customerNotes: notes || 'None' });
       saveState();
-      
-      document.getElementById('lead-name').value = '';
-      document.getElementById('lead-business').value = '';
-      document.getElementById('lead-phone').value = '';
-      document.getElementById('lead-email').value = '';
-      document.getElementById('lead-notes').value = '';
-      
-      toggleInlineLeadForm();
-      renderDashboard();
-      showToast('✓ Custom outreach record pinned live');
+      document.getElementById('lead-name').value = ''; document.getElementById('lead-business').value = ''; document.getElementById('lead-phone').value = ''; document.getElementById('lead-email').value = ''; document.getElementById('lead-notes').value = '';
+      toggleInlineLeadForm(); renderDashboard(); showToast('✓ Lead updated');
     }
 
     function purgeLeadRecord(leadUid) {
-      if (confirm('⚠️ Are you sure you want to completely delete this follow-up record out of your lead book?')) {
-        appManualLeads = appManualLeads.filter(l => l.uid !== leadUid);
-        saveState();
-        renderDashboard();
-        showToast('🗑️ Lead record deleted successfully');
-      }
+      if (confirm('Delete lead?')) { appManualLeads = appManualLeads.filter(l => l.uid !== leadUid); saveState(); renderDashboard(); showToast('Lead scrubbed'); }
     }
 
     function handleManualFormSubmit(e) {
       e.preventDefault();
-      
       const s = parseInt(document.getElementById('m-size-s').value) || 0;
       const m = parseInt(document.getElementById('m-size-m').value) || 0;
       const l = parseInt(document.getElementById('m-size-l').value) || 0;
       const xl = parseInt(document.getElementById('m-size-xl').value) || 0;
-      const xxl = parseInt(document.getElementById('m-size-2xl').value) || 0;
-      const s3 = parseInt(document.getElementById('m-size-3xl').value) || 0;
-      const s4 = parseInt(document.getElementById('m-size-4xl').value) || 0;
       const flat = parseInt(document.getElementById('m-size-flat').value) || 0;
-      
-      let finalQty = flat;
-      if (finalQty === 0) {
-        finalQty = s + m + l + xl + xxl + s3 + s4;
-      }
+      let finalQty = flat === 0 ? (s+m+l+xl) : flat;
 
-      const manualOrder = {
-        id: "HPC-" + Math.floor(1000 + Math.random() * 9000),
-        customerName: document.getElementById('manual-name').value,
-        decorationType: document.getElementById('manual-type').value,
-        brand: document.getElementById('manual-brand').value,
-        color: document.getElementById('manual-color').value,
-        dueDate: document.getElementById('manual-date').value,
-        frontColors: 1,
-        backColors: 0,
-        stitchCount: 5000,
-        logoOnFile: true,
-        sizes: { S: s, M: m, L: l, XL: xl, '2XL': xxl, '3XL': s3, '4XL': s4 },
-        totalQuantity: finalQty,
-        estimatedTotal: parseFloat(document.getElementById('manual-price').value) || 0,
-        notes: document.getElementById('manual-notes').value + " [Manual Shop Log Entry]",
-        stage: document.getElementById('manual-stage').value,
-        tasks: [false, false, false, false, false, false],
-        invoiceSent: false,
-        isPaid: false,
-        artData: ''
-      };
-
-      appOrders.unshift(manualOrder);
-      saveState();
-      closeManualJobModal();
-      renderDashboard();
-      showToast('✓ Walk-in manual job card safely compiled');
+      appOrders.unshift({
+        id: "HPC-" + Math.floor(1000 + Math.random() * 9000), customerName: document.getElementById('manual-name').value, decorationType: document.getElementById('manual-type').value, brand: document.getElementById('manual-brand').value, color: document.getElementById('manual-color').value, dueDate: document.getElementById('manual-date').value, totalQuantity: finalQty, estimatedTotal: parseFloat(document.getElementById('manual-price').value) || 0, notes: document.getElementById('manual-notes').value, stage: document.getElementById('manual-stage').value, tasks: [false,false,false,false,false,false], invoiceSent: false, isPaid: false, artData: ''
+      });
+      saveState(); closeManualJobModal(); renderDashboard(); showToast('✓ Manual card logged');
     }
 
     function toggleTask(orderId, taskIndex) {
       const order = appOrders.find(o => o.id === orderId);
-      if (order) {
-        order.tasks[taskIndex] = !order.tasks[taskIndex];
-        saveState();
-        renderDashboard();
-        showToast('Production step updated');
-      }
+      if (order) { order.tasks[taskIndex] = !order.tasks[taskIndex]; saveState(); renderDashboard(); }
     }
-
-    function toggleInvoiceStatus(orderId) {
-      const order = appOrders.find(o => o.id === orderId);
-      if (order) {
-        order.invoiceSent = !order.invoiceSent;
-        saveState();
-        renderDashboard();
-        showToast(`Order ${orderId} invoice marker updated`);
-      }
-    }
-
-    function togglePaymentStatus(orderId) {
-      const order = appOrders.find(o => o.id === orderId);
-      if (order) {
-        order.isPaid = !order.isPaid;
-        saveState();
-        renderDashboard();
-        showToast(`Order ${orderId} financial ledger updated`);
-      }
-    }
-
-    function cancelOrder(orderId) {
-      if (confirm(`⚠️ Are you sure you want to completely SCRUB and delete job card ${orderId} out of the system? This cannot be undone.`)) {
-        appOrders = appOrders.filter(o => o.id !== orderId);
-        saveState();
-        renderDashboard();
-        showToast(`🗑️ Job Card ${orderId} deleted permanently`);
-      }
-    }
-
+    function toggleInvoiceStatus(orderId) { const order = appOrders.find(o => o.id === orderId); if (order) { order.invoiceSent = !order.invoiceSent; saveState(); renderDashboard(); } }
+    function togglePaymentStatus(orderId) { const order = appOrders.find(o => o.id === orderId); if (order) { order.isPaid = !order.isPaid; saveState(); renderDashboard(); } }
+    function cancelOrder(orderId) { if (confirm('Scrub run?')) { appOrders = appOrders.filter(o => o.id !== orderId); saveState(); renderDashboard(); } }
     function advanceJob(orderId) {
-      const order = appOrders.find(o => o.id === orderId);
-      if (!order) return;
-
+      const order = appOrders.find(o => o.id === orderId); if (!order) return;
       const stages = ['pending', 'prepress', 'production', 'ready'];
-      const currentIndex = stages.indexOf(order.stage);
-      
-      if (currentIndex !== -1 && currentIndex < stages.length - 1) {
-        order.stage = stages[currentIndex + 1];
-        saveState();
-        renderDashboard();
-        showToast(`Job ${orderId} advanced into ${order.stage.toUpperCase()}`);
-      }
+      const cur = stages.indexOf(order.stage);
+      if (cur !== -1 && cur < stages.length - 1) { order.stage = stages[cur + 1]; saveState(); renderDashboard(); }
     }
 
     function generateVisualShopCalendar() {
-      const calGrid = document.getElementById('visual-calendar-grid');
-      if(!calGrid) return;
-      calGrid.innerHTML = '';
-
-      const baseToday = new Date('2026-06-15T00:00:00'); 
-      
+      const calGrid = document.getElementById('visual-calendar-grid'); if(!calGrid) return; calGrid.innerHTML = '';
+      const baseToday = new Date('2026-06-15T00:00:00');
       for(let i=0; i < 28; i++) {
         const loopDate = new Date(baseToday.getTime() + (i * 24 * 60 * 60 * 1000));
-        const y = loopDate.getFullYear();
-        const m = String(loopDate.getMonth() + 1).padStart(2, '0');
-        const d = String(loopDate.getDate()).padStart(2, '0');
-        const searchStringString = `${y}-${m}-${d}`;
-
-        const matchingJobs = appOrders.filter(o => o.dueDate === searchStringString);
-        
-        let nodesHtml = '';
-        matchingJobs.forEach(job => {
-          const timeRemaining = loopDate.getTime() - baseToday.getTime();
-          const runningDaysRemaining = Math.ceil(timeRemaining / (1000 * 3600 * 24));
-          const isUrgent = runningDaysRemaining <= 5 && job.stage !== 'ready';
-          
-          nodesHtml += `
-            <div class="px-1.5 py-0.5 mt-1 text-[9px] font-bold rounded truncate uppercase tracking-tight shadow-sm border ${isUrgent ? 'bg-red-50 text-red-700 border-red-200 animate-pulse' : 'bg-zinc-900 text-white border-zinc-900'}" title="${job.customerName} (${job.decorationType})">
-              ${isUrgent ? '⚠️ ' : ''}${job.customerName}
-            </div>
-          `;
-        });
-
-        const isTodayCell = i === 0;
-        const formattedLabelStrLabel = loopDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-
-        calGrid.innerHTML += `
-          <div class="bg-white border rounded-xl p-2 min-h-[75px] flex flex-col justify-between shadow-xs transition-all hover:border-zinc-400 ${isTodayCell ? 'ring-2 ring-black bg-zinc-50/50' : 'border-zinc-200'}">
-            <span class="text-[10px] font-extrabold ${isTodayCell ? 'text-black' : 'text-zinc-400'} uppercase block">${formattedLabelStrLabel}${isTodayCell ? ' • Shop Today' : ''}</span>
-            <div class="flex-1 space-y-1 mt-1 overflow-y-auto max-h-[60px]">
-              ${nodesHtml}
-            </div>
-          </div>
-        `;
+        const searchStr = `${loopDate.getFullYear()}-${String(loopDate.getMonth() + 1).padStart(2, '0')}-${String(loopDate.getDate()).padStart(2, '0')}`;
+        const matchingJobs = appOrders.filter(o => o.dueDate === searchStr);
+        let nodes = '';
+        matchingJobs.forEach(j => { nodes += `<div class="px-1 py-0.5 mt-1 text-[9px] bg-zinc-900 text-white truncate rounded font-bold uppercase">${j.customerName}</div>`; });
+        calGrid.innerHTML += `<div class="bg-white border rounded-xl p-2 min-h-[70px]"><span class="text-[10px] font-extrabold text-zinc-400 block">${loopDate.toLocaleString('en-US', { month: 'short', day: 'numeric' })}</span><div class="mt-1 overflow-y-auto max-h-[50px]">${nodes}</div></div>`;
       }
     }
 
@@ -813,523 +719,56 @@
       document.getElementById('col-pending-combined').innerHTML = '';
       document.getElementById('col-production-combined').innerHTML = '';
       document.getElementById('col-ready-combined').innerHTML = '';
-      
-      const outreachBox = document.getElementById('box-followup-outreach');
-      const paymentBox = document.getElementById('box-followup-payment');
-      outreachBox.innerHTML = '';
-      paymentBox.innerHTML = '';
+      const outreachBox = document.getElementById('box-followup-outreach'); outreachBox.innerHTML = '';
+      const paymentBox = document.getElementById('box-followup-payment'); paymentBox.innerHTML = '';
+      let outC = 0, payC = 0;
 
-      let outreachCount = 0;
-      let paymentCount = 0;
-
-      const baseToday = new Date('2026-06-15T00:00:00'); 
-
-      // POPULATE UPGRADED HIGH-VISIBILITY MANUAL FOLLOW-UP LEAD CARDS
       appManualLeads.forEach(lead => {
-        outreachCount++;
-        outreachBox.innerHTML += `
-          <div class="p-3 border border-zinc-200 bg-white rounded-xl shadow-xs space-y-2.5 flex flex-col justify-between">
-            <div class="space-y-1">
-              <div class="flex justify-between items-start gap-1">
-                <span class="font-extrabold text-zinc-900 leading-tight text-sm">${lead.name}</span>
-                <span class="text-[9px] bg-zinc-100 border text-zinc-400 font-mono px-1 rounded uppercase tracking-wider">${lead.uid}</span>
-              </div>
-              <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider truncate">${lead.businessName}</div>
-            </div>
-            
-            <!-- HIGH-CONTRAST HIGHLIGHTED CUSTOMER SPEC NOTES BOX -->
-            <div class="text-[11px] bg-amber-50/60 border border-amber-200 text-amber-900 p-2.5 font-medium leading-normal rounded-xl select-text">
-              ${lead.customerNotes || 'No notes logged yet.'}
-            </div>
-
-            <!-- BOLD ACTION FOOTER WITH MANUAL PURGE TRIGGER -->
-            <div class="pt-2 border-t border-zinc-100 flex items-center justify-between gap-2">
-              <div class="flex gap-2 text-[10px] font-bold">
-                <a href="tel:${lead.phone}" class="text-red-600 hover:underline">📞 Call</a>
-                <a href="mailto:${lead.email}" class="text-zinc-500 hover:underline">✉️ Email</a>
-              </div>
-              <button onclick="purgeLeadRecord('${lead.uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded text-[9px] border border-red-100 transition-colors uppercase tracking-wider">
-                🗑️ Delete Lead
-              </button>
-            </div>
-          </div>
-        `;
+        outC++;
+        outreachBox.innerHTML += `<div class="p-2.5 border rounded-xl bg-white space-y-1.5 relative"><button onclick="purgeLeadRecord('${lead.uid}')" class="absolute top-1 right-2 text-zinc-300 text-xs font-bold">×</button><div class="font-extrabold text-zinc-900 leading-tight">${lead.name}</div><div class="text-[11px] bg-amber-50 border border-amber-200 p-2 text-amber-900 rounded-lg italic">${lead.customerNotes}</div><div class="text-[10px] font-bold text-red-600">📞 ${lead.phone} | ✉️ ${lead.email}</div></div>`;
       });
 
       appOrders.forEach(o => {
-        const orderTargetDate = new Date(o.dueDate + 'T00:00:00');
-        const distanceTime = orderTargetDate.getTime() - baseToday.getTime();
-        const activeDaysRemaining = Math.ceil(distanceTime / (1000 * 3600 * 24));
-        const isPriorityRushPriority = activeDaysRemaining <= 5 && o.stage !== 'ready';
-
         if (o.stage === 'pending' && !o.invoiceSent) {
-          outreachCount++;
-          outreachBox.innerHTML += `
-            <div class="p-2 border border-red-100 bg-red-50/40 rounded-lg flex flex-col gap-0.5 shadow-xs">
-              <span class="font-extrabold text-red-950 truncate">${o.customerName}</span>
-              <span class="text-[10px] font-semibold text-red-700 uppercase">Incoming Quote Request • ID: ${o.id}</span>
-            </div>
-          `;
+          outC++; outreachBox.innerHTML += `<div class="p-2 border border-red-100 bg-red-50/40 rounded-lg text-xs font-bold text-red-950">${o.customerName} - Manifest Item [ID: ${o.id}]</div>`;
         } else if (!o.isPaid && o.invoiceSent) {
-          paymentCount++;
-          paymentBox.innerHTML += `
-            <div class="p-2 border border-amber-100 bg-amber-50/30 rounded-lg flex flex-col gap-0.5 shadow-xs">
-              <span class="font-extrabold text-amber-950 truncate">${o.customerName}</span>
-              <span class="text-[10px] font-semibold text-amber-700 uppercase">Awaiting Balance: $${o.estimatedTotal.toFixed(2)}</span>
-            </div>
-          `;
+          payC++; paymentBox.innerHTML += `<div class="p-2 border border-amber-100 bg-amber-50/30 rounded-lg text-xs font-bold text-amber-950">${o.customerName} - Balance Out: $${o.estimatedTotal.toFixed(2)}</div>`;
         }
 
-        const labels = o.decorationType === 'Marketing Materials' ?
-          ['Design Approved', 'Stock Loaded', 'Bleed Verified', 'Color Profiled', 'Plotter Prepped', 'Packaged & QA'] :
-          (o.decorationType === 'Screen Printing' ? 
-            ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] :
-            ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Master Proofed', 'Threads Prepped']);
-
-        let taskButtons = '';
-        labels.forEach((label, index) => {
-          const isDone = o.tasks[index];
-          taskButtons += `
-            <button onclick="toggleTask('${o.id}', ${index})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border flex items-center space-x-2 transition-all ${isDone ? 'bg-zinc-900 text-white border-zinc-900 shadow-sm' : 'bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">
-              <span>${isDone ? '✓' : '○'}</span><span class="truncate">${label}</span>
-            </button>
-          `;
-        });
-
-        let cardThumbnailHtml = o.artData ? 
-          `<div class="mt-2 border border-zinc-200 bg-zinc-50 p-1 flex justify-center items-center h-16 w-full rounded-lg">
-            <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
-           </div>` : '';
+        const labels = o.decorationType === 'Marketing Materials' ? ['Design Approved', 'Stock Loaded', 'Bleed Verified', 'Color Profiled', 'Plotter Prepped', 'Packaged & QA'] : (o.decorationType === 'Screen Printing' ? ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] : ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Proofed', 'Threads Prepped']);
+        let tasksHtml = '';
+        labels.forEach((l, idx) => { tasksHtml += `<button onclick="toggleTask('${o.id}', ${idx})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border truncate ${o.tasks[idx] ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-zinc-50 border-zinc-200 text-zinc-500'}">○ ${l}</button>`; });
 
         const cardHtml = `
-          <div class="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm space-y-3 text-zinc-800 ${o.isPaid ? 'ring-2 ring-emerald-500' : ''} ${isPriorityRushPriority ? 'border-red-400 bg-red-50/10' : ''}">
-            <div class="flex justify-between items-center text-[10px] font-bold">
-              <span class="bg-zinc-900 text-white px-2 py-0.5 rounded">${o.id}</span>
-              <span class="${isPriorityRushPriority ? 'text-red-600 font-extrabold animate-pulse' : 'text-zinc-400'}">${isPriorityRushPriority ? '⏳ RUSH IN: ' : ''}${o.dueDate}</span>
+          <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3 text-zinc-800 ${o.isPaid ? 'ring-2 ring-emerald-500' : ''}">
+            <div class="flex justify-between items-center text-[10px] font-bold"><span class="bg-zinc-900 text-white px-2 py-0.5 rounded">${o.id}</span><span class="text-zinc-400">${o.dueDate}</span></div>
+            <div><h4 class="font-extrabold text-sm text-zinc-900 truncate uppercase">${o.customerName}</h4><p class="text-xs text-zinc-500 font-semibold uppercase">${o.totalQuantity}x Run Items [${o.decorationType}]</p></div>
+            <div class="text-[11px] bg-zinc-50 border p-2 text-zinc-600 rounded-lg leading-normal italic">${o.notes}</div>
+            <div class="grid grid-cols-2 gap-1 pt-1 border-t">${tasksHtml}</div>
+            <div class="pt-2 border-t grid grid-cols-2 gap-1.5 text-[10px]">
+              <button onclick="toggleInvoiceStatus('${o.id}')" class="p-1 rounded font-bold border uppercase ${o.invoiceSent ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-400'}">📄 Invoiced</button>
+              <button onclick="togglePaymentStatus('${o.id}')" class="p-1 rounded font-bold border uppercase ${o.isPaid ? 'bg-emerald-600 text-white' : 'bg-red-50 text-red-600'}">💰 Paid</button>
             </div>
-            <div>
-              <h4 class="font-extrabold text-sm text-zinc-900 truncate leading-tight uppercase tracking-tight">${o.customerName}</h4>
-              <p class="text-xs text-zinc-500 mt-1 font-semibold uppercase">${o.totalQuantity}x Items Run</p>
-              <span class="text-[10px] font-bold text-zinc-400 block mt-0.5 uppercase tracking-wide bg-zinc-50 px-2 py-0.5 rounded inline-block truncate max-w-full border border-zinc-100">${o.brand}</span>
-            </div>
-            
-            ${cardThumbnailHtml}
-            
-            <div class="text-[11px] bg-zinc-50 border border-zinc-100 p-2 text-zinc-600 font-medium break-words max-w-full rounded-lg leading-normal italic">${o.notes}</div>
-            
-            <div class="grid grid-cols-2 gap-1 pt-1 border-t border-zinc-100">
-              ${taskButtons}
-            </div>
-
-            <div class="pt-2 mt-1 border-t border-dashed border-zinc-200 grid grid-cols-2 gap-1.5 text-[10px]">
-              <button onclick="toggleInvoiceStatus('${o.id}')" class="p-1 rounded font-bold text-center border uppercase transition-all ${o.invoiceSent ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-400 border-zinc-200 hover:bg-zinc-50'}">
-                ${o.invoiceSent ? '📄 Sent' : '📄 Invoice'}
-              </button>
-              <button onclick="togglePaymentStatus('${o.id}')" class="p-1 rounded font-bold text-center border uppercase transition-all ${o.isPaid ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'}">
-                ${o.isPaid ? '💰 Paid ✓' : '⏳ Unpaid'}
-              </button>
-            </div>
-
-            <div class="pt-2 border-t border-zinc-100 flex items-center justify-between text-xs gap-1.5">
-              <div>
-                <span class="text-[9px] text-zinc-400 block uppercase font-bold tracking-wider">Total Est</span>
-                <span class="text-xs font-extrabold text-zinc-900">${o.estimatedTotal ? '$' + o.estimatedTotal.toFixed(2) : 'Review Req'}</span>
-              </div>
-              <div class="flex items-center space-x-1 flex-1 justify-end">
-                <button onclick="cancelOrder('${o.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2 py-1 rounded text-[10px] uppercase border border-red-100 transition-colors">
-                  Cancel
-                </button>
-                ${o.stage !== 'ready' ? `<button onclick="advanceJob('${o.id}')" class="bg-zinc-900 hover:bg-black text-white font-bold py-1 px-3 text-[10px] rounded uppercase transition-colors flex items-center space-x-1 shadow-sm">
-                  Next →
-                </button>` : ''}
-              </div>
+            <div class="pt-2 border-t flex items-center justify-between text-xs">
+              <button onclick="cancelOrder('${o.id}')" class="text-red-600 font-bold text-[10px] bg-red-50 px-2 py-1 rounded">Cancel</button>
+              ${o.stage !== 'ready' ? `<button onclick="advanceJob('${o.id}')" class="bg-zinc-900 hover:bg-black text-white font-bold py-1 px-3 text-[10px] rounded uppercase">Next →</button>` : ''}
             </div>
           </div>
         `;
-        
-        if(o.stage === 'pending' || o.stage === 'prepress') {
-          document.getElementById('col-pending-combined').innerHTML += cardHtml;
-        } else if (o.stage === 'production') {
-          document.getElementById('col-production-combined').innerHTML += cardHtml;
-        } else if (o.stage === 'ready') {
-          document.getElementById('col-ready-combined').innerHTML += cardHtml;
-        }
+        if(o.stage === 'pending' || o.stage === 'prepress') document.getElementById('col-pending-combined').innerHTML += cardHtml;
+        else if (o.stage === 'production') document.getElementById('col-production-combined').innerHTML += cardHtml;
+        else if (o.stage === 'ready') document.getElementById('col-ready-combined').innerHTML += cardHtml;
       });
 
-      if(outreachCount === 0) outreachBox.innerHTML = `<p class="text-[11px] text-zinc-400 italic font-medium py-2 text-center">All hot incoming leads invoiced ✓</p>`;
-      if(paymentCount === 0) paymentBox.innerHTML = `<p class="text-[11px] text-zinc-400 italic font-medium py-2 text-center">No outstanding accounts waiting balance ✓</p>`;
-
-      document.getElementById('count-outreach').innerText = outreachCount;
-      document.getElementById('count-payment').innerText = paymentCount;
-      
+      document.getElementById('count-outreach').innerText = outC;
+      document.getElementById('count-payment').innerText = payC;
       generateVisualShopCalendar();
     }
 
-    function processArtworkFile(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        currentArtBase64 = e.target.result;
-        const previewLabel = document.getElementById('art-preview-label');
-        if (previewLabel) {
-          previewLabel.innerText = "✓ " + file.name + " attached";
-          previewLabel.className = "block text-[11px] font-bold text-zinc-800 mt-0.5";
-        }
-        showToast('Graphic design file pinned successfully');
-        recalculateQuote();
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function clearUploadedArt() {
-      currentArtBase64 = '';
-      document.getElementById('input-art').value = '';
-      const previewLabel = document.getElementById('art-preview-label');
-      if (previewLabel) {
-        previewLabel.innerText = "No drawing vector attached";
-        previewLabel.className = "block text-[11px] text-zinc-400 mt-0.5 font-medium";
-      }
-      recalculateQuote();
-    }
-
-    function updateFormFields() {
-      const type = document.getElementById('input-type').value;
-      const brandSelect = document.getElementById('input-brand');
-      if (!brandSelect) return;
-      
-      brandSelect.innerHTML = '';
-
-      const placementBox = document.getElementById('box-design-placement-hub');
-      const printPlacement = document.getElementById('placement-screenprint');
-      const embroideryPlacement = document.getElementById('placement-embroidery');
-
-      if (placementBox && printPlacement && embroideryPlacement) {
-        placementBox.classList.remove('hidden');
-        printPlacement.classList.add('hidden');
-        embroideryPlacement.classList.add('hidden');
-
-        if (type === 'Screen Printing') {
-          printPlacement.classList.remove('hidden');
-        } else if (type === 'Embroidery') {
-          embroideryPlacement.classList.remove('hidden');
-        } else {
-          placementBox.classList.add('hidden'); 
-        }
-      }
-
-      if (type === 'Screen Printing') {
-        document.getElementById('box-screenprint').classList.remove('hidden');
-        document.getElementById('box-embroidery').classList.add('hidden');
-        document.getElementById('box-marketing').classList.add('hidden');
-        document.getElementById('catalog-notice-screenprint').classList.remove('hidden');
-        
-        const spOptions = [
-          { value: 'Gildan (Economical)', text: 'Gildan (Economical Tier)' },
-          { value: 'Next Level (Mid-Tier)', text: 'Next Level (Mid-Tier)' },
-          { value: 'Bella+Canvas (Mid-Tier)', text: 'Bella+Canvas (Mid-Tier)' },
-          { value: 'Specialty Blank (Heavyweight / Vintage Boxy)', text: 'Specialty Blank (Heavyweight)' },
-          { value: 'Other Sourced Apparel', text: 'Other / Custom Catalog Request' }
-        ];
-        spOptions.forEach(opt => {
-          let el = document.createElement('option');
-          el.value = opt.value;
-          el.text = opt.text;
-          brandSelect.appendChild(el);
-        });
-      } else if (type === 'Embroidery') {
-        document.getElementById('box-screenprint').classList.add('hidden');
-        document.getElementById('box-embroidery').classList.remove('hidden');
-        document.getElementById('box-marketing').classList.add('hidden');
-        document.getElementById('catalog-notice-screenprint').classList.add('hidden');
-
-        const embOptions = [
-          { value: 'Hats (Adjustable / Flexfit)', text: 'Hats (Adjustable / Flexfit)' },
-          { value: 'Polos (Professional Blank)', text: 'Polos (Professional Classic)' },
-          { value: 'Hoodies (Midweight Layering)', text: 'Hoodies (Cozy Midweight Fleeces)' },
-          { value: 'Jackets (Outerwear Protection)', text: 'Jackets (Premium Outerwear Layer)' },
-          { value: 'Other Sourced Embroidery', text: 'Other / Custom Blank Catalog Spec' }
-        ];
-        embOptions.forEach(opt => {
-          let el = document.createElement('option');
-          el.value = opt.value;
-          el.text = opt.text;
-          brandSelect.appendChild(el);
-        });
-      } else if (type === 'Marketing Materials') {
-        document.getElementById('box-screenprint').classList.add('hidden');
-        document.getElementById('box-embroidery').classList.add('hidden');
-        document.getElementById('box-marketing').classList.remove('hidden');
-        document.getElementById('catalog-notice-screenprint').classList.add('hidden');
-
-        const mktOptions = [
-          { value: 'Banners (Outdoor Heavy Vinyl)', text: 'Banners (Grommeted Outdoor Vinyl - $5/sq ft)' },
-          { value: 'Business Cards (Premium Heavy 16pt)', text: 'Business Cards (Premium Heavy 16pt Packs)' },
-          { value: 'Metal Signage (Aluminum Panels)', text: 'Metal Signage (Heavy Aluminum Panels)' },
-          { value: 'Car Magnets (Vehicle Strength)', text: 'Car Magnets (.030 Vehicle Strength)' },
-          { value: 'Promo Items (Mugs, Accessories)', text: 'Promo Items (Pens, Mugs, Custom Accessories)' },
-          { value: 'Other Sourced Media Specs', text: 'Other / Custom Media Request' }
-        ];
-        mktOptions.forEach(opt => {
-          let el = document.createElement('option');
-          el.value = opt.value;
-          el.text = opt.text;
-          brandSelect.appendChild(el);
-        });
-      }
-      checkSelectedBrand();
-    }
-
-    function checkSelectedBrand() {
-      const type = document.getElementById('input-type').value;
-      const brandSelect = document.getElementById('input-brand');
-      const brand = brandSelect ? brandSelect.value : '';
-      const ottocapNotice = document.getElementById('catalog-notice-ottocap');
-
-      document.getElementById('box-banner-dimensions').classList.add('hidden');
-      document.getElementById('box-card-packs').classList.add('hidden');
-      document.getElementById('sizing-grid').classList.add('hidden');
-      document.getElementById('hat-osfa-notice').classList.add('hidden');
-      document.getElementById('marketing-volume-box').classList.add('hidden');
-      if (ottocapNotice) ottocapNotice.classList.add('hidden');
-
-      if (type === 'Screen Printing') {
-        document.getElementById('matrix-label').innerText = "Garment Sizing Volumes";
-        document.getElementById('sizing-grid').classList.remove('hidden');
-      } 
-      
-      else if (type === 'Embroidery') {
-        if (ottocapNotice) ottocapNotice.classList.remove('hidden');
-
-        if (brand && brand.startsWith('Hats')) {
-          document.getElementById('matrix-label').innerText = "Headwear Run Volume Configuration";
-          document.getElementById('hat-osfa-notice').classList.remove('hidden');
-          document.getElementById('marketing-volume-box').classList.remove('hidden');
-          document.getElementById('volume-box-label').innerText = "Total Caps Needed in Batch";
-          document.getElementById('label-unit-price').innerText = "Per-Hat (Finished)";
-        } else {
-          document.getElementById('matrix-label').innerText = "Garment Sizing Volumes";
-          document.getElementById('sizing-grid').classList.remove('hidden');
-          document.getElementById('label-unit-price').innerText = "Per-Garment (Finished)";
-        }
-      } 
-      
-      else if (type === 'Marketing Materials') {
-        document.getElementById('matrix-label').innerText = "Print Asset Volume Run Setup";
-        document.getElementById('marketing-volume-box').classList.remove('hidden');
-        document.getElementById('label-unit-price').innerText = "Per-Unit Wholesale Cost";
-
-        if (brand && brand.startsWith('Banners')) {
-          document.getElementById('box-banner-dimensions').classList.remove('hidden');
-          document.getElementById('volume-box-label').innerText = "Total Banners Needed";
-        } else if (brand && brand.startsWith('Business')) {
-          document.getElementById('box-card-packs').classList.remove('hidden');
-          document.getElementById('marketing-volume-box').classList.add('hidden'); 
-          syncCardPackQuantityValues();
-          return;
-        } else {
-          document.getElementById('volume-box-label').innerText = "Total Order Quantity";
-        }
-      }
-      recalculateQuote();
-    }
-
-    function syncCardPackQuantityValues() {
-      const tier = document.getElementById('input-card-tier').value;
-      document.getElementById('input-marketing-qty').value = tier;
-      recalculateQuote();
-    }
-
-    function setLogoOnFile(val) {
-      logoOnFile = val;
-      document.getElementById('btn-file-yes').className = val ? "px-4 py-1.5 rounded-lg border border-zinc-800 text-[11px] font-bold bg-zinc-900 text-white" : "px-4 py-1.5 rounded-lg border border-zinc-200 text-[11px] font-bold bg-zinc-100 text-zinc-500";
-      document.getElementById('btn-file-no').className = !val ? "px-4 py-1.5 rounded-lg border border-zinc-800 text-[11px] font-bold bg-zinc-900 text-white" : "px-4 py-1.5 rounded-lg border border-zinc-200 text-[11px] font-bold bg-zinc-100 text-zinc-500";
-      recalculateQuote();
-    }
-
-    function recalculateQuote() {
-      const type = document.getElementById('input-type').value;
-      const brandSelect = document.getElementById('input-brand');
-      const brand = brandSelect ? brandSelect.value : '';
-      
-      const frontColors = parseInt(document.getElementById('input-front').value) || 0;
-      const backColors = parseInt(document.getElementById('input-back').value) || 0;
-      const stitchCount = parseInt(document.getElementById('input-stitch').value) || 5000;
-      const mktQty = parseInt(document.getElementById('input-marketing-qty').value) || 0;
-
-      let qty = 0;
-      if (type === 'Marketing Materials' || (type === 'Embroidery' && brand && brand.startsWith('Hats'))) {
-        qty = mktQty;
-      } else {
-        qty = (parseInt(document.getElementById('size-s').value) || 0) +
-              (parseInt(document.getElementById('size-m').value) || 0) +
-              (parseInt(document.getElementById('size-l').value) || 0) +
-              (parseInt(document.getElementById('size-xl').value) || 0) +
-              (parseInt(document.getElementById('size-2xl').value) || 0) +
-              (parseInt(document.getElementById('size-3xl').value) || 0) +
-              (parseInt(document.getElementById('size-4xl').value) || 0);
-      }
-
-      document.getElementById('summary-qty').innerText = qty + " items";
-      document.getElementById('summary-brand').innerText = brand ? brand.split(' ')[0] : 'Gildan';
-
-      const spRetail = { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)': 8.75, 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other Sourced Apparel': 10.00 };
-      const embRetail = { 'Hats (Adjustable / Flexfit)': 10.00, 'Polos (Professional Blank)': 15.00, 'Hoodies (Midweight Layering)': 22.00, 'Jackets (Outerwear Protection)': 42.00, 'Other Sourced Embroidery': 12.00 };
-
-      let blankRetail = 0;
-      let decoFee = 0;
-      let isCustomQuoteItem = false;
-
-      if(document.getElementById('rate-wrapper')) document.getElementById('rate-wrapper').classList.remove('hidden');
-      if(document.getElementById('total-wrapper')) document.getElementById('total-wrapper').innerHTML = `$<span id="summary-total">0.00</span>`;
-
-      if (type === 'Screen Printing') {
-        blankRetail = spRetail[brand] || 10.00;
-        const grid = [0, 6.50, 7.50, 8.50, 9.50];
-        decoFee = (grid[Math.min(4, Math.max(0, frontColors))] || 0) + (grid[Math.min(4, Math.max(0, backColors))] || 0);
-      } else if (type === 'Embroidery') {
-        blankRetail = embRetail[brand] || 12.00;
-        let baseRun = qty < 12 ? 5.00 : qty < 24 ? 4.00 : qty < 48 ? 3.00 : 2.50;
-        decoFee = baseRun + ((stitchCount / 1000) * 1.50);
-      } else if (type === 'Marketing Materials') {
-        if (brand && brand.startsWith('Banners')) {
-          const w = parseInt(document.getElementById('input-banner-w').value) || 1;
-          const h = parseInt(document.getElementById('input-banner-h').value) || 1;
-          blankRetail = (w * h) * 5.00; 
-          decoFee = 0;
-        } else if (brand && brand.startsWith('Business')) {
-          blankRetail = (mktQty === 250) ? 60.00 : 120.00; 
-          decoFee = 0;
-          qty = 1; 
-        } else {
-          isCustomQuoteItem = true;
-        }
-      }
-
-      const rate = blankRetail + decoFee;
-      let total = qty * rate;
-      if (type === 'Embroidery' && !logoOnFile) total += 30.00;
-
-      if (isCustomQuoteItem) {
-        if(document.getElementById('rate-wrapper')) document.getElementById('rate-wrapper').classList.add('hidden');
-        if(document.getElementById('total-wrapper')) document.getElementById('total-wrapper').innerHTML = `<span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Review Required</span>`;
-      } else {
-        if(document.getElementById('summary-rate')) document.getElementById('summary-rate').innerText = rate.toFixed(2);
-        if(document.getElementById('summary-total')) document.getElementById('summary-total').innerText = total.toFixed(2);
-      }
-
-      const submitBtn = document.getElementById('submit-btn');
-      const warning = document.getElementById('min-warning');
-
-      let minRequired = 12;
-      if (type === 'Marketing Materials') {
-        if (brand && (brand.startsWith('Banners') || brand.startsWith('Metal') || brand.startsWith('Car') || isCustomQuoteItem)) {
-          minRequired = 1;
-        } else {
-          minRequired = 250;
-        }
-      }
-
-      const baselineCheckQty = (brand && brand.startsWith('Business')) ? mktQty : qty;
-
-      if (baselineCheckQty >= minRequired) {
-        submitBtn.disabled = false;
-        submitBtn.className = "w-full bg-zinc-900 hover:bg-black text-white font-bold py-4 rounded-xl text-sm uppercase tracking-wider shadow-sm transition-all cursor-pointer";
-        warning.innerText = "Order quantity threshold verified ✓";
-        warning.className = "text-[11px] font-bold uppercase text-zinc-800 tracking-wide";
-      } else {
-        submitBtn.disabled = true;
-        submitBtn.className = "w-full bg-zinc-100 text-zinc-400 font-bold py-4 rounded-xl text-sm border border-zinc-200 text-center shadow-inner cursor-not-allowed uppercase tracking-wider";
-        warning.className = "text-[11px] font-bold uppercase text-zinc-400 tracking-wide";
-        warning.innerText = `Adjust count parameters to initialize batch runs.`;
-      }
-    }
-
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      const type = document.getElementById('input-type').value;
-      const brandSelect = document.getElementById('input-brand');
-      const brand = brandSelect ? brandSelect.value : '';
-      
-      let s = 0, m = 0, l = 0, xl = 0, xxl = 0, s3 = 0, s4 = 0, totalQty = 0;
-      if (type === 'Marketing Materials' || (type === 'Embroidery' && brand && brand.startsWith('Hats'))) {
-        totalQty = parseInt(document.getElementById('input-marketing-qty').value) || 0;
-      } else {
-        s = parseInt(document.getElementById('size-s').value) || 0;
-        m = parseInt(document.getElementById('size-m').value) || 0;
-        l = parseInt(document.getElementById('size-l').value) || 0;
-        xl = parseInt(document.getElementById('size-xl').value) || 0;
-        xxl = parseInt(document.getElementById('size-2xl').value) || 0;
-        s3 = parseInt(document.getElementById('size-3xl').value) || 0;
-        s4 = parseInt(document.getElementById('size-4xl').value) || 0;
-        totalQty = s + m + l + xl + xxl + s3 + s4;
-      }
-
-      let orderNotes = document.getElementById('input-notes').value;
-      
-      if (type === 'Screen Printing') {
-        const val = document.getElementById('placement-screenprint').value;
-        orderNotes += ` [Placement Spec: ${val.toUpperCase()}]`;
-      } else if (type === 'Embroidery') {
-        const val = document.getElementById('placement-embroidery').value;
-        orderNotes += ` [Placement Spec: ${val.toUpperCase()}]`;
-      }
-
-      if (type === 'Marketing Materials') {
-        orderNotes += ` [Finish: ${document.getElementById('input-finish').value}]`;
-        if (brand.startsWith('Banners')) {
-          orderNotes += ` [Dimensions: ${document.getElementById('input-banner-w').value}x${document.getElementById('input-banner-h').value} ft]`;
-        }
-      }
-
-      const displayTotalText = document.getElementById('summary-total') ? parseFloat(document.getElementById('summary-total').innerText) : 0;
-
-      const newOrder = {
-        id: "HPC-" + Math.floor(1000 + Math.random() * 9000),
-        customerName: document.getElementById('input-name').value,
-        decorationType: type,
-        brand: brand,
-        color: document.getElementById('input-color').value,
-        dueDate: document.getElementById('input-date').value,
-        frontColors: parseInt(document.getElementById('input-front').value) || 0,
-        backColors: parseInt(document.getElementById('input-back').value) || 0,
-        stitchCount: parseInt(document.getElementById('input-stitch').value) || 5000,
-        logoOnFile: logoOnFile,
-        sizes: { S: s, M: m, L: l, XL: xl, '2XL': xxl, '3XL': s3, '4XL': s4 },
-        totalQuantity: (brand.startsWith('Business')) ? parseInt(document.getElementById('input-marketing-qty').value) : totalQty,
-        estimatedTotal: displayTotalText,
-        notes: orderNotes,
-        stage: 'pending',
-        tasks: [false, false, false, false, false, false],
-        invoiceSent: false,
-        isPaid: false,
-        artData: currentArtBase64
-      };
-
-      appOrders.unshift(newOrder);
-      saveState();
-      
-      document.getElementById('estimator-form').reset();
-      clearUploadedArt();
-      
-      document.getElementById('view-estimator').classList.add('hidden');
-      document.getElementById('portal-footer').classList.add('hidden');
-      document.getElementById('view-success').classList.remove('hidden');
-      showToast('Project registered successfully');
-    }
-
-    function showToast(text) {
-      const t = document.getElementById('toast');
-      if (t) {
-        document.getElementById('toast-text').innerText = text;
-        t.classList.remove('hidden');
-        setTimeout(() => t.classList.add('hidden'), 3500);
-      }
-    }
-
-    updateFormFields();
-    initializeDefaultDates();
+    window.addEventListener('DOMContentLoaded', () => {
+      renderManifestInputsGrid();
+      initializeDefaultDates();
+    });
   </script>
 </body>
 </html>
