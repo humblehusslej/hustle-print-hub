@@ -366,13 +366,13 @@
       </div>
     </div>
 
-    <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD (UPDATED WITH COMBINED PANELS) -->
+    <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD -->
     <div id="view-dashboard" class="hidden space-y-8 animate-fadeIn">
       
       <!-- TOP PORTION: BACKLOG PIPELINE & FOLLOW-UP DECK SIDEBAR -->
       <div class="grid grid-cols-1 xl:grid-cols-4 gap-6 items-start">
         
-        <!-- LEFT THREE COLUMNS: THE MAIN MANUFACTURE PIPELINE PIPELINE -->
+        <!-- LEFT THREE COLUMNS: THE MAIN MANUFACTURE PIPELINE -->
         <div class="xl:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
           <div class="border border-zinc-200 rounded-2xl p-4 min-h-[450px] flex flex-col bg-white shadow-sm">
             <div class="flex justify-between items-center border-b border-zinc-200 pb-2 mb-4">
@@ -394,18 +394,35 @@
           </div>
         </div>
 
-        <!-- RIGHT COLUMN SIDE-DECK: LEAD ASSIGNMENTS & FOLLOW-UP MATRIX LISTS -->
+        <!-- RIGHT COLUMN SIDE-DECK: LEAD ASSIGNMENTS & OUTREACH STACK -->
         <div class="space-y-4">
-          <!-- PANEL A: CLIENTS THAT NEED OUTREACH (STALE INTAKES >48 HOURS OLD) -->
+          <!-- PANEL A: MANUAL LEAD INTAKE AND OUTREACH LOG LIST -->
           <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
             <div class="border-b pb-2 flex justify-between items-center">
               <span class="text-xs font-extrabold uppercase tracking-wide text-red-600 block">📞 Needs Call / Outreach</span>
               <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded-full" id="count-outreach">0</span>
             </div>
-            <div id="box-followup-outreach" class="space-y-2 text-xs font-medium text-zinc-500"></div>
+            
+            <!-- NEW MANUAL LEAD ENTRY INLINE ACCORDION LOG COMPONENT -->
+            <div class="bg-zinc-50 border border-zinc-200 p-2.5 rounded-xl space-y-2">
+              <button onclick="toggleInlineLeadForm()" class="w-full text-left text-[10px] font-bold uppercase text-zinc-700 tracking-wide flex justify-between items-center">
+                <span>➕ Log Manual Hot Lead</span>
+                <span id="lead-form-indicator">▼</span>
+              </button>
+              
+              <div id="inline-lead-form" class="hidden space-y-2 pt-1 border-t border-zinc-200">
+                <input type="text" id="lead-name" placeholder="Contact Name" class="w-full p-1.5 border border-zinc-300 rounded text-[11px] font-medium outline-none focus:border-black" />
+                <input type="text" id="lead-business" placeholder="Business / Organization Name" class="w-full p-1.5 border border-zinc-300 rounded text-[11px] font-medium outline-none focus:border-black" />
+                <input type="tel" id="lead-phone" placeholder="Phone Number" class="w-full p-1.5 border border-zinc-300 rounded text-[11px] font-medium outline-none focus:border-black" />
+                <input type="email" id="lead-email" placeholder="Email Address" class="w-full p-1.5 border border-zinc-300 rounded text-[11px] font-medium outline-none focus:border-black" />
+                <button onclick="submitManualOutreachLead()" class="w-full bg-red-600 hover:bg-red-700 text-white text-[10px] font-bold py-1 rounded transition-colors uppercase tracking-wider">Save Lead Note</button>
+              </div>
+            </div>
+
+            <div id="box-followup-outreach" class="space-y-2 text-xs font-medium text-zinc-500 max-h-[300px] overflow-y-auto"></div>
           </div>
 
-          <!-- PANEL B: AWAITING PAYMENT (INVOICED BUT UNPAID) -->
+          <!-- PANEL B: AWAITING PAYMENT -->
           <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
             <div class="border-b pb-2 flex justify-between items-center">
               <span class="text-xs font-extrabold uppercase tracking-wide text-amber-600 block">⏳ Awaiting Payment Ledger</span>
@@ -430,7 +447,6 @@
           </div>
         </div>
         
-        <!-- CALENDAR BLOCK GENERATOR SEED TANK -->
         <div id="visual-calendar-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5"></div>
       </div>
 
@@ -463,11 +479,13 @@
   </footer>
 
   <script>
-    // Configured static entries tracking dates inside our current 2026 runway matrix
     let appOrders = [
       { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4, '3XL': 0, '4XL': 0 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks. [Placement: Full Front Layout Print]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '' },
       { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-06-18', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], invoiceSent: false, isPaid: false, artData: '' }
     ];
+
+    // Separate mini tank tracker for manually typed custom sidebar lead records
+    let appManualLeads = [];
 
     let currentArtBase64 = '';
     let logoOnFile = false;
@@ -491,8 +509,13 @@
       localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
     }
 
+    if (localStorage.getItem('hpc_manual_leads')) {
+      appManualLeads = JSON.parse(localStorage.getItem('hpc_manual_leads'));
+    }
+
     function saveState() {
       localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
+      localStorage.setItem('hpc_manual_leads', JSON.stringify(appManualLeads));
       if (document.getElementById('queue-count')) {
         document.getElementById('queue-count').innerText = appOrders.length;
       }
@@ -584,6 +607,62 @@
     function closeManualJobModal() {
       document.getElementById('manual-job-modal').classList.add('hidden');
       document.getElementById('manual-form').reset();
+    }
+
+    // INLINE SIDEBAR LEAD TRACKER TOGGLE
+    function toggleInlineLeadForm() {
+      const box = document.getElementById('inline-lead-form');
+      const ind = document.getElementById('lead-form-indicator');
+      if (box.classList.contains('hidden')) {
+        box.classList.remove('hidden');
+        ind.innerText = '▲';
+      } else {
+        box.classList.add('hidden');
+        ind.innerText = '▼';
+      }
+    }
+
+    // SUBMIT DIRECT SIDEBAR CUSTOM LEAD NOTE
+    function submitManualOutreachLead() {
+      const name = document.getElementById('lead-name').value.trim();
+      const biz = document.getElementById('lead-business').value.trim();
+      const phone = document.getElementById('lead-phone').value.trim();
+      const email = document.getElementById('lead-email').value.trim();
+
+      if (!name) {
+        alert('Please fill out at least a Contact Name to store an active lead card.');
+        return;
+      }
+
+      const freshLead = {
+        uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000),
+        name: name,
+        businessName: biz || 'Individual Account',
+        phone: phone || 'No Phone Logged',
+        email: email || 'No Email Logged'
+      };
+
+      appManualLeads.unshift(freshLead);
+      saveState();
+      
+      // Clear inputs out
+      document.getElementById('lead-name').value = '';
+      document.getElementById('lead-business').value = '';
+      document.getElementById('lead-phone').value = '';
+      document.getElementById('lead-email').value = '';
+      
+      toggleInlineLeadForm();
+      renderDashboard();
+      showToast('✓ Custom outreach record pinned live');
+    }
+
+    function purgeLeadRecord(leadUid) {
+      if (confirm('Remove this outreach card entry from your list?')) {
+        appManualLeads = appManualLeads.filter(l => l.uid !== leadUid);
+        saveState();
+        renderDashboard();
+        showToast('Lead note removed');
+      }
     }
 
     function handleManualFormSubmit(e) {
@@ -686,13 +765,12 @@
       }
     }
 
-    // VISUAL CALENDAR GENERATOR CORE MATRICES
     function generateVisualShopCalendar() {
       const calGrid = document.getElementById('visual-calendar-grid');
       if(!calGrid) return;
       calGrid.innerHTML = '';
 
-      const baseToday = new Date('2026-06-15T00:00:00'); // Anchored accurately inside active 2026 shop window 
+      const baseToday = new Date('2026-06-15T00:00:00'); 
       
       for(let i=0; i < 28; i++) {
         const loopDate = new Date(baseToday.getTime() + (i * 24 * 60 * 60 * 1000));
@@ -731,7 +809,6 @@
     }
 
     function renderDashboard() {
-      // Columns target alignment resets
       if(!document.getElementById('col-pending-combined')) return;
       document.getElementById('col-pending-combined').innerHTML = '';
       document.getElementById('col-production-combined').innerHTML = '';
@@ -745,28 +822,44 @@
       let outreachCount = 0;
       let paymentCount = 0;
 
-      const baseToday = new Date('2026-06-15T00:00:00'); // Sync baseline date parameters 
+      const baseToday = new Date('2026-06-15T00:00:00'); 
 
+      // FIRST: LOOP AND INJECT MANUALLY TYPE OUTREACH LEAD CARDS
+      appManualLeads.forEach(lead => {
+        outreachCount++;
+        outreachBox.innerHTML += `
+          <div class="p-2.5 border border-zinc-200 bg-white rounded-xl shadow-xs space-y-1 group relative">
+            <button onclick="purgeLeadRecord('${lead.uid}')" class="absolute top-1 right-2 text-zinc-300 hover:text-red-600 text-xs font-bold">×</button>
+            <div class="font-extrabold text-zinc-900 leading-tight">${lead.name}</div>
+            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wide truncate">${lead.businessName}</div>
+            <div class="pt-1 mt-0.5 border-t border-zinc-100 flex flex-wrap gap-2 text-[10px] font-semibold">
+              <a href="tel:${lead.phone}" class="text-red-600 hover:underline">📞 ${lead.phone}</a>
+              <a href="mailto:${lead.email}" class="text-zinc-500 hover:underline truncate max-w-[130px]">✉️ ${lead.email}</a>
+            </div>
+          </div>
+        `;
+      });
+
+      // SECOND: LOOP PRODUCTION SYSTEM INTAKES
       appOrders.forEach(o => {
-        // Compute urgency flags for custom badge injections
         const orderTargetDate = new Date(o.dueDate + 'T00:00:00');
         const distanceTime = orderTargetDate.getTime() - baseToday.getTime();
         const activeDaysRemaining = Math.ceil(distanceTime / (1000 * 3600 * 24));
         const isPriorityRushPriority = activeDaysRemaining <= 5 && o.stage !== 'ready';
 
-        // 1. CHOOSE CORRESPONDING LEAD OUTREACH TRACKS DYNAMICALLY
+        // Automated triggers populate system pipeline logs alongside manual entries
         if (o.stage === 'pending' && !o.invoiceSent) {
           outreachCount++;
           outreachBox.innerHTML += `
-            <div onclick="switchView('dashboard')" class="p-2 border border-red-100 bg-red-50/40 rounded-lg flex flex-col gap-0.5 shadow-xs cursor-pointer hover:bg-red-50">
+            <div class="p-2 border border-red-100 bg-red-50/40 rounded-lg flex flex-col gap-0.5 shadow-xs">
               <span class="font-extrabold text-red-950 truncate">${o.customerName}</span>
-              <span class="text-[10px] font-semibold text-red-700 uppercase">Needs Invoice Setup • Tag: ${o.id}</span>
+              <span class="text-[10px] font-semibold text-red-700 uppercase">Incoming Quote Request • ID: ${o.id}</span>
             </div>
           `;
         } else if (!o.isPaid && o.invoiceSent) {
           paymentCount++;
           paymentBox.innerHTML += `
-            <div onclick="switchView('dashboard')" class="p-2 border border-amber-100 bg-amber-50/30 rounded-lg flex flex-col gap-0.5 shadow-xs cursor-pointer hover:bg-amber-50">
+            <div class="p-2 border border-amber-100 bg-amber-50/30 rounded-lg flex flex-col gap-0.5 shadow-xs">
               <span class="font-extrabold text-amber-950 truncate">${o.customerName}</span>
               <span class="text-[10px] font-semibold text-amber-700 uppercase">Awaiting Balance: $${o.estimatedTotal.toFixed(2)}</span>
             </div>
@@ -840,7 +933,6 @@
           </div>
         `;
         
-        // Split drops targeting combined pipeline rows cleanly
         if(o.stage === 'pending' || o.stage === 'prepress') {
           document.getElementById('col-pending-combined').innerHTML += cardHtml;
         } else if (o.stage === 'production') {
@@ -850,7 +942,6 @@
         }
       });
 
-      // Render out baseline structural empty states for follow up boxes if empty
       if(outreachCount === 0) outreachBox.innerHTML = `<p class="text-[11px] text-zinc-400 italic font-medium py-2 text-center">All hot incoming leads invoiced ✓</p>`;
       if(paymentCount === 0) paymentBox.innerHTML = `<p class="text-[11px] text-zinc-400 italic font-medium py-2 text-center">No outstanding accounts waiting balance ✓</p>`;
 
@@ -1212,23 +1303,6 @@
       document.getElementById('portal-footer').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
       showToast('Project registered successfully');
-    }
-
-    function resetPortalForNewQuote() {
-      document.getElementById('view-success').classList.add('hidden');
-      document.getElementById('view-estimator').classList.remove('hidden');
-      document.getElementById('portal-footer').classList.remove('hidden');
-      updateFormFields();
-      initializeDefaultDates();
-    }
-
-    function showToast(text) {
-      const t = document.getElementById('toast');
-      if (t) {
-        document.getElementById('toast-text').innerText = text;
-        t.classList.remove('hidden');
-        setTimeout(() => t.classList.add('hidden'), 3500);
-      }
     }
 
     updateFormFields();
