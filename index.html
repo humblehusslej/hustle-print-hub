@@ -310,7 +310,7 @@
 
     // CUSTOMER COMBINATION BUNDLE STATE MEMORY BANK TANK
     let customerManifestItems = [
-      { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', qty: 24, frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout' }
+      { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Midnight Black', qty: 24, frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout' }
     ];
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -368,7 +368,7 @@
     function addBlankManifestItemLine() {
       const uniqueId = 'item-' + Date.now();
       customerManifestItems.push({
-        id: uniqueId, decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'White', qty: 12, frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: ''
+        id: uniqueId, decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'White', qty: 12, frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: ''
       });
       renderManifestInputsGrid();
     }
@@ -416,7 +416,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Method Style</label>
-                <select onchange="updateManifestItemField('${item.id}', 'decorationType', this.value); syncBrandDropdownPlaceholder('${item.id}')" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-bold text-zinc-700 outline-none cursor-pointer">
+                <select onchange="updateManifestItemField('${item.id}', 'decorationType', this.value); syncBrandDropdownPlaceholder('${item.id}')" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-bold text-zinc-700 outline-none">
                   <option value="Screen Printing" ${isSP ? 'selected' : ''}>Screen Printing</option>
                   <option value="Embroidery" ${isEMB ? 'selected' : ''}>Custom Embroidery</option>
                   <option value="Marketing Materials" ${isMKT ? 'selected' : ''}>Marketing Asset</option>
@@ -424,23 +424,23 @@
               </div>
               <div>
                 <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Canvas / Stock</label>
-                <select id="brand-select-${item.id}" onchange="updateManifestItemField('${item.id}', 'brand', this.value)" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-medium text-zinc-700 outline-none cursor-pointer">
+                <select id="brand-select-${item.id}" onchange="updateManifestItemField('${item.id}', 'brand', this.value)" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-medium text-zinc-700 outline-none">
                    <!-- Swapped seamlessly inside renderer step -->
                 </select>
               </div>
               <div>
                 <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Base Finish Color</label>
-                <input type="text" value="${item.color}" oninput="updateManifestItemField('${item.id}', 'color', this.value)" class="w-full p-2 border border-zinc-200 rounded-xl text-xs font-medium text-zinc-800 outline-none" placeholder="e.g. Navy Blue" />
+                <input type="text" value="${item.color}" oninput="updateManifestItemField('${item.id}', 'color', this.value)" class="w-full p-2 border border-zinc-200 rounded-xl text-xs font-medium text-zinc-800" placeholder="e.g. Navy Blue" />
               </div>
             </div>
 
-            <!-- ENHANCED LOGO ON FILE WORDING ROW WITH independent SEPARATED BINDINGS -->
+            <!-- UNIFIED LOGO STORAGE INTERACTIVE TOGGLE BUTTON HUB -->
             ${(isSP || isEMB) ? `
-              <div class="p-3 bg-zinc-50 border border-zinc-100 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                <span class="font-bold text-zinc-600">Do we already have your logo on file for screen printing or embroidery?</span>
+              <div class="p-3 bg-zinc-50 border border-zinc-100 rounded-xl flex items-center justify-between gap-2 text-xs">
+                <span class="font-bold text-zinc-600">Do we already have your layout design logo file on file?</span>
                 <div class="flex space-x-1">
-                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'true')" class="px-3 py-1 rounded-lg text-[11px] font-bold border transition-all ${item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900 shadow-xs' : 'bg-white text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">Yes</button>
-                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'false')" class="px-3 py-1 rounded-lg text-[11px] font-bold border transition-all ${!item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900 shadow-xs' : 'bg-white text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">No (+$30 setup)</button>
+                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'true')" class="px-3 py-1 rounded-lg text-[11px] font-bold border transition-all ${item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-500 border-zinc-200'}">Yes</button>
+                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'false')" class="px-3 py-1 rounded-lg text-[11px] font-bold border transition-all ${!item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-500 border-zinc-200'}">No (+$30 setup)</button>
                 </div>
               </div>
             ` : ''}
@@ -537,7 +537,7 @@
 
         let lineCost = item.qty * lineRate;
         if ((item.decorationType === 'Screen Printing' || item.decorationType === 'Embroidery') && !item.logoOnFile) {
-          lineCost += 30.00; 
+          lineCost += 30.00; // Inject master digitization matrix setup charge
         }
 
         completeBatchQty += item.qty;
@@ -579,7 +579,7 @@
           color: item.color,
           dueDate: document.getElementById('input-date').value,
           totalQuantity: item.qty,
-          estimatedTotal: item.qty * 12.50, 
+          estimatedTotal: item.qty * 12.50, // Compiled clean approximation
           notes: compiledNotes + ` [Logo Logged on File: ${item.logoOnFile ? 'YES' : 'NO'}]`,
           stage: 'pending',
           tasks: [false, false, false, false, false, false],
@@ -590,7 +590,7 @@
 
       saveState();
       document.getElementById('input-name').value = '';
-      customerManifestItems = [{ id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Black', qty: 24, frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '' }];
+      customerManifestItems = [{ id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Black', qty: 24, frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '' }];
       
       document.getElementById('view-estimator').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
