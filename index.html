@@ -104,7 +104,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1">Custom Specs / Operator Notes</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1">Custom Specs / Production Run Instructions</label>
           <textarea id="manual-notes" rows="2" placeholder="Sourcing notes, print dimensions, setup overrides..." class="w-full p-2.5 border border-zinc-300 rounded-lg text-sm outline-none font-medium resize-none focus:border-black"></textarea>
         </div>
         <div class="grid grid-cols-2 gap-3">
@@ -175,7 +175,7 @@
           <!-- COMPACT ARTWORK UPLOAD LINE -->
           <div class="p-4 bg-zinc-50 border border-zinc-100 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-zinc-750">Logo Graphic Sourcing File</label>
+              <label class="block text-xs font-bold uppercase tracking-wider text-zinc-755">Logo Graphic Sourcing File</label>
               <span id="art-preview-label" class="block text-[11px] text-zinc-400 font-medium mt-0.5">No drawing vector attached</span>
             </div>
             <label class="cursor-pointer bg-white border border-zinc-300 text-zinc-700 hover:bg-zinc-50 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all text-center whitespace-nowrap">
@@ -242,7 +242,7 @@
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs">
               <span class="font-bold text-zinc-600">Logo Sizing File History Run</span>
               <div class="flex space-x-2">
-                <button type="button" id="btn-file-yes" onclick="setLogoOnFile(true)" class="px-4 py-1.5 rounded-lg border border-zinc-800 text-[11px] font-bold bg-zinc-900 text-white">Yes</button>
+                <button type="button" id="btn-file-yes" onclick="setLogoOnFile(true)" class="px-4 py-1.5 rounded-lg border border-zinc-300 text-[11px] font-bold bg-zinc-900 text-white">Yes</button>
                 <button type="button" id="btn-file-no" onclick="setLogoOnFile(false)" class="px-4 py-1.5 rounded-lg border border-zinc-200 text-[11px] font-bold bg-zinc-100 text-zinc-700">No ($30 setup)</button>
               </div>
             </div>
@@ -403,23 +403,24 @@
               <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded-full" id="count-outreach">0</span>
             </div>
             
-            <!-- NEW MANUAL LEAD ENTRY INLINE ACCORDION LOG COMPONENT -->
-            <div class="bg-zinc-50 border border-zinc-200 p-2.5 rounded-xl space-y-2">
-              <button onclick="toggleInlineLeadForm()" class="w-full text-left text-[10px] font-bold uppercase text-zinc-700 tracking-wide flex justify-between items-center">
+            <!-- HIGH-CONTRAST INLINE HOT LEAD ENTRY MATRICES -->
+            <div class="bg-zinc-100 border-2 border-zinc-300 p-3 rounded-xl space-y-2.5 shadow-inner">
+              <button onclick="toggleInlineLeadForm()" class="w-full text-left text-[11px] font-extrabold uppercase text-zinc-800 tracking-wide flex justify-between items-center">
                 <span>➕ Log Manual Hot Lead</span>
-                <span id="lead-form-indicator">▼</span>
+                <span id="lead-form-indicator" class="text-xs text-zinc-400">▼</span>
               </button>
               
-              <div id="inline-lead-form" class="hidden space-y-2 pt-1 border-t border-zinc-200">
-                <input type="text" id="lead-name" placeholder="Contact Name" class="w-full p-1.5 border border-zinc-300 rounded text-[11px] font-medium outline-none focus:border-black" />
-                <input type="text" id="lead-business" placeholder="Business / Organization Name" class="w-full p-1.5 border border-zinc-300 rounded text-[11px] font-medium outline-none focus:border-black" />
-                <input type="tel" id="lead-phone" placeholder="Phone Number" class="w-full p-1.5 border border-zinc-300 rounded text-[11px] font-medium outline-none focus:border-black" />
-                <input type="email" id="lead-email" placeholder="Email Address" class="w-full p-1.5 border border-zinc-300 rounded text-[11px] font-medium outline-none focus:border-black" />
-                <button onclick="submitManualOutreachLead()" class="w-full bg-red-600 hover:bg-red-700 text-white text-[10px] font-bold py-1 rounded transition-colors uppercase tracking-wider">Save Lead Note</button>
+              <div id="inline-lead-form" class="hidden space-y-2 pt-2 border-t-2 border-dashed border-zinc-300">
+                <input type="text" id="lead-name" placeholder="Contact Name" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black focus:ring-1 focus:ring-black" />
+                <input type="text" id="lead-business" placeholder="Business / Organization" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black focus:ring-1 focus:ring-black" />
+                <input type="tel" id="lead-phone" placeholder="Phone Number" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black focus:ring-1 focus:ring-black" />
+                <input type="email" id="lead-email" placeholder="Email Address" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black focus:ring-1 focus:ring-black" />
+                <textarea id="lead-notes" rows="2" placeholder="Scribble client needs or pricing details..." class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none resize-none focus:border-black focus:ring-1 focus:ring-black"></textarea>
+                <button onclick="submitManualOutreachLead()" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs font-extrabold py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">Save Lead Note</button>
               </div>
             </div>
 
-            <div id="box-followup-outreach" class="space-y-2 text-xs font-medium text-zinc-500 max-h-[300px] overflow-y-auto"></div>
+            <div id="box-followup-outreach" class="space-y-3 text-xs font-medium text-zinc-500 max-h-[380px] overflow-y-auto pt-1"></div>
           </div>
 
           <!-- PANEL B: AWAITING PAYMENT -->
@@ -434,7 +435,7 @@
 
       </div>
 
-      <!-- LOWER PORTION: VISUAL TARGET DEADLINE CALENDAR MATRIX LAYOUT FRAME -->
+      <!-- LOWER PORTION: VISUAL TARGET DEADLINE CALENDAR MATRIX -->
       <div class="bg-white border border-zinc-200 p-5 rounded-2xl shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b pb-3 gap-2">
           <div>
@@ -484,7 +485,6 @@
       { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-06-18', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], invoiceSent: false, isPaid: false, artData: '' }
     ];
 
-    // Separate mini tank tracker for manually typed custom sidebar lead records
     let appManualLeads = [];
 
     let currentArtBase64 = '';
@@ -609,7 +609,6 @@
       document.getElementById('manual-form').reset();
     }
 
-    // INLINE SIDEBAR LEAD TRACKER TOGGLE
     function toggleInlineLeadForm() {
       const box = document.getElementById('inline-lead-form');
       const ind = document.getElementById('lead-form-indicator');
@@ -622,12 +621,12 @@
       }
     }
 
-    // SUBMIT DIRECT SIDEBAR CUSTOM LEAD NOTE
     function submitManualOutreachLead() {
       const name = document.getElementById('lead-name').value.trim();
       const biz = document.getElementById('lead-business').value.trim();
       const phone = document.getElementById('lead-phone').value.trim();
       const email = document.getElementById('lead-email').value.trim();
+      const notes = document.getElementById('lead-notes').value.trim();
 
       if (!name) {
         alert('Please fill out at least a Contact Name to store an active lead card.');
@@ -639,17 +638,18 @@
         name: name,
         businessName: biz || 'Individual Account',
         phone: phone || 'No Phone Logged',
-        email: email || 'No Email Logged'
+        email: email || 'No Email Logged',
+        customerNotes: notes || 'No custom layout requests logged yet.'
       };
 
       appManualLeads.unshift(freshLead);
       saveState();
       
-      // Clear inputs out
       document.getElementById('lead-name').value = '';
       document.getElementById('lead-business').value = '';
       document.getElementById('lead-phone').value = '';
       document.getElementById('lead-email').value = '';
+      document.getElementById('lead-notes').value = '';
       
       toggleInlineLeadForm();
       renderDashboard();
@@ -657,11 +657,11 @@
     }
 
     function purgeLeadRecord(leadUid) {
-      if (confirm('Remove this outreach card entry from your list?')) {
+      if (confirm('⚠️ Are you sure you want to completely delete this follow-up record out of your lead book?')) {
         appManualLeads = appManualLeads.filter(l => l.uid !== leadUid);
         saveState();
         renderDashboard();
-        showToast('Lead note removed');
+        showToast('🗑️ Lead record deleted successfully');
       }
     }
 
@@ -824,30 +824,44 @@
 
       const baseToday = new Date('2026-06-15T00:00:00'); 
 
-      // FIRST: LOOP AND INJECT MANUALLY TYPE OUTREACH LEAD CARDS
+      // POPULATE UPGRADED HIGH-VISIBILITY MANUAL FOLLOW-UP LEAD CARDS
       appManualLeads.forEach(lead => {
         outreachCount++;
         outreachBox.innerHTML += `
-          <div class="p-2.5 border border-zinc-200 bg-white rounded-xl shadow-xs space-y-1 group relative">
-            <button onclick="purgeLeadRecord('${lead.uid}')" class="absolute top-1 right-2 text-zinc-300 hover:text-red-600 text-xs font-bold">×</button>
-            <div class="font-extrabold text-zinc-900 leading-tight">${lead.name}</div>
-            <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wide truncate">${lead.businessName}</div>
-            <div class="pt-1 mt-0.5 border-t border-zinc-100 flex flex-wrap gap-2 text-[10px] font-semibold">
-              <a href="tel:${lead.phone}" class="text-red-600 hover:underline">📞 ${lead.phone}</a>
-              <a href="mailto:${lead.email}" class="text-zinc-500 hover:underline truncate max-w-[130px]">✉️ ${lead.email}</a>
+          <div class="p-3 border border-zinc-200 bg-white rounded-xl shadow-xs space-y-2.5 flex flex-col justify-between">
+            <div class="space-y-1">
+              <div class="flex justify-between items-start gap-1">
+                <span class="font-extrabold text-zinc-900 leading-tight text-sm">${lead.name}</span>
+                <span class="text-[9px] bg-zinc-100 border text-zinc-400 font-mono px-1 rounded uppercase tracking-wider">${lead.uid}</span>
+              </div>
+              <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider truncate">${lead.businessName}</div>
+            </div>
+            
+            <!-- HIGH-CONTRAST HIGHLIGHTED CUSTOMER SPEC NOTES BOX -->
+            <div class="text-[11px] bg-amber-50/60 border border-amber-200 text-amber-900 p-2.5 font-medium leading-normal rounded-xl select-text">
+              ${lead.customerNotes || 'No notes logged yet.'}
+            </div>
+
+            <!-- BOLD ACTION FOOTER WITH MANUAL PURGE TRIGGER -->
+            <div class="pt-2 border-t border-zinc-100 flex items-center justify-between gap-2">
+              <div class="flex gap-2 text-[10px] font-bold">
+                <a href="tel:${lead.phone}" class="text-red-600 hover:underline">📞 Call</a>
+                <a href="mailto:${lead.email}" class="text-zinc-500 hover:underline">✉️ Email</a>
+              </div>
+              <button onclick="purgeLeadRecord('${lead.uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded text-[9px] border border-red-100 transition-colors uppercase tracking-wider">
+                🗑️ Delete Lead
+              </button>
             </div>
           </div>
         `;
       });
 
-      // SECOND: LOOP PRODUCTION SYSTEM INTAKES
       appOrders.forEach(o => {
         const orderTargetDate = new Date(o.dueDate + 'T00:00:00');
         const distanceTime = orderTargetDate.getTime() - baseToday.getTime();
         const activeDaysRemaining = Math.ceil(distanceTime / (1000 * 3600 * 24));
         const isPriorityRushPriority = activeDaysRemaining <= 5 && o.stage !== 'ready';
 
-        // Automated triggers populate system pipeline logs alongside manual entries
         if (o.stage === 'pending' && !o.invoiceSent) {
           outreachCount++;
           outreachBox.innerHTML += `
@@ -1303,6 +1317,15 @@
       document.getElementById('portal-footer').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
       showToast('Project registered successfully');
+    }
+
+    function showToast(text) {
+      const t = document.getElementById('toast');
+      if (t) {
+        document.getElementById('toast-text').innerText = text;
+        t.classList.remove('hidden');
+        setTimeout(() => t.classList.add('hidden'), 3500);
+      }
     }
 
     updateFormFields();
