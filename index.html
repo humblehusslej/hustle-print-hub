@@ -21,7 +21,7 @@
 </head>
 <body class="bg-gradient-halftone text-black font-sans min-h-screen flex flex-col antialiased">
 
-  <!-- TOP HUB NAVIGATION BAR (UPDATED TO HUMBLE HUSSLE PRINT SHOP) -->
+  <!-- TOP HUB NAVIGATION BAR -->
   <header class="bg-black text-white p-5 border-b-4 border-black sticky top-0 z-50 shadow-2xl">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center space-x-3">
@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="flex items-center space-x-4">
-        <div id="admin-nav-container" class="hidden bg-zinc-950 p-1 border-2 border-zinc-800 shadow-inner">
+        <div id="admin-nav-container" class="hidden bg-zinc-950 p-1 border-2 border-zinc-800 rounded-none flex shadow-inner">
           <button onclick="switchView('estimator')" id="nav-estimator" class="px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all bg-white text-black">Estimator</button>
           <button onclick="switchView('dashboard')" id="nav-dashboard" class="px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all text-zinc-400 hover:text-white">Dashboard (<span id="queue-count">0</span>)</button>
         </div>
@@ -73,7 +73,7 @@
         <form id="estimator-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
           <div>
             <label class="block text-xs font-black uppercase tracking-widest text-black mb-2">Customer Name / Organization</label>
-            <input type="text" id="input-name" required placeholder="e.g. Hussle Cafe" class="w-full px-4 py-3 border-4 border-black rounded-none outline-none font-bold focus:bg-zinc-50 text-sm text-black placeholder-zinc-400" />
+            <input type="text" id="input-name" required placeholder="e.g. Humble Cafe" class="w-full px-4 py-3 border-4 border-black rounded-none outline-none font-bold focus:bg-zinc-50 text-sm text-black placeholder-zinc-400" />
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -287,7 +287,7 @@
       </div>
     </div>
 
-    <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD -->
+    <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD (RESTORED RUN MACHINE) -->
     <div id="view-dashboard" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
       <div class="border-4 border-black rounded-none p-4 min-h-[500px] flex flex-col bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
         <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-4"><span class="text-xs font-black uppercase tracking-widest text-black">Pending Review</span></div>
@@ -346,10 +346,13 @@
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true') {
       isAdminMode = true;
-      if (document.getElementById('admin-nav-container')) {
-        document.getElementById('admin-nav-container').classList.remove('hidden');
-      }
-      document.getElementById('hub-subtitle').innerText = "Production Command Hub";
+      // Force extraction layer check on container load run
+      window.addEventListener('DOMContentLoaded', () => {
+        if (document.getElementById('admin-nav-container')) {
+          document.getElementById('admin-nav-container').classList.remove('hidden');
+        }
+        document.getElementById('hub-subtitle').innerText = "Production Command Hub";
+      });
     }
 
     if (localStorage.getItem('hpc_static_orders')) {
@@ -424,6 +427,32 @@
         document.getElementById('nav-dashboard').className = "px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all bg-white text-black";
         document.getElementById('nav-estimator').className = "px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-all text-zinc-400 hover:text-white";
         renderDashboard();
+      }
+    }
+
+    // INTERACTIVE PIPELINE CORE AUTOMATION RUN FUNCTIONS (RESTORED ENGINE)
+    function toggleTask(orderId, taskIndex) {
+      const order = appOrders.find(o => o.id === orderId);
+      if (order) {
+        order.tasks[taskIndex] = !order.tasks[taskIndex];
+        saveState();
+        renderDashboard();
+        showToast('Production step status altered verified');
+      }
+    }
+
+    function advanceJob(orderId) {
+      const order = appOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      const stages = ['pending', 'prepress', 'production', 'ready'];
+      const currentIndex = stages.indexOf(order.stage);
+      
+      if (currentIndex !== -1 && currentIndex < stages.length - 1) {
+        order.stage = stages[currentIndex + 1];
+        saveState();
+        renderDashboard();
+        showToast(`Job ${orderId} moved to ${order.stage.toUpperCase()} channel`);
       }
     }
 
@@ -636,15 +665,15 @@
       document.getElementById('summary-qty').innerText = qty + " items";
       document.getElementById('summary-brand').innerText = brand ? brand.split(' ')[0] : 'Gildan';
 
-      const spRetail = { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)': 8.75, 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other Sourced Apparel': 10.00 };
+      const spRetail = { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)', text: 'Next Level (Mid-Tier)', 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other Sourced Apparel': 10.00 };
       const embRetail = { 'Hats (Adjustable / Flexfit)': 10.00, 'Polos (Professional Blank)': 15.00, 'Hoodies (Midweight Layering)': 22.00, 'Jackets (Outerwear Protection)': 42.00, 'Other Sourced Embroidery': 12.00 };
 
       let blankRetail = 0;
       let decoFee = 0;
       let isCustomQuoteItem = false;
 
-      document.getElementById('rate-wrapper').classList.remove('hidden');
-      document.getElementById('total-wrapper').innerHTML = `$<span id="summary-total">0.00</span>`;
+      if(document.getElementById('rate-wrapper')) document.getElementById('rate-wrapper').classList.remove('hidden');
+      if(document.getElementById('total-wrapper')) document.getElementById('total-wrapper').innerHTML = `$<span id="summary-total">0.00</span>`;
 
       if (type === 'Screen Printing') {
         blankRetail = spRetail[brand] || 10.00;
@@ -674,8 +703,8 @@
       if (type === 'Embroidery' && !logoOnFile) total += 30.00;
 
       if (isCustomQuoteItem) {
-        document.getElementById('rate-wrapper').classList.add('hidden');
-        document.getElementById('total-wrapper').innerHTML = `<span class="text-xs font-black uppercase tracking-wider text-zinc-400">Review Required</span>`;
+        if(document.getElementById('rate-wrapper')) document.getElementById('rate-wrapper').classList.add('hidden');
+        if(document.getElementById('total-wrapper')) document.getElementById('total-wrapper').innerHTML = `<span class="text-xs font-black uppercase tracking-wider text-zinc-400">Review Required</span>`;
       } else {
         if(document.getElementById('summary-rate')) document.getElementById('summary-rate').innerText = rate.toFixed(2);
         if(document.getElementById('summary-total')) document.getElementById('summary-total').innerText = total.toFixed(2);
@@ -787,15 +816,6 @@
       initializeDefaultDates();
     }
 
-    function showToast(text) {
-      const t = document.getElementById('toast');
-      if (t) {
-        document.getElementById('toast-text').innerText = text;
-        t.classList.remove('hidden');
-        setTimeout(() => t.classList.add('hidden'), 3500);
-      }
-    }
-
     function renderDashboard() {
       if(!document.getElementById('col-pending')) return;
       document.getElementById('col-pending').innerHTML = '';
@@ -814,7 +834,7 @@
         labels.forEach((label, index) => {
           const isDone = o.tasks[index];
           taskButtons += `
-            <button class="w-full text-left text-[10px] p-1.5 rounded-none font-bold border-2 border-black flex items-center space-x-2 transition-all ${isDone ? 'bg-black text-white' : 'bg-slate-50 text-slate-500'}">
+            <button onclick="toggleTask('${o.id}', ${index})" class="w-full text-left text-[10px] p-1.5 rounded-none font-bold border-2 border-black flex items-center space-x-2 transition-all ${isDone ? 'bg-black text-white' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}">
               <span>${isDone ? '✓' : '○'}</span><span class="truncate">${label}</span>
             </button>
           `;
@@ -822,11 +842,12 @@
 
         let cardThumbnailHtml = o.artData ? 
           `<div class="mt-2 border-2 border-black bg-slate-50 p-1 flex justify-center items-center h-16 w-full">
-            <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
+            <img src="${o.artData}" class="h-full object-contain max-w-full" />
            </div>` : '';
 
+        const isLastStage = o.stage === 'ready';
         const cardHtml = `
-          <div class="bg-white border-4 border-black rounded-none p-4 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] space-y-3">
+          <div class="bg-white border-4 border-black rounded-none p-4 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] space-y-3 text-black">
             <div class="flex justify-between items-center text-[10px] font-black">
               <span class="bg-black text-white px-2 py-0.5 rounded-none">${o.id}</span>
               <span class="text-zinc-500">${o.dueDate}</span>
@@ -841,6 +862,7 @@
             <div class="grid grid-cols-2 gap-1 pt-1 border-t-2 border-zinc-100">
               ${taskButtons}
             </div>
+            ${!isLastStage ? `<button onclick="advanceJob('${o.id}')" class="w-full bg-black hover:bg-zinc-950 text-white font-black py-2 rounded-none text-xs transition-colors flex items-center justify-center space-x-1 border-2 border-black mt-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Advance Stage →</button>` : ''}
           </div>
         `;
         const targetCol = document.getElementById(`col-${o.stage}`);
