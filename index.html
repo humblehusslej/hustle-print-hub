@@ -25,7 +25,8 @@
   <header class="bg-black text-white p-5 border-b-4 border-black sticky top-0 z-50 shadow-2xl">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center space-x-3">
-        <div class="bg-white text-black px-4 py-1.5 font-black text-2xl rounded-none transform -rotate-2 border-2 border-white shadow-[3px_3px_0px_0px_rgba(255,255,255,0.2)] tracking-tighter">H</div>
+        <!-- SECRET TRIPLE TAP TOGGLE BUTTON PORTAL WIRED DIRECTLY HERE -->
+        <div onclick="handleSecretShopClick()" class="bg-white text-black px-4 py-1.5 font-black text-2xl rounded-none transform -rotate-2 border-2 border-white shadow-[3px_3px_0px_0px_rgba(255,255,255,0.2)] tracking-tighter cursor-pointer select-none">H</div>
         <div>
           <h1 class="text-xl font-black tracking-tighter uppercase">Humble Hussle Print Shop</h1>
           <p id="hub-subtitle" class="text-[10px] text-zinc-400 font-black uppercase tracking-widest">Project Estimator Portal</p>
@@ -133,7 +134,7 @@
           <!-- PUBLIC CATALOG SOURCING NOTICES -->
           <div id="catalog-notice-screenprint" class="p-4 bg-zinc-50 border-2 border-black text-xs text-zinc-600 font-bold leading-relaxed">
             <span class="font-black text-black block uppercase tracking-wide mb-0.5">Looking for specific styles?</span>
-            We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-black underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-black underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
+            We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
           </div>
 
           <!-- DYNAMIC OTTOCAP CATALOG BANNER LINK -->
@@ -287,7 +288,7 @@
       </div>
     </div>
 
-    <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD (RESTORED RUN MACHINE) -->
+    <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD -->
     <div id="view-dashboard" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
       <div class="border-4 border-black rounded-none p-4 min-h-[500px] flex flex-col bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
         <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-4"><span class="text-xs font-black uppercase tracking-widest text-black">Pending Review</span></div>
@@ -336,17 +337,30 @@
   <script>
     let appOrders = [
       { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4, '3XL': 0, '4XL': 0 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks. [Placement: Full Front Layout Print]', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
-      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
+      { id: 'HPC-7412', customerName: 'West Texas Athletics', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
     ];
 
     let currentArtBase64 = '';
     let logoOnFile = false;
     let isAdminMode = false;
+    let clickCountTracker = 0;
+
+    // FORCED OVERRIDE BACKUP BYPASS TRIGGER ENGINE
+    function handleSecretShopClick() {
+      clickCountTracker++;
+      if (clickCountTracker >= 3) {
+        isAdminMode = true;
+        document.getElementById('admin-nav-container').classList.remove('hidden');
+        document.getElementById('hub-subtitle').innerText = "Production Command Hub";
+        switchView('dashboard');
+        showToast('🔓 Shop Dashboard Bypass Override Authorized');
+        clickCountTracker = 0;
+      }
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true') {
       isAdminMode = true;
-      // Force extraction layer check on container load run
       window.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('admin-nav-container')) {
           document.getElementById('admin-nav-container').classList.remove('hidden');
@@ -430,7 +444,6 @@
       }
     }
 
-    // INTERACTIVE PIPELINE CORE AUTOMATION RUN FUNCTIONS (RESTORED ENGINE)
     function toggleTask(orderId, taskIndex) {
       const order = appOrders.find(o => o.id === orderId);
       if (order) {
@@ -665,7 +678,7 @@
       document.getElementById('summary-qty').innerText = qty + " items";
       document.getElementById('summary-brand').innerText = brand ? brand.split(' ')[0] : 'Gildan';
 
-      const spRetail = { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)', text: 'Next Level (Mid-Tier)', 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other Sourced Apparel': 10.00 };
+      const spRetail = { 'Gildan (Economical)': 6.25, 'Next Level (Mid-Tier)': 8.75, 'Bella+Canvas (Mid-Tier)': 8.75, 'Specialty Blank (Heavyweight / Vintage Boxy)': 15.00, 'Other Sourced Apparel': 10.00 };
       const embRetail = { 'Hats (Adjustable / Flexfit)': 10.00, 'Polos (Professional Blank)': 15.00, 'Hoodies (Midweight Layering)': 22.00, 'Jackets (Outerwear Protection)': 42.00, 'Other Sourced Embroidery': 12.00 };
 
       let blankRetail = 0;
@@ -814,6 +827,15 @@
       document.getElementById('portal-footer').classList.remove('hidden');
       updateFormFields();
       initializeDefaultDates();
+    }
+
+    function showToast(text) {
+      const t = document.getElementById('toast');
+      if (t) {
+        document.getElementById('toast-text').innerText = text;
+        t.classList.remove('hidden');
+        setTimeout(() => t.classList.add('hidden'), 3500);
+      }
     }
 
     function renderDashboard() {
