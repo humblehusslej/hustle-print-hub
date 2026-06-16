@@ -25,7 +25,7 @@
   <header class="bg-black text-white p-5 border-b-4 border-black sticky top-0 z-50 shadow-2xl">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center space-x-3">
-        <!-- SECRET TRIPLE TAP TOGGLE BUTTON PORTAL WIRED DIRECTLY HERE -->
+        <!-- SECRET TRIPLE TAP TOGGLE BUTTON PORTAL -->
         <div onclick="handleSecretShopClick()" class="bg-white text-black px-4 py-1.5 font-black text-2xl rounded-none transform -rotate-2 border-2 border-white shadow-[3px_3px_0px_0px_rgba(255,255,255,0.2)] tracking-tighter cursor-pointer select-none">H</div>
         <div>
           <h1 class="text-xl font-black tracking-tighter uppercase">Humble Hussle Print Shop</h1>
@@ -134,7 +134,7 @@
           <!-- PUBLIC CATALOG SOURCING NOTICES -->
           <div id="catalog-notice-screenprint" class="p-4 bg-zinc-50 border-2 border-black text-xs text-zinc-600 font-bold leading-relaxed">
             <span class="font-black text-black block uppercase tracking-wide mb-0.5">Looking for specific styles?</span>
-            We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
+            We partner with premium wholesale suppliers. Browse catalogs via <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-black underline text-black">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-black underline text-black">CottonCollective.org</a>, choose "Other" above, and input your style code numbers in the notes.
           </div>
 
           <!-- DYNAMIC OTTOCAP CATALOG BANNER LINK -->
@@ -225,7 +225,7 @@
           <!-- TURNAROUND NOTIFICATION BOX -->
           <div id="date-turnaround-notice" class="p-4 rounded-none border-4 font-black text-xs leading-relaxed transition-all hidden"></div>
 
-          <!-- QUANTITY TRACKER MATRIX BOARD WITH FULL 7-TIER ROW -->
+          <!-- QUANTITY TRACKER MATRIX BOARD -->
           <div class="p-4 bg-zinc-50 border-4 border-black rounded-none space-y-3">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
               <label id="matrix-label" class="text-xs font-black uppercase tracking-widest text-black">Garment Sizing Volumes</label>
@@ -336,27 +336,14 @@
 
   <script>
     let appOrders = [
-      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4, '3XL': 0, '4XL': 0 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks. [Placement: Full Front Layout Print]', stage: 'pending', tasks: [true, true, true, true, false, false], artData: '' },
-      { id: 'HPC-7412', customerName: 'West Texas Athletics', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], artData: '' }
+      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4, '3XL': 0, '4XL': 0 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks. [Placement: Full Front Layout Print]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '' },
+      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], invoiceSent: false, isPaid: false, artData: '' }
     ];
 
     let currentArtBase64 = '';
     let logoOnFile = false;
     let isAdminMode = false;
     let clickCountTracker = 0;
-
-    // FORCED OVERRIDE BACKUP BYPASS TRIGGER ENGINE
-    function handleSecretShopClick() {
-      clickCountTracker++;
-      if (clickCountTracker >= 3) {
-        isAdminMode = true;
-        document.getElementById('admin-nav-container').classList.remove('hidden');
-        document.getElementById('hub-subtitle').innerText = "Production Command Hub";
-        switchView('dashboard');
-        showToast('🔓 Shop Dashboard Bypass Override Authorized');
-        clickCountTracker = 0;
-      }
-    }
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true') {
@@ -444,13 +431,55 @@
       }
     }
 
+    function handleSecretShopClick() {
+      clickCountTracker++;
+      if (clickCountTracker >= 3) {
+        isAdminMode = true;
+        document.getElementById('admin-nav-container').classList.remove('hidden');
+        document.getElementById('hub-subtitle').innerText = "Production Command Hub";
+        switchView('dashboard');
+        showToast('🔓 Shop Dashboard Bypass Override Authorized');
+        clickCountTracker = 0;
+      }
+    }
+
     function toggleTask(orderId, taskIndex) {
       const order = appOrders.find(o => o.id === orderId);
       if (order) {
         order.tasks[taskIndex] = !order.tasks[taskIndex];
         saveState();
         renderDashboard();
-        showToast('Production step status altered verified');
+        showToast('Production step updated');
+      }
+    }
+
+    // RESTORED FINANCIAL SPEC TOGGLE ROUTINES
+    function toggleInvoiceStatus(orderId) {
+      const order = appOrders.find(o => o.id === orderId);
+      if (order) {
+        order.invoiceSent = !order.invoiceSent;
+        saveState();
+        renderDashboard();
+        showToast(`Order ${orderId} invoice marker updated`);
+      }
+    }
+
+    function togglePaymentStatus(orderId) {
+      const order = appOrders.find(o => o.id === orderId);
+      if (order) {
+        order.isPaid = !order.isPaid;
+        saveState();
+        renderDashboard();
+        showToast(`Order ${orderId} financial ledger updated`);
+      }
+    }
+
+    function cancelOrder(orderId) {
+      if (confirm(`⚠️ Are you sure you want to completely SCRUB and delete job card ${orderId} out of the system? This cannot be undone.`)) {
+        appOrders = appOrders.filter(o => o.id !== orderId);
+        saveState();
+        renderDashboard();
+        showToast(`🗑️ Job Card ${orderId} deleted permanently`);
       }
     }
 
@@ -465,7 +494,7 @@
         order.stage = stages[currentIndex + 1];
         saveState();
         renderDashboard();
-        showToast(`Job ${orderId} moved to ${order.stage.toUpperCase()} channel`);
+        showToast(`Job ${orderId} advanced into ${order.stage.toUpperCase()}`);
       }
     }
 
@@ -806,6 +835,8 @@
         notes: orderNotes,
         stage: 'pending',
         tasks: [false, false, false, false, false, false],
+        invoiceSent: false,
+        isPaid: false,
         artData: currentArtBase64
       };
 
@@ -868,8 +899,10 @@
            </div>` : '';
 
         const isLastStage = o.stage === 'ready';
+        
+        // DYNAMIC FINANCIAL HUB RENDER ROW
         const cardHtml = `
-          <div class="bg-white border-4 border-black rounded-none p-4 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] space-y-3 text-black">
+          <div class="bg-white border-4 border-black rounded-none p-4 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] space-y-3 text-black ${o.isPaid ? 'border-emerald-500 shadow-[5px_5px_0px_0px_#10b981]' : ''}">
             <div class="flex justify-between items-center text-[10px] font-black">
               <span class="bg-black text-white px-2 py-0.5 rounded-none">${o.id}</span>
               <span class="text-zinc-500">${o.dueDate}</span>
@@ -879,12 +912,39 @@
               <p class="text-xs text-zinc-500 mt-1 font-bold uppercase">${o.totalQuantity}x Items Run</p>
               <span class="text-[10px] font-black text-zinc-400 block mt-0.5 uppercase tracking-wide bg-zinc-100 px-2 py-0.5 rounded inline-block truncate max-w-full">${o.brand}</span>
             </div>
+            
             ${cardThumbnailHtml}
+            
             <div class="text-[11px] bg-zinc-50 border border-zinc-200 p-2 text-zinc-600 font-bold break-words max-w-full leading-normal">${o.notes}</div>
+            
             <div class="grid grid-cols-2 gap-1 pt-1 border-t-2 border-zinc-100">
               ${taskButtons}
             </div>
-            ${!isLastStage ? `<button onclick="advanceJob('${o.id}')" class="w-full bg-black hover:bg-zinc-950 text-white font-black py-2 rounded-none text-xs transition-colors flex items-center justify-center space-x-1 border-2 border-black mt-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Advance Stage →</button>` : ''}
+
+            <!-- RESTORED FINANCIAL HUB CARD OVERLAYS -->
+            <div class="pt-2 mt-1 border-t border-dashed border-zinc-300 grid grid-cols-2 gap-1.5 text-[10px]">
+              <button onclick="toggleInvoiceStatus('${o.id}')" class="p-1 rounded-none font-black text-center border uppercase transition-all ${o.invoiceSent ? 'bg-zinc-900 text-white border-black' : 'bg-white text-zinc-400 border-zinc-300 hover:bg-zinc-50'}">
+                ${o.invoiceSent ? '📄 Invoice Sent' : '📄 Send Invoice'}
+              </button>
+              <button onclick="togglePaymentStatus('${o.id}')" class="p-1 rounded-none font-black text-center border uppercase transition-all ${o.isPaid ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100'}">
+                ${o.isPaid ? '💰 Paid ✓' : '⏳ Unpaid'}
+              </button>
+            </div>
+
+            <div class="pt-2 border-t-2 border-black flex items-center justify-between text-xs gap-1.5">
+              <div>
+                <span class="text-[9px] text-zinc-400 block uppercase font-black tracking-wider">Estimated Total</span>
+                <span class="text-xs font-black text-black">${o.estimatedTotal ? '$' + o.estimatedTotal.toFixed(2) : 'Review Req'}</span>
+              </div>
+              <div class="flex items-center space-x-1 flex-1 justify-end">
+                <button onclick="cancelOrder('${o.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-black p-2 text-[10px] uppercase tracking-wider border border-red-200 transition-colors">
+                  Cancel ×
+                </button>
+                ${!isLastStage ? `<button onclick="advanceJob('${o.id}')" class="bg-black hover:bg-zinc-950 text-white font-black py-2 px-3 text-[10px] uppercase tracking-wider transition-colors flex items-center space-x-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  Next →
+                </button>` : ''}
+              </div>
+            </div>
           </div>
         `;
         const targetCol = document.getElementById(`col-${o.stage}`);
