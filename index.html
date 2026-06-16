@@ -242,8 +242,8 @@
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs">
               <span class="font-bold text-zinc-600">Logo Sizing File History Run</span>
               <div class="flex space-x-2">
-                <button type="button" id="btn-file-yes" onclick="setLogoOnFile(true)" class="px-4 py-1.5 rounded-lg border border-zinc-300 text-[11px] font-bold bg-zinc-900 text-white">Yes</button>
-                <button type="button" id="btn-file-no" onclick="setLogoOnFile(false)" class="px-4 py-1.5 rounded-lg border border-zinc-300 text-[11px] font-bold bg-zinc-100 text-zinc-700">No ($30 setup)</button>
+                <button type="button" id="btn-file-yes" onclick="setLogoOnFile(true)" class="px-4 py-1.5 rounded-lg border border-zinc-800 text-[11px] font-bold bg-zinc-900 text-white">Yes</button>
+                <button type="button" id="btn-file-no" onclick="setLogoOnFile(false)" class="px-4 py-1.5 rounded-lg border border-zinc-200 text-[11px] font-bold bg-zinc-100 text-zinc-700">No ($30 setup)</button>
               </div>
             </div>
             <div>
@@ -366,24 +366,74 @@
       </div>
     </div>
 
-    <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD -->
-    <div id="view-dashboard" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
-      <div class="border border-zinc-200 rounded-2xl p-4 min-h-[500px] flex flex-col bg-white shadow-sm">
-        <div class="flex justify-between items-center border-b border-zinc-200 pb-2 mb-4"><span class="text-xs font-bold uppercase tracking-wider text-zinc-800">Pending Review</span></div>
-        <div id="col-pending" class="space-y-3 flex-1"></div>
+    <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD (UPDATED WITH COMBINED PANELS) -->
+    <div id="view-dashboard" class="hidden space-y-8 animate-fadeIn">
+      
+      <!-- TOP PORTION: BACKLOG PIPELINE & FOLLOW-UP DECK SIDEBAR -->
+      <div class="grid grid-cols-1 xl:grid-cols-4 gap-6 items-start">
+        
+        <!-- LEFT THREE COLUMNS: THE MAIN MANUFACTURE PIPELINE PIPELINE -->
+        <div class="xl:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+          <div class="border border-zinc-200 rounded-2xl p-4 min-h-[450px] flex flex-col bg-white shadow-sm">
+            <div class="flex justify-between items-center border-b border-zinc-200 pb-2 mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-zinc-800">1. Pending / Pre-Press</span>
+            </div>
+            <div id="col-pending-combined" class="space-y-3 flex-1"></div>
+          </div>
+          <div class="border border-zinc-200 rounded-2xl p-4 min-h-[450px] flex flex-col bg-white shadow-sm">
+            <div class="flex justify-between items-center border-b border-zinc-200 pb-2 mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-zinc-800">2. In Production</span>
+            </div>
+            <div id="col-production-combined" class="space-y-3 flex-1"></div>
+          </div>
+          <div class="border border-zinc-200 rounded-2xl p-4 min-h-[450px] flex flex-col bg-zinc-900 text-white shadow-sm">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-2 mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-zinc-300">3. Ready / Complete</span>
+            </div>
+            <div id="col-ready-combined" class="space-y-3 flex-1"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN SIDE-DECK: LEAD ASSIGNMENTS & FOLLOW-UP MATRIX LISTS -->
+        <div class="space-y-4">
+          <!-- PANEL A: CLIENTS THAT NEED OUTREACH (STALE INTAKES >48 HOURS OLD) -->
+          <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
+            <div class="border-b pb-2 flex justify-between items-center">
+              <span class="text-xs font-extrabold uppercase tracking-wide text-red-600 block">📞 Needs Call / Outreach</span>
+              <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded-full" id="count-outreach">0</span>
+            </div>
+            <div id="box-followup-outreach" class="space-y-2 text-xs font-medium text-zinc-500"></div>
+          </div>
+
+          <!-- PANEL B: AWAITING PAYMENT (INVOICED BUT UNPAID) -->
+          <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
+            <div class="border-b pb-2 flex justify-between items-center">
+              <span class="text-xs font-extrabold uppercase tracking-wide text-amber-600 block">⏳ Awaiting Payment Ledger</span>
+              <span class="text-[10px] bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded-full" id="count-payment">0</span>
+            </div>
+            <div id="box-followup-payment" class="space-y-2 text-xs font-medium text-zinc-500"></div>
+          </div>
+        </div>
+
       </div>
-      <div class="border border-zinc-200 rounded-2xl p-4 min-h-[500px] flex flex-col bg-white shadow-sm">
-        <div class="flex justify-between items-center border-b border-zinc-200 pb-2 mb-4"><span class="text-xs font-bold uppercase tracking-wider text-zinc-800">Pre-Press / Proofing</span></div>
-        <div id="col-prepress" class="space-y-3 flex-1"></div>
+
+      <!-- LOWER PORTION: VISUAL TARGET DEADLINE CALENDAR MATRIX LAYOUT FRAME -->
+      <div class="bg-white border border-zinc-200 p-5 rounded-2xl shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b pb-3 gap-2">
+          <div>
+            <h3 class="text-sm font-extrabold uppercase tracking-wider text-zinc-900">🗓️ Visual Shop Deadline Grid (Next 30 Days)</h3>
+            <p class="text-[11px] text-zinc-400 font-medium">Spots clusters and heavy dispatch slots on your schedule across upcoming run thresholds.</p>
+          </div>
+          <div class="flex items-center space-x-3 text-[10px] font-bold">
+            <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-zinc-900"></span><span class="text-zinc-500">Standard Run</span></span>
+            <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-red-600"></span><span class="text-red-600">Priority Rush (&lt;5 Days)</span></span>
+          </div>
+        </div>
+        
+        <!-- CALENDAR BLOCK GENERATOR SEED TANK -->
+        <div id="visual-calendar-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5"></div>
       </div>
-      <div class="border border-zinc-200 rounded-2xl p-4 min-h-[500px] flex flex-col bg-white shadow-sm">
-        <div class="flex justify-between items-center border-b border-zinc-200 pb-2 mb-4"><span class="text-xs font-bold uppercase tracking-wider text-zinc-800">In Production</span></div>
-        <div id="col-production" class="space-y-3 flex-1"></div>
-      </div>
-      <div class="border border-zinc-200 rounded-2xl p-4 min-h-[500px] flex flex-col bg-zinc-900 text-white shadow-sm">
-        <div class="flex justify-between items-center border-b border-zinc-800 pb-2 mb-4"><span class="text-xs font-bold uppercase tracking-wider text-zinc-300">Ready / Complete</span></div>
-        <div id="col-ready" class="space-y-3 flex-1"></div>
-      </div>
+
     </div>
 
   </main>
@@ -413,9 +463,10 @@
   </footer>
 
   <script>
+    // Configured static entries tracking dates inside our current 2026 runway matrix
     let appOrders = [
       { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical)', color: 'Coal Black', dueDate: '2026-06-25', frontColors: 2, backColors: 1, stitchCount: 0, logoOnFile: true, sizes: { S: 10, M: 20, L: 20, XL: 10, '2XL': 4, '3XL': 0, '4XL': 0 }, totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Please use high opacity white and black inks. [Placement: Full Front Layout Print]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '' },
-      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-07-02', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], invoiceSent: false, isPaid: false, artData: '' }
+      { id: 'HPC-7412', customerName: 'Hussle Coffee Co.', decorationType: 'Embroidery', brand: 'Hats (Adjustable / Flexfit)', color: 'Slate Gray', dueDate: '2026-06-18', frontColors: 0, backColors: 0, stitchCount: 8000, logoOnFile: true, sizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, totalQuantity: 32, estimatedTotal: 800.00, notes: 'Small front logo design alignment. [Placement: Hat Front Center Profile]', stage: 'prepress', tasks: [true, false, false, true, true, false], invoiceSent: false, isPaid: false, artData: '' }
     ];
 
     let currentArtBase64 = '';
@@ -633,6 +684,180 @@
         renderDashboard();
         showToast(`Job ${orderId} advanced into ${order.stage.toUpperCase()}`);
       }
+    }
+
+    // VISUAL CALENDAR GENERATOR CORE MATRICES
+    function generateVisualShopCalendar() {
+      const calGrid = document.getElementById('visual-calendar-grid');
+      if(!calGrid) return;
+      calGrid.innerHTML = '';
+
+      const baseToday = new Date('2026-06-15T00:00:00'); // Anchored accurately inside active 2026 shop window 
+      
+      for(let i=0; i < 28; i++) {
+        const loopDate = new Date(baseToday.getTime() + (i * 24 * 60 * 60 * 1000));
+        const y = loopDate.getFullYear();
+        const m = String(loopDate.getMonth() + 1).padStart(2, '0');
+        const d = String(loopDate.getDate()).padStart(2, '0');
+        const searchStringString = `${y}-${m}-${d}`;
+
+        const matchingJobs = appOrders.filter(o => o.dueDate === searchStringString);
+        
+        let nodesHtml = '';
+        matchingJobs.forEach(job => {
+          const timeRemaining = loopDate.getTime() - baseToday.getTime();
+          const runningDaysRemaining = Math.ceil(timeRemaining / (1000 * 3600 * 24));
+          const isUrgent = runningDaysRemaining <= 5 && job.stage !== 'ready';
+          
+          nodesHtml += `
+            <div class="px-1.5 py-0.5 mt-1 text-[9px] font-bold rounded truncate uppercase tracking-tight shadow-sm border ${isUrgent ? 'bg-red-50 text-red-700 border-red-200 animate-pulse' : 'bg-zinc-900 text-white border-zinc-900'}" title="${job.customerName} (${job.decorationType})">
+              ${isUrgent ? '⚠️ ' : ''}${job.customerName}
+            </div>
+          `;
+        });
+
+        const isTodayCell = i === 0;
+        const formattedLabelStrLabel = loopDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+        calGrid.innerHTML += `
+          <div class="bg-white border rounded-xl p-2 min-h-[75px] flex flex-col justify-between shadow-xs transition-all hover:border-zinc-400 ${isTodayCell ? 'ring-2 ring-black bg-zinc-50/50' : 'border-zinc-200'}">
+            <span class="text-[10px] font-extrabold ${isTodayCell ? 'text-black' : 'text-zinc-400'} uppercase block">${formattedLabelStrLabel}${isTodayCell ? ' • Shop Today' : ''}</span>
+            <div class="flex-1 space-y-1 mt-1 overflow-y-auto max-h-[60px]">
+              ${nodesHtml}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderDashboard() {
+      // Columns target alignment resets
+      if(!document.getElementById('col-pending-combined')) return;
+      document.getElementById('col-pending-combined').innerHTML = '';
+      document.getElementById('col-production-combined').innerHTML = '';
+      document.getElementById('col-ready-combined').innerHTML = '';
+      
+      const outreachBox = document.getElementById('box-followup-outreach');
+      const paymentBox = document.getElementById('box-followup-payment');
+      outreachBox.innerHTML = '';
+      paymentBox.innerHTML = '';
+
+      let outreachCount = 0;
+      let paymentCount = 0;
+
+      const baseToday = new Date('2026-06-15T00:00:00'); // Sync baseline date parameters 
+
+      appOrders.forEach(o => {
+        // Compute urgency flags for custom badge injections
+        const orderTargetDate = new Date(o.dueDate + 'T00:00:00');
+        const distanceTime = orderTargetDate.getTime() - baseToday.getTime();
+        const activeDaysRemaining = Math.ceil(distanceTime / (1000 * 3600 * 24));
+        const isPriorityRushPriority = activeDaysRemaining <= 5 && o.stage !== 'ready';
+
+        // 1. CHOOSE CORRESPONDING LEAD OUTREACH TRACKS DYNAMICALLY
+        if (o.stage === 'pending' && !o.invoiceSent) {
+          outreachCount++;
+          outreachBox.innerHTML += `
+            <div onclick="switchView('dashboard')" class="p-2 border border-red-100 bg-red-50/40 rounded-lg flex flex-col gap-0.5 shadow-xs cursor-pointer hover:bg-red-50">
+              <span class="font-extrabold text-red-950 truncate">${o.customerName}</span>
+              <span class="text-[10px] font-semibold text-red-700 uppercase">Needs Invoice Setup • Tag: ${o.id}</span>
+            </div>
+          `;
+        } else if (!o.isPaid && o.invoiceSent) {
+          paymentCount++;
+          paymentBox.innerHTML += `
+            <div onclick="switchView('dashboard')" class="p-2 border border-amber-100 bg-amber-50/30 rounded-lg flex flex-col gap-0.5 shadow-xs cursor-pointer hover:bg-amber-50">
+              <span class="font-extrabold text-amber-950 truncate">${o.customerName}</span>
+              <span class="text-[10px] font-semibold text-amber-700 uppercase">Awaiting Balance: $${o.estimatedTotal.toFixed(2)}</span>
+            </div>
+          `;
+        }
+
+        const labels = o.decorationType === 'Marketing Materials' ?
+          ['Design Approved', 'Stock Loaded', 'Bleed Verified', 'Color Profiled', 'Plotter Prepped', 'Packaged & QA'] :
+          (o.decorationType === 'Screen Printing' ? 
+            ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] :
+            ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Master Proofed', 'Threads Prepped']);
+
+        let taskButtons = '';
+        labels.forEach((label, index) => {
+          const isDone = o.tasks[index];
+          taskButtons += `
+            <button onclick="toggleTask('${o.id}', ${index})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border flex items-center space-x-2 transition-all ${isDone ? 'bg-zinc-900 text-white border-zinc-900 shadow-sm' : 'bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">
+              <span>${isDone ? '✓' : '○'}</span><span class="truncate">${label}</span>
+            </button>
+          `;
+        });
+
+        let cardThumbnailHtml = o.artData ? 
+          `<div class="mt-2 border border-zinc-200 bg-zinc-50 p-1 flex justify-center items-center h-16 w-full rounded-lg">
+            <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
+           </div>` : '';
+
+        const cardHtml = `
+          <div class="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm space-y-3 text-zinc-800 ${o.isPaid ? 'ring-2 ring-emerald-500' : ''} ${isPriorityRushPriority ? 'border-red-400 bg-red-50/10' : ''}">
+            <div class="flex justify-between items-center text-[10px] font-bold">
+              <span class="bg-zinc-900 text-white px-2 py-0.5 rounded">${o.id}</span>
+              <span class="${isPriorityRushPriority ? 'text-red-600 font-extrabold animate-pulse' : 'text-zinc-400'}">${isPriorityRushPriority ? '⏳ RUSH IN: ' : ''}${o.dueDate}</span>
+            </div>
+            <div>
+              <h4 class="font-extrabold text-sm text-zinc-900 truncate leading-tight uppercase tracking-tight">${o.customerName}</h4>
+              <p class="text-xs text-zinc-500 mt-1 font-semibold uppercase">${o.totalQuantity}x Items Run</p>
+              <span class="text-[10px] font-bold text-zinc-400 block mt-0.5 uppercase tracking-wide bg-zinc-50 px-2 py-0.5 rounded inline-block truncate max-w-full border border-zinc-100">${o.brand}</span>
+            </div>
+            
+            ${cardThumbnailHtml}
+            
+            <div class="text-[11px] bg-zinc-50 border border-zinc-100 p-2 text-zinc-600 font-medium break-words max-w-full rounded-lg leading-normal italic">${o.notes}</div>
+            
+            <div class="grid grid-cols-2 gap-1 pt-1 border-t border-zinc-100">
+              ${taskButtons}
+            </div>
+
+            <div class="pt-2 mt-1 border-t border-dashed border-zinc-200 grid grid-cols-2 gap-1.5 text-[10px]">
+              <button onclick="toggleInvoiceStatus('${o.id}')" class="p-1 rounded font-bold text-center border uppercase transition-all ${o.invoiceSent ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-400 border-zinc-200 hover:bg-zinc-50'}">
+                ${o.invoiceSent ? '📄 Sent' : '📄 Invoice'}
+              </button>
+              <button onclick="togglePaymentStatus('${o.id}')" class="p-1 rounded font-bold text-center border uppercase transition-all ${o.isPaid ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'}">
+                ${o.isPaid ? '💰 Paid ✓' : '⏳ Unpaid'}
+              </button>
+            </div>
+
+            <div class="pt-2 border-t border-zinc-100 flex items-center justify-between text-xs gap-1.5">
+              <div>
+                <span class="text-[9px] text-zinc-400 block uppercase font-bold tracking-wider">Total Est</span>
+                <span class="text-xs font-extrabold text-zinc-900">${o.estimatedTotal ? '$' + o.estimatedTotal.toFixed(2) : 'Review Req'}</span>
+              </div>
+              <div class="flex items-center space-x-1 flex-1 justify-end">
+                <button onclick="cancelOrder('${o.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2 py-1 rounded text-[10px] uppercase border border-red-100 transition-colors">
+                  Cancel
+                </button>
+                ${o.stage !== 'ready' ? `<button onclick="advanceJob('${o.id}')" class="bg-zinc-900 hover:bg-black text-white font-bold py-1 px-3 text-[10px] rounded uppercase transition-colors flex items-center space-x-1 shadow-sm">
+                  Next →
+                </button>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Split drops targeting combined pipeline rows cleanly
+        if(o.stage === 'pending' || o.stage === 'prepress') {
+          document.getElementById('col-pending-combined').innerHTML += cardHtml;
+        } else if (o.stage === 'production') {
+          document.getElementById('col-production-combined').innerHTML += cardHtml;
+        } else if (o.stage === 'ready') {
+          document.getElementById('col-ready-combined').innerHTML += cardHtml;
+        }
+      });
+
+      // Render out baseline structural empty states for follow up boxes if empty
+      if(outreachCount === 0) outreachBox.innerHTML = `<p class="text-[11px] text-zinc-400 italic font-medium py-2 text-center">All hot incoming leads invoiced ✓</p>`;
+      if(paymentCount === 0) paymentBox.innerHTML = `<p class="text-[11px] text-zinc-400 italic font-medium py-2 text-center">No outstanding accounts waiting balance ✓</p>`;
+
+      document.getElementById('count-outreach').innerText = outreachCount;
+      document.getElementById('count-payment').innerText = paymentCount;
+      
+      generateVisualShopCalendar();
     }
 
     function processArtworkFile(event) {
@@ -1003,90 +1228,6 @@
         document.getElementById('toast-text').innerText = text;
         t.classList.remove('hidden');
         setTimeout(() => t.classList.add('hidden'), 3500);
-      }
-    }
-
-    function renderDashboard() {
-      if(!document.getElementById('col-pending')) return;
-      document.getElementById('col-pending').innerHTML = '';
-      document.getElementById('col-prepress').innerHTML = '';
-      document.getElementById('col-production').innerHTML = '';
-      document.getElementById('col-ready').innerHTML = '';
-
-      appOrders.forEach(o => {
-        const labels = o.decorationType === 'Marketing Materials' ?
-          ['Design Approved', 'Stock Loaded', 'Bleed Verified', 'Color Profiled', 'Plotter Prepped', 'Packaged & QA'] :
-          (o.decorationType === 'Screen Printing' ? 
-            ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] :
-            ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Master Proofed', 'Threads Prepped']);
-
-        let taskButtons = '';
-        labels.forEach((label, index) => {
-          const isDone = o.tasks[index];
-          taskButtons += `
-            <button onclick="toggleTask('${o.id}', ${index})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border flex items-center space-x-2 transition-all ${isDone ? 'bg-zinc-900 text-white border-zinc-900 shadow-sm' : 'bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">
-              <span>${isDone ? '✓' : '○'}</span><span class="truncate">${label}</span>
-            </button>
-          `;
-        });
-
-        let cardThumbnailHtml = o.artData ? 
-          `<div class="mt-2 border border-zinc-200 bg-zinc-50 p-1 flex justify-center items-center h-16 w-full rounded-lg">
-            <img src="${o.artData}" class="h-full object-contain max-w-full rounded" />
-           </div>` : '';
-
-        const isLastStage = o.stage === 'ready';
-        
-        const cardHtml = `
-          <div class="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm space-y-3 text-zinc-800 ${o.isPaid ? 'ring-2 ring-emerald-500' : ''}">
-            <div class="flex justify-between items-center text-[10px] font-bold">
-              <span class="bg-zinc-900 text-white px-2 py-0.5 rounded">${o.id}</span>
-              <span class="text-zinc-400">${o.dueDate}</span>
-            </div>
-            <div>
-              <h4 class="font-extrabold text-sm text-zinc-900 truncate leading-tight uppercase tracking-tight">${o.customerName}</h4>
-              <p class="text-xs text-zinc-500 mt-1 font-semibold uppercase">${o.totalQuantity}x Items Run</p>
-              <span class="text-[10px] font-bold text-zinc-400 block mt-0.5 uppercase tracking-wide bg-zinc-50 px-2 py-0.5 rounded inline-block truncate max-w-full border border-zinc-100">${o.brand}</span>
-            </div>
-            
-            ${cardThumbnailHtml}
-            
-            <div class="text-[11px] bg-zinc-50 border border-zinc-100 p-2 text-zinc-600 font-medium break-words max-w-full rounded-lg leading-normal italic">${o.notes}</div>
-            
-            <div class="grid grid-cols-2 gap-1 pt-1 border-t border-zinc-100">
-              ${taskButtons}
-            </div>
-
-            <div class="pt-2 mt-1 border-t border-dashed border-zinc-200 grid grid-cols-2 gap-1.5 text-[10px]">
-              <button onclick="toggleInvoiceStatus('${o.id}')" class="p-1 rounded font-bold text-center border uppercase transition-all ${o.invoiceSent ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-400 border-zinc-200 hover:bg-zinc-50'}">
-                ${o.invoiceSent ? '📄 Sent' : '📄 Invoice'}
-              </button>
-              <button onclick="togglePaymentStatus('${o.id}')" class="p-1 rounded font-bold text-center border uppercase transition-all ${o.isPaid ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'}">
-                ${o.isPaid ? '💰 Paid ✓' : '⏳ Unpaid'}
-              </button>
-            </div>
-
-            <div class="pt-2 border-t border-zinc-100 flex items-center justify-between text-xs gap-1.5">
-              <div>
-                <span class="text-[9px] text-zinc-400 block uppercase font-bold tracking-wider">Total Est</span>
-                <span class="text-xs font-extrabold text-zinc-900">${o.estimatedTotal ? '$' + o.estimatedTotal.toFixed(2) : 'Review Req'}</span>
-              </div>
-              <div class="flex items-center space-x-1 flex-1 justify-end">
-                <button onclick="cancelOrder('${o.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2 py-1 rounded text-[10px] uppercase border border-red-100 transition-colors">
-                  Cancel
-                </button>
-                ${!isLastStage ? `<button onclick="advanceJob('${o.id}')" class="bg-zinc-900 hover:bg-black text-white font-bold py-1 px-3 text-[10px] rounded uppercase transition-colors flex items-center space-x-1 shadow-sm">
-                  Next →
-                </button>` : ''}
-              </div>
-            </div>
-          </div>
-        `;
-        const targetCol = document.getElementById(`col-${o.stage}`);
-        if(targetCol) targetCol.innerHTML += cardHtml;
-      });
-      if(document.getElementById('queue-count')) {
-        document.getElementById('queue-count').innerText = appOrders.length;
       }
     }
 
