@@ -228,16 +228,14 @@
           </div>
         </div>
 
-        <!-- RIGHT COLUMN SIDE-DECK: LEAD ASSIGNMENTS & OUTREACH STACK -->
+        <!-- RIGHT COLUMN SIDE-DECK -->
         <div class="space-y-4">
-          <!-- PANEL A: MANUAL LEAD INTAKE AND OUTREACH LOG LIST -->
           <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
             <div class="border-b pb-2 flex justify-between items-center">
               <span class="text-xs font-extrabold uppercase tracking-wide text-red-600 block">📞 Needs Call / Outreach</span>
               <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded-full" id="count-outreach">0</span>
             </div>
             
-            <!-- HIGH-CONTRAST INLINE HOT LEAD ENTRY MODIFIED WITH YOUTH SIZE ALLOCATIONS -->
             <div class="bg-zinc-100 border-2 border-zinc-300 p-3 rounded-xl space-y-2.5 shadow-inner text-zinc-800">
               <button onclick="toggleInlineLeadForm()" class="w-full text-left text-[11px] font-extrabold uppercase text-zinc-800 tracking-wide flex justify-between items-center">
                 <span>➕ Log Manual Hot Lead</span>
@@ -253,7 +251,6 @@
                   <input type="email" id="lead-email" placeholder="Email" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
                 </div>
 
-                <!-- ADDED ADVANCED INLINE ADULT & YOUTH SIZE MATRICES TO SIDEBAR LEAD LOGS -->
                 <div class="border border-zinc-300 p-2 bg-white rounded-lg space-y-2">
                   <div class="space-y-1">
                     <span class="text-[9px] font-black uppercase text-zinc-400 tracking-wide block">Adult Sizes (S-4XL)</span>
@@ -284,10 +281,9 @@
               </div>
             </div>
 
-            <div id="box-followup-outreach" class="space-y-3 text-xs font-medium text-zinc-500 max-h-[420px] overflow-y-auto pt-1"></div>
+            <div id="box-followup-outreach" class="space-y-3 text-xs font-medium text-zinc-500 max-h-[380px] overflow-y-auto pt-1"></div>
           </div>
 
-          <!-- PANEL B: AWAITING PAYMENT -->
           <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
             <div class="border-b pb-2 flex justify-between items-center">
               <span class="text-xs font-extrabold uppercase tracking-wide text-amber-600 block">⏳ Awaiting Payment Ledger</span>
@@ -438,6 +434,27 @@
         const isEMB = item.decorationType === 'Embroidery';
         const isMKT = item.decorationType === 'Marketing Materials';
 
+        // RESTORED DIRECT SUPPLIER CATALOG BANNER LINKS LOGIC
+        let catalogNoticeBannerHtml = '';
+        if (isSP || isMKT) {
+          catalogNoticeBannerHtml = `
+            <div class="mt-2 p-3 bg-zinc-50 border border-zinc-200 text-[11px] text-zinc-500 rounded-xl font-medium leading-relaxed">
+              <span class="font-bold text-zinc-800 block mb-0.5">Looking for specific blank codes?</span>
+              Browse wholesale structures live at <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black hover:text-zinc-600">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black hover:text-zinc-600">CottonCollective.org</a>, then type your selection choices above.
+            </div>
+          `;
+        } else if (isEMB) {
+          catalogNoticeBannerHtml = `
+            <div class="mt-2 p-4 bg-zinc-900 text-white rounded-xl text-[11px] leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-xs animate-fadeIn">
+              <div class="font-medium">
+                <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Canvas Options</span>
+                Need a hand tracing trucker meshes, snaps, or structured adjustments? Explore options at <span class="font-bold text-zinc-300 underline">Ottocap.com</span>.
+              </div>
+              <a href="https://ottocap.com" target="_blank" rel="noopener noreferrer" class="bg-white text-black hover:bg-zinc-100 font-bold px-3 py-1.5 rounded-lg whitespace-nowrap text-center text-[10px] transition-all">Browse Catalog ↗</a>
+            </div>
+          `;
+        }
+
         tank.innerHTML += `
           <div class="bg-white border border-zinc-200 rounded-2xl shadow-sm p-5 space-y-4 animate-fadeIn relative">
             <div class="flex justify-between items-center border-b pb-2">
@@ -464,12 +481,15 @@
               </div>
             </div>
 
+            <!-- RENDER RESTORED SUPPLIER CATALOG DATA PANEL HUB -->
+            ${catalogNoticeBannerHtml}
+
             ${(isSP || isEMB) ? `
               <div class="p-3 bg-zinc-50 border border-zinc-100 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                 <span class="font-bold text-zinc-600">Do we already have your logo on file for screen printing or embroidery?</span>
                 <div class="flex space-x-1">
-                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'true')" class="px-3 py-1 rounded-lg text-[11px] font-bold border ${item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">Yes</button>
-                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'false')" class="px-3 py-1 rounded-lg text-[11px] font-bold border ${!item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">No (+$30 setup)</button>
+                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'true')" class="px-3 py-1 rounded-lg text-[11px] font-bold border ${item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900 shadow-xs' : 'bg-white text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">Yes</button>
+                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'false')" class="px-3 py-1 rounded-lg text-[11px] font-bold border ${!item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900 shadow-xs' : 'bg-white text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">No (+$30 setup)</button>
                 </div>
               </div>
             ` : ''}
@@ -708,7 +728,6 @@
       else box.classList.add('hidden');
     }
 
-    // UPDATED MANUALLY TYPE INTAKE COMPILING RECONCILED SIZES BINDINGS
     function submitManualOutreachLead() {
       const name = document.getElementById('lead-name').value.trim();
       const biz = document.getElementById('lead-business').value.trim();
@@ -718,7 +737,6 @@
       
       if (!name) return;
 
-      // Extract raw inputs to calculate accurate totals for manual desk notes
       const as = parseInt(document.getElementById('l-size-s').value) || 0;
       const am = parseInt(document.getElementById('l-size-m').value) || 0;
       const al = parseInt(document.getElementById('l-size-l').value) || 0;
@@ -749,7 +767,6 @@
 
       saveState();
       
-      // Wipe clean manual rows
       document.getElementById('lead-name').value = ''; document.getElementById('lead-business').value = '';
       document.getElementById('lead-phone').value = ''; document.getElementById('lead-email').value = '';
       document.getElementById('lead-notes').value = '';
@@ -816,7 +833,6 @@
       const paymentBox = document.getElementById('box-followup-payment'); paymentBox.innerHTML = '';
       let outC = 0, payC = 0;
 
-      // POPULATE UPGRADED LEAD CARDS WITH COMPREHENSIVE RECONCILED YOUTH SIZE LABELS
       appManualLeads.forEach(lead => {
         outC++;
         
