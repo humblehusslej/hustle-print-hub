@@ -338,7 +338,7 @@
     let clickCountTracker = 0;
 
     let customerManifestItems = [
-      { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 0 }
+      { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 12 }
     ];
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -391,7 +391,7 @@
     function addBlankManifestItemLine() {
       const uniqueId = 'item-' + Date.now();
       customerManifestItems.push({
-        id: uniqueId, decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'White', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 0
+        id: uniqueId, decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'White', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 12
       });
       renderManifestInputsGrid();
     }
@@ -478,7 +478,6 @@
           `;
         }
 
-        // HIDDEN / VISIBLE INTERACTION CONDITIONAL SPLIT ENGINE RUNNING LIVE IN THE DOM BLOCKS
         let sizingOrHeadwearFieldTemplate = '';
         if (isHatsSelected) {
           sizingOrHeadwearFieldTemplate = `
@@ -548,7 +547,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Method Style</label>
-                <select id="method-type-${item.id}" onchange="updateManifestItemField('${item.id}', 'decorationType', this.value); syncBrandDropdownPlaceholder('${item.id}')" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-bold text-zinc-700 outline-none cursor-pointer">
+                <select id="method-type-${item.id}" onchange="updateManifestItemField('${item.id}', 'decorationType', this.value); syncBrandDropdownPlaceholder('${item.id}'); renderManifestInputsGrid();" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-bold text-zinc-700 outline-none cursor-pointer">
                   <option value="Screen Printing" ${isSP ? 'selected' : ''}>Screen Printing</option>
                   <option value="Embroidery" ${isEMB ? 'selected' : ''}>Custom Embroidery</option>
                   <option value="Marketing Materials" ${isMKT ? 'selected' : ''}>Marketing Asset</option>
@@ -599,7 +598,6 @@
               </div>
             ` : ''}
 
-            <!-- INJECTING DYNAMIC SPLIT SELECTION ACCORDION FROM MATRIX COMPUTATION -->
             ${sizingOrHeadwearFieldTemplate}
 
           </div>
@@ -609,6 +607,7 @@
       calculateManifestTotals();
     }
 
+    // MANDATORY STRATEGIC FORCED MEMORY OVERWRITE BINDINGS 
     function syncBrandDropdownPlaceholder(id, selectedValue) {
       const row = customerManifestItems.find(item => item.id === id);
       const dropdown = document.getElementById(`brand-select-${id}`);
@@ -624,9 +623,14 @@
         options = ['Banners (Outdoor Vinyl Run)', 'Business Cards (16pt Bulk Pack)', 'Metal Aluminum Signage'];
       }
 
+      // If switching categories and no custom item was parsed, bind memory index immediately to first option index!
+      if (!selectedValue || !options.includes(selectedValue)) {
+        row.brand = options[0];
+      }
+
       options.forEach(opt => {
         let el = document.createElement('option'); el.value = opt; el.text = opt;
-        if (opt === selectedValue) el.selected = true;
+        if (opt === row.brand) el.selected = true;
         dropdown.appendChild(el);
       });
     }
@@ -822,7 +826,7 @@
         customerNotes: notes || 'No specs logged yet.',
         totalLeadQty: totalCalculatedLeadQty,
         adultSummary: `S:${as} M:${am} L:${al} XL:${axl} 2X:${axx} 3X:${a3x} 4X:${a4x}`,
-        youthSummary: `YXS:${yxs} YS:${ys} YM:${ym} YL:${yl} YXL:${yxl}`
+        youthSummary: `YXS:${yxs} YS:${ys} YM:${ym} L:${yl} YXL:${yxl}`
       });
 
       saveState();
