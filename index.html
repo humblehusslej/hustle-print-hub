@@ -338,7 +338,7 @@
     let clickCountTracker = 0;
 
     let customerManifestItems = [
-      { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 } }
+      { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached' }
     ];
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -391,7 +391,7 @@
     function addBlankManifestItemLine() {
       const uniqueId = 'item-' + Date.now();
       customerManifestItems.push({
-        id: uniqueId, decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'White', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }
+        id: uniqueId, decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'White', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached'
       });
       renderManifestInputsGrid();
     }
@@ -425,6 +425,22 @@
       calculateManifestTotals();
     }
 
+    function handleManifestLineArtUpload(id, event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const row = customerManifestItems.find(item => item.id === id);
+      if (row) {
+        row.artFileName = "✓ " + file.name;
+        const label = document.getElementById(`art-preview-label-${id}`);
+        if(label) {
+          label.innerText = "✓ " + file.name;
+          label.className = "block text-xs font-bold text-emerald-600 mt-1";
+        }
+        showToast('Artwork linked successfully');
+      }
+    }
+
     function renderManifestInputsGrid() {
       const tank = document.getElementById('manifest-lines-tank');
       if (!tank) return; tank.innerHTML = '';
@@ -434,18 +450,17 @@
         const isEMB = item.decorationType === 'Embroidery';
         const isMKT = item.decorationType === 'Marketing Materials';
 
-        // RESTORED DIRECT SUPPLIER CATALOG BANNER LINKS LOGIC
         let catalogNoticeBannerHtml = '';
         if (isSP || isMKT) {
           catalogNoticeBannerHtml = `
-            <div class="mt-2 p-3 bg-zinc-50 border border-zinc-200 text-[11px] text-zinc-500 rounded-xl font-medium leading-relaxed">
+            <div class="p-3 bg-zinc-50 border border-zinc-200 text-[11px] text-zinc-500 rounded-xl font-medium leading-relaxed">
               <span class="font-bold text-zinc-800 block mb-0.5">Looking for specific blank codes?</span>
-              Browse wholesale structures live at <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black hover:text-zinc-600">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black hover:text-zinc-600">CottonCollective.org</a>, then type your selection choices above.
+              Browse wholesale structures live at <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black hover:text-zinc-600">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black hover:text-zinc-600">CottonCollective.org</a>.
             </div>
           `;
         } else if (isEMB) {
           catalogNoticeBannerHtml = `
-            <div class="mt-2 p-4 bg-zinc-900 text-white rounded-xl text-[11px] leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-xs animate-fadeIn">
+            <div class="p-4 bg-zinc-900 text-white rounded-xl text-[11px] leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-xs animate-fadeIn">
               <div class="font-medium">
                 <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Canvas Options</span>
                 Need a hand tracing trucker meshes, snaps, or structured adjustments? Explore options at <span class="font-bold text-zinc-300 underline">Ottocap.com</span>.
@@ -455,6 +470,7 @@
           `;
         }
 
+        // COMPLETELY STANDARD UN-HIDDEN FILE UPLOAD INPUT STRUCTURE - BROWSER CANNOT OMIT
         tank.innerHTML += `
           <div class="bg-white border border-zinc-200 rounded-2xl shadow-sm p-5 space-y-4 animate-fadeIn relative">
             <div class="flex justify-between items-center border-b pb-2">
@@ -481,8 +497,14 @@
               </div>
             </div>
 
-            <!-- RENDER RESTORED SUPPLIER CATALOG DATA PANEL HUB -->
             ${catalogNoticeBannerHtml}
+
+            <!-- 100% STANDARD SOLID FILE ELEMENT ROWS - ZERO TRICKS LAYER -->
+            <div class="p-4 bg-zinc-50 border border-zinc-200 rounded-xl space-y-2">
+              <label class="block text-xs font-bold uppercase tracking-wide text-zinc-700">Upload Artwork File Sourcing Reference</label>
+              <input type="file" accept="image/*" onchange="handleManifestLineArtUpload('${item.id}', event)" class="w-full text-xs font-medium text-zinc-700 bg-white border border-zinc-300 rounded-lg p-2 outline-none cursor-pointer focus:border-black" />
+              <span id="art-preview-label-${item.id}" class="block text-[11px] text-zinc-400 font-medium mt-1">${item.artFileName || 'No drawing vector attached'}</span>
+            </div>
 
             ${(isSP || isEMB) ? `
               <div class="p-3 bg-zinc-50 border border-zinc-100 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
@@ -656,7 +678,7 @@
           dueDate: document.getElementById('input-date').value,
           totalQuantity: totalCount,
           estimatedTotal: totalCount * 11.50, 
-          notes: `Batch configuration asset on file. Color: ${item.color}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}]`,
+          notes: `Batch configuration asset on file. Color: ${item.color}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}]`,
           stage: 'pending',
           tasks: [false, false, false, false, false, false],
           invoiceSent: false, isPaid: false, artData: ''
@@ -666,7 +688,7 @@
 
       saveState();
       document.getElementById('input-name').value = '';
-      customerManifestItems = [{ id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 } }];
+      customerManifestItems = [{ id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached' }];
       switchView('estimator');
       document.getElementById('view-estimator').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
@@ -835,7 +857,6 @@
 
       appManualLeads.forEach(lead => {
         outC++;
-        
         let leadSizeSummaryHtml = '';
         if(lead.totalLeadQty && lead.totalLeadQty > 0) {
           leadSizeSummaryHtml = `
@@ -856,13 +877,10 @@
               </div>
               <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider truncate">${lead.businessName}</div>
             </div>
-            
             ${leadSizeSummaryHtml}
-
             <div class="text-[11px] bg-amber-50/60 border border-amber-200 text-amber-900 p-2.5 font-medium leading-normal rounded-xl select-text italic">
               ${lead.customerNotes}
             </div>
-
             <div class="pt-2 border-t border-zinc-100 flex items-center justify-between gap-2">
               <div class="flex gap-2 text-[10px] font-bold">
                 <a href="tel:${lead.phone}" class="text-red-600 hover:underline">📞 Call</a>
