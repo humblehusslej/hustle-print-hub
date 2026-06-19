@@ -127,12 +127,12 @@
 
   <main class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full relative">
     
-    <!-- SUCCESS SCREEN FOR CUSTOMERS WITH EXPLICIT FOLLOW-UP NOTICES RESTORED -->
+    <!-- SUCCESS SCREEN FOR CUSTOMERS -->
     <div id="view-success" class="hidden max-w-xl mx-auto bg-white border border-zinc-200 rounded-2xl p-8 text-center space-y-5 shadow-sm my-12 animate-fadeIn">
       <div class="w-12 h-12 bg-zinc-900 text-white rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
-      <h2 class="text-xl font-extrabold uppercase tracking-tight">Project Sourced!</h2>
+      <h2 class="text-xl font-extrabold uppercase tracking-tight">Manifest Submitted!</h2>
       <div class="text-sm text-zinc-600 space-y-3 font-medium leading-relaxed">
-        <p>Your combined multi-item package specifications and structural contact fields have been logged successfully into our production queue.</p>
+        <p>Your combined multi-item package specifications and contact credentials have been logged successfully into our production queue.</p>
         <p class="bg-zinc-50 border border-zinc-200 p-3 rounded-xl text-xs font-bold text-zinc-900 italic">
           📢 Please Note: The configuration layout generated below is a rough preliminary baseline. An office operator from the Humble Hussle team will review your artwork vectors and touch base with you very soon with your finalized complete estimate proof.
         </p>
@@ -164,11 +164,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
             <div>
               <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Phone Number</label>
-              <input type="tel" id="input-client-phone" required placeholder="e.g. 806-555-0199" class="w-full px-4 py-2 border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
+              <input type="tel" id="input-client-phone" required placeholder="e.g. 806-555-0199" class="w-full px-4 py-2 border border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
             </div>
             <div>
               <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Email Address</label>
-              <input type="email" id="input-client-email" required placeholder="e.g. manager@husslecafe.com" class="w-full px-4 py-2 border border-zinc-200 rounded-xl text-sm font-medium text-zinc-800 outline-none focus:border-black" />
+              <input type="email" id="input-client-email" required placeholder="e.g. manager@husslecafe.com" class="w-full px-4 py-2 border border border-zinc-200 rounded-xl text-sm font-medium text-zinc-800 outline-none focus:border-black" />
             </div>
           </div>
 
@@ -213,7 +213,7 @@
             </div>
           </div>
 
-          <!-- BOLD ROUGH ESTIMATE DISCLAIMER PANEL INFUSED INFUSED -->
+          <!-- BOLD ROUGH ESTIMATE DISCLAIMER PANEL -->
           <div class="pt-3 border-t border-dashed border-zinc-800 text-[11px] text-zinc-400 font-medium leading-normal italic">
             ⚠️ Note: This invoice sums an initial <span class="text-zinc-200 font-bold">rough baseline estimate</span>. A specialist will review artwork files and contact you soon with a finalized proofing quote.
           </div>
@@ -353,11 +353,14 @@
 
   <script>
     let appOrders = [
-      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Coal Black', dueDate: '2026-06-25', totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Screen printed standard bulk shirts setup run. [Contact: 806-555-0144]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '' }
+      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Coal Black', dueDate: '2026-06-25', totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Screen printed standard bulk shirts setup run. [Contact: 806-555-0144]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '', clientPhone: '806-555-0144', clientEmail: 'athletics@wt.edu' }
     ];
     let appManualLeads = [];
     let isAdminMode = false;
     let clickCountTracker = 0;
+
+    // GLOBAL NOTIFICATION ENDPOINT WEBHOOK RELAY CONFIGURATION LAYER
+    const WEBHOOK_URL = "https://httpbin.org/post"; // <-- PASTE YOUR ZAPIER / MAKE ENDPOINT CAPTURE URL DIRECTLY HERE
 
     let customerManifestItems = [
       { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 12 }
@@ -381,6 +384,36 @@
       localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
       localStorage.setItem('hpc_manual_leads', JSON.stringify(appManualLeads));
       if (document.getElementById('queue-count')) document.getElementById('queue-count').innerText = appOrders.length;
+    }
+
+    // AUTOMATED LIVE FETCH OUTBOUND EXECUTOR
+    function dispatchOutboundRelayNotification(orderObject, actionEventName) {
+      if (!WEBHOOK_URL || WEBHOOK_URL.includes("httpbin.org/post")) {
+        console.log(`Relay Sandbox Log: Action "${actionEventName}" tracked for Order ${orderObject.id}.`);
+        return;
+      }
+
+      const payload = {
+        event: actionEventName,
+        timestamp: new Date().toISOString(),
+        orderId: orderObject.id,
+        clientName: orderObject.customerName,
+        phone: orderObject.clientPhone || "No Phone",
+        email: orderObject.clientEmail || "No Email",
+        currentStage: orderObject.stage,
+        totalQty: orderObject.totalQuantity,
+        financialStatus: orderObject.isPaid ? "PAID" : "UNPAID",
+        invoiceSent: orderObject.invoiceSent ? "SENT" : "NOT_SENT",
+        specs: orderObject.notes
+      };
+
+      fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => console.log(`Notification Hook Success for Event: ${actionEventName}`))
+      .catch(err => console.error("Relay Connection Refused:", err));
     }
 
     function initializeDefaultDates() {
@@ -749,7 +782,9 @@
           notes: `Batch configuration baseline estimation template. Color: ${item.color}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Client Contact: Ph: ${clientPhone} | Em: ${clientEmail}]`,
           stage: 'pending',
           tasks: [false, false, false, false, false, false],
-          invoiceSent: false, isPaid: false, artData: ''
+          invoiceSent: false, isPaid: false, artData: '',
+          clientPhone: clientPhone,
+          clientEmail: clientEmail
         };
         
         appOrders.unshift(systemicCard);
@@ -765,6 +800,9 @@
           adultSummary: 'Sourced from Client Portal Input',
           youthSummary: 'Sourced from Client Portal Input'
         });
+
+        // Trigger outbound webhook mapping for newly submitted quotes
+        dispatchOutboundRelayNotification(systemicCard, "QUOTE_SUBMITTED");
       });
 
       saveState();
@@ -829,7 +867,6 @@
     function openManualJobModal() { document.getElementById('manual-job-modal').classList.remove('hidden'); }
     function closeManualJobModal() { document.getElementById('manual-job-modal').classList.add('hidden'); document.getElementById('manual-form').reset(); }
 
-    // DYNAMIC COLLAPSIBLE TRIGGER ENGINE
     function toggleInlineLeadForm() {
       const box = document.getElementById('inline-lead-form');
       if (box.classList.contains('hidden')) box.classList.remove('hidden'); 
@@ -908,16 +945,44 @@
 
     function toggleTask(orderId, taskIndex) {
       const order = appOrders.find(o => o.id === orderId);
-      if (order) { order.tasks[taskIndex] = !order.tasks[taskIndex]; saveState(); renderDashboard(); }
+      if (order) { 
+        order.tasks[taskIndex] = !order.tasks[taskIndex]; 
+        saveState(); 
+        renderDashboard(); 
+        dispatchOutboundRelayNotification(order, "PRODUCTION_STEP_TOGGLED");
+      }
     }
-    function toggleInvoiceStatus(orderId) { const order = appOrders.find(o => o.id === orderId); if (order) { order.invoiceSent = !order.invoiceSent; saveState(); renderDashboard(); } }
-    function togglePaymentStatus(orderId) { const order = appOrders.find(o => o.id === orderId); if (order) { order.isPaid = !order.isPaid; saveState(); renderDashboard(); } }
+    function toggleInvoiceStatus(orderId) { 
+      const order = appOrders.find(o => o.id === orderId); 
+      if (order) { 
+        order.invoiceSent = !order.invoiceSent; 
+        saveState(); 
+        renderDashboard(); 
+        dispatchOutboundRelayNotification(order, "INVOICE_STATUS_UPDATED");
+      } 
+    }
+    function togglePaymentStatus(orderId) { 
+      const order = appOrders.find(o => o.id === orderId); 
+      if (order) { 
+        order.isPaid = !order.isPaid; 
+        saveState(); 
+        renderDashboard(); 
+        dispatchOutboundRelayNotification(order, "PAYMENT_STATUS_UPDATED");
+      } 
+    }
     function cancelOrder(orderId) { if (confirm('Scrub run?')) { appOrders = appOrders.filter(o => o.id !== orderId); saveState(); renderDashboard(); } }
+    
     function advanceJob(orderId) {
       const order = appOrders.find(o => o.id === orderId); if (!order) return;
       const stages = ['pending', 'prepress', 'production', 'ready'];
       const cur = stages.indexOf(order.stage);
-      if (cur !== -1 && cur < stages.length - 1) { order.stage = stages[cur + 1]; saveState(); renderDashboard(); }
+      if (cur !== -1 && cur < stages.length - 1) { 
+        order.stage = stages[cur + 1]; 
+        saveState(); 
+        renderDashboard(); 
+        // Trigger Live Alert webhook when advancing stages
+        dispatchOutboundRelayNotification(order, "ORDER_STAGE_ADVANCED");
+      }
     }
 
     function generateVisualShopCalendar() {
