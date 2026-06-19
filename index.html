@@ -21,11 +21,9 @@
 </head>
 <body class="bg-gradient-halftone text-zinc-900 font-sans min-h-screen flex flex-col antialiased">
 
-  <!-- TOP HUB NAVIGATION BAR -->
   <header class="bg-black text-white p-5 border-b border-zinc-800 sticky top-0 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center space-x-3">
-        <!-- SECRET TRIPLE TAP TOGGLE BUTTON PORTAL -->
         <div onclick="handleSecretShopClick()" class="bg-white text-black px-3.5 py-1.5 font-black text-xl rounded tracking-tighter cursor-pointer select-none">H</div>
         <div>
           <h1 class="text-lg font-extrabold tracking-tight uppercase">Humble Hussle Print Shop</h1>
@@ -42,13 +40,11 @@
     </div>
   </header>
 
-  <!-- NOTIFICATION TOAST BOX ENGINE -->
   <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-zinc-900 text-white px-5 py-3 rounded-lg border border-zinc-800 flex items-center space-x-3 shadow-xl">
     <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
     <span id="toast-text" class="text-xs font-medium uppercase tracking-wider">Action Processed</span>
   </div>
 
-  <!-- BACK OFFICE INTERNAL MANUAL JOB INTAKE MODAL SCREEN LAYER -->
   <div id="manual-job-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white border border-zinc-300 rounded-xl w-full max-w-lg p-6 relative shadow-2xl text-zinc-900 max-h-[90vh] overflow-y-auto">
       <button onclick="closeManualJobModal()" class="absolute top-4 right-4 font-bold text-xl text-zinc-400 hover:text-zinc-900">×</button>
@@ -127,12 +123,11 @@
 
   <main class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full relative">
     
-    <!-- SUCCESS SCREEN FOR CUSTOMERS WITH EXPLICIT FOLLOW-UP NOTICES RESTORED -->
     <div id="view-success" class="hidden max-w-xl mx-auto bg-white border border-zinc-200 rounded-2xl p-8 text-center space-y-5 shadow-sm my-12 animate-fadeIn">
       <div class="w-12 h-12 bg-zinc-900 text-white rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
-      <h2 class="text-xl font-extrabold uppercase tracking-tight">Project Sourced!</h2>
+      <h2 class="text-xl font-extrabold uppercase tracking-tight">Manifest Submitted!</h2>
       <div class="text-sm text-zinc-600 space-y-3 font-medium leading-relaxed">
-        <p>Your combined multi-item package specifications and structural contact fields have been logged successfully into our production queue.</p>
+        <p>Your combined multi-item package specifications and contact credentials have been logged successfully into our production queue.</p>
         <p class="bg-zinc-50 border border-zinc-200 p-3 rounded-xl text-xs font-bold text-zinc-900 italic">
           📢 Please Note: The configuration layout generated below is a rough preliminary baseline. An office operator from the Humble Hussle team will review your artwork vectors and touch base with you very soon with your finalized complete estimate proof.
         </p>
@@ -142,11 +137,9 @@
       </button>
     </div>
 
-    <!-- SECTION 1: CUSTOMER ESTIMATOR PORTAL -->
     <div id="view-estimator" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       <div class="lg:col-span-2 space-y-6">
         
-        <!-- CUSTOMER MASTER PROFILE BLOCK -->
         <div class="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6 space-y-4">
           <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-800 border-b pb-2">📋 Customer Account & Contact Details</h3>
           
@@ -164,43 +157,36 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
             <div>
               <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Phone Number</label>
-              <input type="tel" id="input-client-phone" required placeholder="e.g. 806-555-0199" class="w-full px-4 py-2 border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
+              <input type="tel" id="input-client-phone" required placeholder="e.g. 806-555-0199" class="w-full px-4 py-2 border border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
             </div>
             <div>
               <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Email Address</label>
-              <input type="email" id="input-client-email" required placeholder="e.g. manager@husslecafe.com" class="w-full px-4 py-2 border border-zinc-200 rounded-xl text-sm font-medium text-zinc-800 outline-none focus:border-black" />
+              <input type="email" id="input-client-email" required placeholder="e.g. manager@husslecafe.com" class="w-full px-4 py-2 border border border-zinc-200 rounded-xl text-sm font-medium text-zinc-800 outline-none focus:border-black" />
             </div>
           </div>
 
-          <!-- TURNAROUND NOTIFICATION BOX -->
           <div id="date-turnaround-notice" class="p-4 rounded-xl border font-medium text-xs leading-relaxed transition-all hidden"></div>
         </div>
 
-        <!-- DYNAMIC MANIFEST CONTAINER TANK -->
         <div class="space-y-4" id="manifest-lines-tank">
-          <!-- Item rows injected cleanly here via javascript loop arrays -->
-        </div>
+          </div>
 
-        <!-- ADD LINE COMPONENT CONTAINER ROW -->
         <button onclick="addBlankManifestItemLine()" class="w-full bg-white hover:bg-zinc-50 text-zinc-800 font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider border border-zinc-300 border-dashed transition-all text-center flex items-center justify-center space-x-2 shadow-xs">
           <span>➕ Add Component Line to This Batch</span>
         </button>
 
-        <!-- SUBMIT ORDER CALL ACTION BUTTON -->
         <button onclick="fireManifestSubmission(event)" id="submit-btn" class="w-full bg-zinc-900 hover:bg-black text-white font-bold py-4 rounded-xl text-sm uppercase tracking-wider shadow-sm transition-all text-center cursor-pointer">
           Ready for a Quote
         </button>
 
       </div>
 
-      <!-- SIDE TALLY BOARD WITH INJECTED ESTIMATE DISCLAIMER -->
       <div class="space-y-4 sticky top-24">
         <div class="bg-zinc-950 text-white rounded-2xl p-6 shadow-xl border border-zinc-800 space-y-4">
           <h3 class="text-xs font-bold uppercase tracking-widest text-zinc-400 pb-2 border-b border-zinc-800">Combined Package Invoice</h3>
           
           <div id="side-manifest-summary-rows" class="space-y-2 text-xs font-medium max-h-[250px] overflow-y-auto divide-y divide-zinc-900 pr-1">
-            <!-- Summary breakdown strings print out here -->
-          </div>
+            </div>
 
           <div class="border-t border-zinc-800 pt-3 flex justify-between items-end">
             <div>
@@ -213,7 +199,6 @@
             </div>
           </div>
 
-          <!-- BOLD ROUGH ESTIMATE DISCLAIMER PANEL INFUSED INFUSED -->
           <div class="pt-3 border-t border-dashed border-zinc-800 text-[11px] text-zinc-400 font-medium leading-normal italic">
             ⚠️ Note: This invoice sums an initial <span class="text-zinc-200 font-bold">rough baseline estimate</span>. A specialist will review artwork files and contact you soon with a finalized proofing quote.
           </div>
@@ -222,13 +207,10 @@
       </div>
     </div>
 
-    <!-- SECTION 2: PRODUCTION PIPELINE METRIC BOARD -->
     <div id="view-dashboard" class="hidden space-y-8 animate-fadeIn">
       
-      <!-- TOP PORTION: BACKLOG PIPELINE & FOLLOW-UP DECK SIDEBAR -->
       <div class="grid grid-cols-1 xl:grid-cols-4 gap-6 items-start">
         
-        <!-- LEFT THREE COLUMNS: THE MAIN MANUFACTURE PIPELINE -->
         <div class="xl:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
           <div class="border border-zinc-200 rounded-2xl p-4 min-h-[450px] flex flex-col bg-white shadow-sm">
             <div class="flex justify-between items-center border-b border-zinc-200 pb-2 mb-4">
@@ -250,7 +232,6 @@
           </div>
         </div>
 
-        <!-- RIGHT COLUMN SIDE-DECK -->
         <div class="space-y-4">
           <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
             <div class="border-b pb-2 flex justify-between items-center">
@@ -317,7 +298,6 @@
 
       </div>
 
-      <!-- LOWER PORTION: VISUAL TARGET DEADLINE CALENDAR MATRIX -->
       <div class="bg-white border border-zinc-200 p-5 rounded-2xl shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b pb-3 gap-2">
           <div>
@@ -336,7 +316,6 @@
 
   </main>
 
-  <!-- MASTER CONTACT FOOTER -->
   <footer id="portal-footer" class="bg-black text-zinc-400 text-xs py-8 mt-auto border-t border-zinc-900">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-6 text-center sm:text-left">
       <div class="space-y-1">
@@ -352,8 +331,11 @@
   </footer>
 
   <script>
+    // 1. PASTE YOUR MAKE.COM URL ENDPOINT LINK INSIDE THESE QUOTES:
+    const WEBHOOK_URL = "https://httpbin.org/post";
+
     let appOrders = [
-      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Coal Black', dueDate: '2026-06-25', totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Screen printed standard bulk shirts setup run. [Contact: 806-555-0144]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '' }
+      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Coal Black', dueDate: '2026-06-25', totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Screen printed standard bulk shirts setup run. [Contact: 806-555-0144]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '', clientPhone: '806-555-0144', clientEmail: 'athletics@wt.edu' }
     ];
     let appManualLeads = [];
     let isAdminMode = false;
@@ -381,6 +363,35 @@
       localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
       localStorage.setItem('hpc_manual_leads', JSON.stringify(appManualLeads));
       if (document.getElementById('queue-count')) document.getElementById('queue-count').innerText = appOrders.length;
+    }
+
+    function dispatchOutboundRelayNotification(orderObject, actionEventName) {
+      if (!WEBHOOK_URL || WEBHOOK_URL.includes("httpbin.org/post")) {
+        console.log(`Relay Sandbox Log: Action "${actionEventName}" tracked.`);
+        return;
+      }
+
+      const payload = {
+        event: actionEventName,
+        timestamp: new Date().toISOString(),
+        orderId: orderObject.id,
+        clientName: orderObject.customerName,
+        phone: orderObject.clientPhone || "No Phone",
+        email: orderObject.clientEmail || "No Email",
+        currentStage: orderObject.stage,
+        totalQty: orderObject.totalQuantity,
+        financialStatus: orderObject.isPaid ? "PAID" : "UNPAID",
+        invoiceSent: orderObject.invoiceSent ? "SENT" : "NOT_SENT",
+        specs: orderObject.notes
+      };
+
+      fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => console.log(`Notification Hook Success for Event: ${actionEventName}`))
+      .catch(err => console.error("Relay Connection Refused:", err));
     }
 
     function initializeDefaultDates() {
@@ -430,6 +441,8 @@
       row[sizeGroup][sizeKey] = Math.max(0, parseInt(val) || 0);
       calculateManifestTotals();
     }
+
+    UX = window.updateSizeValueField;
 
     function updateHatQtyField(id, val) {
       const row = customerManifestItems.find(item => item.id === id);
@@ -749,7 +762,9 @@
           notes: `Batch configuration baseline estimation template. Color: ${item.color}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Client Contact: Ph: ${clientPhone} | Em: ${clientEmail}]`,
           stage: 'pending',
           tasks: [false, false, false, false, false, false],
-          invoiceSent: false, isPaid: false, artData: ''
+          invoiceSent: false, isPaid: false, artData: '',
+          clientPhone: clientPhone,
+          clientEmail: clientEmail
         };
         
         appOrders.unshift(systemicCard);
@@ -765,6 +780,8 @@
           adultSummary: 'Sourced from Client Portal Input',
           youthSummary: 'Sourced from Client Portal Input'
         });
+
+        dispatchOutboundRelayNotification(systemicCard, "QUOTE_SUBMITTED");
       });
 
       saveState();
@@ -829,7 +846,6 @@
     function openManualJobModal() { document.getElementById('manual-job-modal').classList.remove('hidden'); }
     function closeManualJobModal() { document.getElementById('manual-job-modal').classList.add('hidden'); document.getElementById('manual-form').reset(); }
 
-    // DYNAMIC COLLAPSIBLE TRIGGER ENGINE
     function toggleInlineLeadForm() {
       const box = document.getElementById('inline-lead-form');
       if (box.classList.contains('hidden')) box.classList.remove('hidden'); 
@@ -908,16 +924,43 @@
 
     function toggleTask(orderId, taskIndex) {
       const order = appOrders.find(o => o.id === orderId);
-      if (order) { order.tasks[taskIndex] = !order.tasks[taskIndex]; saveState(); renderDashboard(); }
+      if (order) { 
+        order.tasks[taskIndex] = !order.tasks[taskIndex]; 
+        saveState(); 
+        renderDashboard(); 
+        dispatchOutboundRelayNotification(order, "PRODUCTION_STEP_TOGGLED");
+      }
     }
-    function toggleInvoiceStatus(orderId) { const order = appOrders.find(o => o.id === orderId); if (order) { order.invoiceSent = !order.invoiceSent; saveState(); renderDashboard(); } }
-    function togglePaymentStatus(orderId) { const order = appOrders.find(o => o.id === orderId); if (order) { order.isPaid = !order.isPaid; saveState(); renderDashboard(); } }
+    function toggleInvoiceStatus(orderId) { 
+      const order = appOrders.find(o => o.id === orderId); 
+      if (order) { 
+        order.invoiceSent = !order.invoiceSent; 
+        saveState(); 
+        renderDashboard(); 
+        dispatchOutboundRelayNotification(order, "INVOICE_STATUS_UPDATED");
+      } 
+    }
+    function togglePaymentStatus(orderId) { 
+      const order = appOrders.find(o => o.id === orderId); 
+      if (order) { 
+        order.isPaid = !order.isPaid; 
+        saveState(); 
+        renderDashboard(); 
+        dispatchOutboundRelayNotification(order, "PAYMENT_STATUS_UPDATED");
+      } 
+    }
     function cancelOrder(orderId) { if (confirm('Scrub run?')) { appOrders = appOrders.filter(o => o.id !== orderId); saveState(); renderDashboard(); } }
+    
     function advanceJob(orderId) {
       const order = appOrders.find(o => o.id === orderId); if (!order) return;
       const stages = ['pending', 'prepress', 'production', 'ready'];
       const cur = stages.indexOf(order.stage);
-      if (cur !== -1 && cur < stages.length - 1) { order.stage = stages[cur + 1]; saveState(); renderDashboard(); }
+      if (cur !== -1 && cur < stages.length - 1) { 
+        order.stage = stages[cur + 1]; 
+        saveState(); 
+        renderDashboard(); 
+        dispatchOutboundRelayNotification(order, "ORDER_STAGE_ADVANCED");
+      }
     }
 
     function generateVisualShopCalendar() {
