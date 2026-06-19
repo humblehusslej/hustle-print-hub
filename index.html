@@ -132,7 +132,7 @@
       <div class="w-12 h-12 bg-zinc-900 text-white rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
       <h2 class="text-xl font-extrabold uppercase tracking-tight">Manifest Submitted!</h2>
       <p class="text-sm text-zinc-500 leading-relaxed font-medium">
-        Thank you! Your combined project specifications and logo storage details have been uploaded securely. An operator from the **Humble Hussle** team will review your multi-item bundle and reach out shortly with your proofs.
+        Thank you! Your combined project specifications and contact credentials have been uploaded securely. An operator from the **Humble Hussle** team will look over your layout and reach out shortly with a quote.
       </p>
       <button onclick="resetPortalForNewQuote()" class="bg-black hover:bg-zinc-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
         Build Another Package
@@ -143,12 +143,13 @@
     <div id="view-estimator" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       <div class="lg:col-span-2 space-y-6">
         
-        <!-- CUSTOMER MASTER PROFILE BLOCK -->
+        <!-- UPGRADED MASTER PROFILE BLOCK WITH LIVE CONTACT INTAKES INCLUDED -->
         <div class="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6 space-y-4">
-          <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-800 border-b pb-2">📋 Customer Account Details</h3>
+          <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-800 border-b pb-2">📋 Customer Account & Contact Details</h3>
+          
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Your Name / Business</label>
+              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Contact Name / Organization</label>
               <input type="text" id="input-name" required placeholder="e.g. Lubbock Coffee Co." class="w-full px-4 py-2 border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
             </div>
             <div>
@@ -156,6 +157,19 @@
               <input type="date" id="input-date" required onchange="validateTurnaroundTimeline()" class="w-full px-4 py-2 border border-zinc-200 rounded-xl text-sm font-medium text-zinc-700 outline-none focus:border-black" />
             </div>
           </div>
+
+          <!-- NEW CONTEXTUAL PHONE & EMAIL ACCOUNT FRAME SECTIONS -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Phone Number</label>
+              <input type="tel" id="input-client-phone" required placeholder="e.g. 806-555-0199" class="w-full px-4 py-2 border border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Email Address</label>
+              <input type="email" id="input-client-email" required placeholder="e.g. manager@husslecafe.com" class="w-full px-4 py-2 border border border-zinc-200 rounded-xl text-sm font-medium text-zinc-800 outline-none focus:border-black" />
+            </div>
+          </div>
+
           <!-- TURNAROUND NOTIFICATION BOX -->
           <div id="date-turnaround-notice" class="p-4 rounded-xl border font-medium text-xs leading-relaxed transition-all hidden"></div>
         </div>
@@ -170,7 +184,7 @@
           <span>➕ Add Component Line to This Batch</span>
         </button>
 
-        <!-- SUBMIT ORDER CALL ACTION BUTTON (UPDATED WORDING WORDING) -->
+        <!-- SUBMIT ORDER CALL ACTION BUTTON -->
         <button onclick="fireManifestSubmission(event)" id="submit-btn" class="w-full bg-zinc-900 hover:bg-black text-white font-bold py-4 rounded-xl text-sm uppercase tracking-wider shadow-sm transition-all text-center cursor-pointer">
           Ready for a Quote
         </button>
@@ -331,13 +345,12 @@
 
   <script>
     let appOrders = [
-      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Coal Black', dueDate: '2026-06-25', totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Screen printed standard bulk shirts setup run.', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '' }
+      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Coal Black', dueDate: '2026-06-25', totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Screen printed standard bulk shirts setup run. [Contact: 806-555-0144]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '' }
     ];
     let appManualLeads = [];
     let isAdminMode = false;
     let clickCountTracker = 0;
 
-    // CUSTOMER COMBINATION BUNDLE STATE MEMORY BANK TANK
     let customerManifestItems = [
       { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 12 }
     ];
@@ -692,7 +705,13 @@
     function fireManifestSubmission(e) {
       e.preventDefault();
       const clientName = document.getElementById('input-name').value.trim();
-      if (!clientName) { alert('Map Customer Account Name.'); return; }
+      const clientPhone = document.getElementById('input-client-phone').value.trim();
+      const clientEmail = document.getElementById('input-client-email').value.trim();
+
+      if (!clientName || !clientPhone || !clientEmail) { 
+        alert('Please completely fill out your Name, Phone, and Email credentials to activate submission.'); 
+        return; 
+      }
 
       customerManifestItems.forEach(item => {
         let totalCount = 0;
@@ -719,16 +738,36 @@
           dueDate: document.getElementById('input-date').value,
           totalQuantity: totalCount,
           estimatedTotal: totalCount * 11.50, 
-          notes: `Batch configuration asset on file. Color: ${item.color}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}]`,
+          notes: `Batch configuration asset on file. Color: ${item.color}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Client Contact: Ph: ${clientPhone} | Em: ${clientEmail}]`,
           stage: 'pending',
           tasks: [false, false, false, false, false, false],
           invoiceSent: false, isPaid: false, artData: ''
         };
+        
+        // Push onto production boards
         appOrders.unshift(systemicCard);
+
+        // AUTO-INJECT DIRECTLY INTO OUTREACH STACK AS AN ACTIVE FOLLOW-UP LEAD!
+        appManualLeads.unshift({
+          uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000),
+          name: clientName,
+          businessName: 'Incoming Hub Manifest Submission',
+          phone: clientPhone,
+          email: clientEmail,
+          customerNotes: `Inbound system manifest with ${totalCount} items run configuration. Method style: ${item.decorationType}.`,
+          totalLeadQty: totalCount,
+          adultSummary: 'Sourced from Client Portal Input',
+          youthSummary: 'Sourced from Client Portal Input'
+        });
       });
 
       saveState();
+      
+      // Reset full top container elements
       document.getElementById('input-name').value = '';
+      document.getElementById('input-client-phone').value = '';
+      document.getElementById('input-client-email').value = '';
+
       customerManifestItems = [{ id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 0 }];
       switchView('estimator');
       document.getElementById('view-estimator').classList.add('hidden');
