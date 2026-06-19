@@ -170,9 +170,9 @@
           <span>➕ Add Component Line to This Batch</span>
         </button>
 
-        <!-- SUBMIT ORDER CALL ACTION BUTTON -->
+        <!-- SUBMIT ORDER CALL ACTION BUTTON (UPDATED WORDING WORDING) -->
         <button onclick="fireManifestSubmission(event)" id="submit-btn" class="w-full bg-zinc-900 hover:bg-black text-white font-bold py-4 rounded-xl text-sm uppercase tracking-wider shadow-sm transition-all text-center cursor-pointer">
-          Submit Package Manifest for Review Run
+          Ready for a Quote
         </button>
 
       </div>
@@ -337,6 +337,7 @@
     let isAdminMode = false;
     let clickCountTracker = 0;
 
+    // CUSTOMER COMBINATION BUNDLE STATE MEMORY BANK TANK
     let customerManifestItems = [
       { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 12 }
     ];
@@ -607,7 +608,6 @@
       calculateManifestTotals();
     }
 
-    // MANDATORY STRATEGIC FORCED MEMORY OVERWRITE BINDINGS 
     function syncBrandDropdownPlaceholder(id, selectedValue) {
       const row = customerManifestItems.find(item => item.id === id);
       const dropdown = document.getElementById(`brand-select-${id}`);
@@ -623,7 +623,6 @@
         options = ['Banners (Outdoor Vinyl Run)', 'Business Cards (16pt Bulk Pack)', 'Metal Aluminum Signage'];
       }
 
-      // If switching categories and no custom item was parsed, bind memory index immediately to first option index!
       if (!selectedValue || !options.includes(selectedValue)) {
         row.brand = options[0];
       }
