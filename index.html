@@ -338,7 +338,7 @@
     let clickCountTracker = 0;
 
     let customerManifestItems = [
-      { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached' }
+      { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 0 }
     ];
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -391,7 +391,7 @@
     function addBlankManifestItemLine() {
       const uniqueId = 'item-' + Date.now();
       customerManifestItems.push({
-        id: uniqueId, decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'White', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached'
+        id: uniqueId, decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'White', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 0
       });
       renderManifestInputsGrid();
     }
@@ -406,6 +406,13 @@
       const row = customerManifestItems.find(item => item.id === id);
       if (!row) return;
       row[sizeGroup][sizeKey] = Math.max(0, parseInt(val) || 0);
+      calculateManifestTotals();
+    }
+
+    function updateHatQtyField(id, val) {
+      const row = customerManifestItems.find(item => item.id === id);
+      if (!row) return;
+      row.hatQty = Math.max(0, parseInt(val) || 0);
       calculateManifestTotals();
     }
 
@@ -449,6 +456,7 @@
         const isSP = item.decorationType === 'Screen Printing';
         const isEMB = item.decorationType === 'Embroidery';
         const isMKT = item.decorationType === 'Marketing Materials';
+        const isHatsSelected = isEMB && item.brand.startsWith('Hats');
 
         let catalogNoticeBannerHtml = '';
         if (isSP || isMKT) {
@@ -470,7 +478,66 @@
           `;
         }
 
-        // COMPLETELY STANDARD UN-HIDDEN FILE UPLOAD INPUT STRUCTURE - BROWSER CANNOT OMIT
+        // HIDDEN / VISIBLE INTERACTION CONDITIONAL SPLIT ENGINE RUNNING LIVE IN THE DOM BLOCKS
+        let sizingOrHeadwearFieldTemplate = '';
+        if (isHatsSelected) {
+          sizingOrHeadwearFieldTemplate = `
+            <div class="border border-zinc-200 bg-amber-50/40 p-4 rounded-xl space-y-2.5 animate-fadeIn">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <span class="text-xs font-extrabold uppercase text-amber-900 tracking-wide block">🧢 Headwear Allocation Run</span>
+                  <p class="text-[11px] text-amber-700 font-medium">Professional wholesale One Size Fits All (OSFA) Snapbacks are locked for this component row.</p>
+                </div>
+                <div class="w-full sm:w-32">
+                  <label class="text-[10px] font-bold text-amber-800 block mb-0.5">Total Caps Needed</label>
+                  <input type="number" min="12" value="${item.hatQty || 12}" oninput="updateHatQtyField('${item.id}', this.value)" class="w-full p-2 border border-amber-300 rounded-lg text-xs font-bold text-zinc-800 bg-white outline-none focus:border-black" />
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (isSP || isEMB) {
+          sizingOrHeadwearFieldTemplate = `
+            <div class="border border-zinc-200 rounded-xl p-3 bg-zinc-50/50 space-y-3 animate-fadeIn">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block mb-1">Adult Size Breakdown</span>
+                <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5 text-center text-[10px] font-bold text-zinc-500">
+                  <div><span>S</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.S || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'S', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>M</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.M || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'M', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>L</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.L || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'L', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.XL || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>2XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes['2XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '2XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>3XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes['3XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '3XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>4XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes['4XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '4XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                </div>
+              </div>
+
+              <div class="pt-2 border-t border-dashed border-zinc-200">
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block mb-1">Youth Size Breakdown</span>
+                <div class="grid grid-cols-5 gap-1.5 text-center text-[10px] font-bold text-zinc-500">
+                  <div><span>YXS</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YXS || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXS', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YS</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YS || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YS', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YM</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YM || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YM', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YXL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YXL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (isMKT) {
+          sizingOrHeadwearFieldTemplate = `
+            <div class="grid grid-cols-2 gap-3 p-3 bg-zinc-50 border border-zinc-200 rounded-xl animate-fadeIn">
+              <div>
+                <label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Asset Coating Spec</label>
+                <select onchange="updateManifestItemField('${item.id}', 'sText', this.value)" class="w-full p-1.5 border border-zinc-200 bg-white rounded-lg text-xs font-medium text-zinc-700 outline-none">
+                  <option value="Standard Finish">Standard Matte Coat Finish</option>
+                  <option value="Premium Heavy Matte">Premium Heavy Matte Stock</option>
+                </select>
+              </div>
+              <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Total Quantity Override</label><input type="number" min="1" value="${item.flatQtyOverride || 250}" oninput="updateManualFlatQtyField('${item.id}', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
+            </div>
+          `;
+        }
+
         tank.innerHTML += `
           <div class="bg-white border border-zinc-200 rounded-2xl shadow-sm p-5 space-y-4 animate-fadeIn relative">
             <div class="flex justify-between items-center border-b pb-2">
@@ -481,7 +548,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Method Style</label>
-                <select onchange="updateManifestItemField('${item.id}', 'decorationType', this.value); syncBrandDropdownPlaceholder('${item.id}')" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-bold text-zinc-700 outline-none cursor-pointer">
+                <select id="method-type-${item.id}" onchange="updateManifestItemField('${item.id}', 'decorationType', this.value); syncBrandDropdownPlaceholder('${item.id}')" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-bold text-zinc-700 outline-none cursor-pointer">
                   <option value="Screen Printing" ${isSP ? 'selected' : ''}>Screen Printing</option>
                   <option value="Embroidery" ${isEMB ? 'selected' : ''}>Custom Embroidery</option>
                   <option value="Marketing Materials" ${isMKT ? 'selected' : ''}>Marketing Asset</option>
@@ -489,7 +556,7 @@
               </div>
               <div>
                 <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Canvas / Stock</label>
-                <select id="brand-select-${item.id}" onchange="updateManifestItemField('${item.id}', 'brand', this.value)" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-medium text-zinc-700 outline-none cursor-pointer"></select>
+                <select id="brand-select-${item.id}" onchange="updateManifestItemField('${item.id}', 'brand', this.value); renderManifestInputsGrid()" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-medium text-zinc-700 outline-none cursor-pointer"></select>
               </div>
               <div>
                 <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Base Color</label>
@@ -499,7 +566,6 @@
 
             ${catalogNoticeBannerHtml}
 
-            <!-- 100% STANDARD SOLID FILE ELEMENT ROWS - ZERO TRICKS LAYER -->
             <div class="p-4 bg-zinc-50 border border-zinc-200 rounded-xl space-y-2">
               <label class="block text-xs font-bold uppercase tracking-wide text-zinc-700">Upload Artwork File Sourcing Reference</label>
               <input type="file" accept="image/*" onchange="handleManifestLineArtUpload('${item.id}', event)" class="w-full text-xs font-medium text-zinc-700 bg-white border border-zinc-300 rounded-lg p-2 outline-none cursor-pointer focus:border-black" />
@@ -533,46 +599,9 @@
               </div>
             ` : ''}
 
-            ${(isSP || isEMB) ? `
-              <div class="border border-zinc-200 rounded-xl p-3 bg-zinc-50/50 space-y-3">
-                <div>
-                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block mb-1">Adult Size Breakdown</span>
-                  <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5 text-center text-[10px] font-bold text-zinc-500">
-                    <div><span>S</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.S || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'S', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                    <div><span>M</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.M || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'M', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                    <div><span>L</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.L || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'L', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                    <div><span>XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.XL || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                    <div><span>2XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes['2XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '2XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                    <div><span>3XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes['3XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '3XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                    <div><span>4XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes['4XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '4XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  </div>
-                </div>
+            <!-- INJECTING DYNAMIC SPLIT SELECTION ACCORDION FROM MATRIX COMPUTATION -->
+            ${sizingOrHeadwearFieldTemplate}
 
-                <div class="pt-2 border-t border-dashed border-zinc-200">
-                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block mb-1">Youth Size Breakdown</span>
-                  <div class="grid grid-cols-5 gap-1.5 text-center text-[10px] font-bold text-zinc-500">
-                    <div><span>YXS</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YXS || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXS', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                    <div><span>YS</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YS || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YS', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                    <div><span>YM</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YM || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YM', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                    <div><span>YL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                    <div><span>YXL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YXL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  </div>
-                </div>
-              </div>
-            ` : ''}
-
-            ${isMKT ? `
-              <div class="grid grid-cols-2 gap-3 p-3 bg-zinc-50 border border-zinc-100 rounded-xl">
-                <div>
-                  <label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Asset Coating Spec</label>
-                  <select onchange="updateManifestItemField('${item.id}', 'sText', this.value)" class="w-full p-1.5 border border-zinc-200 bg-white rounded-lg text-xs font-medium text-zinc-700 outline-none">
-                    <option value="Standard Finish">Standard Matte Coat Finish</option>
-                    <option value="Premium Heavy Matte">Premium Heavy Matte Stock</option>
-                  </select>
-                </div>
-                <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Total Quantity Override</label><input type="number" min="1" value="${item.flatQtyOverride || 250}" oninput="updateManualFlatQtyField('${item.id}', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
-              </div>
-            ` : ''}
           </div>
         `;
         syncBrandDropdownPlaceholder(item.id, item.brand);
@@ -611,8 +640,12 @@
 
       customerManifestItems.forEach((item, idx) => {
         let itemSumQty = 0;
+        const isHatsSelected = item.decorationType === 'Embroidery' && item.brand.startsWith('Hats');
+
         if (item.decorationType === 'Marketing Materials') {
           itemSumQty = item.flatQtyOverride || 250;
+        } else if (isHatsSelected) {
+          itemSumQty = item.hatQty || 12;
         } else {
           itemSumQty = (item.adultSizes.S || 0) + (item.adultSizes.M || 0) + (item.adultSizes.L || 0) + (item.adultSizes.XL || 0) + (item.adultSizes['2XL'] || 0) + (item.adultSizes['3XL'] || 0) + (item.adultSizes['4XL'] || 0) +
                        (item.youthSizes.YXS || 0) + (item.youthSizes.YS || 0) + (item.youthSizes.YM || 0) + (item.youthSizes.YL || 0) + (item.youthSizes.YXL || 0);
@@ -661,8 +694,13 @@
       customerManifestItems.forEach(item => {
         let totalCount = 0;
         let youthDetailsStr = "";
+        const isHatsSelected = item.decorationType === 'Embroidery' && item.brand.startsWith('Hats');
+
         if (item.decorationType === 'Marketing Materials') {
           totalCount = item.flatQtyOverride || 250;
+        } else if (isHatsSelected) {
+          totalCount = item.hatQty || 12;
+          youthDetailsStr = ` [Wholesale OSFA Hat Run Pool]`;
         } else {
           totalCount = (item.adultSizes.S || 0) + (item.adultSizes.M || 0) + (item.adultSizes.L || 0) + (item.adultSizes.XL || 0) + (item.adultSizes['2XL'] || 0) + (item.adultSizes['3XL'] || 0) + (item.adultSizes['4XL'] || 0) +
                        (item.youthSizes.YXS || 0) + (item.youthSizes.YS || 0) + (item.youthSizes.YM || 0) + (item.youthSizes.YL || 0) + (item.youthSizes.YXL || 0);
@@ -688,7 +726,7 @@
 
       saveState();
       document.getElementById('input-name').value = '';
-      customerManifestItems = [{ id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached' }];
+      customerManifestItems = [{ id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 0 }];
       switchView('estimator');
       document.getElementById('view-estimator').classList.add('hidden');
       document.getElementById('view-success').classList.remove('hidden');
