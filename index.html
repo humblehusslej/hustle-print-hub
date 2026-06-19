@@ -127,13 +127,16 @@
 
   <main class="max-w-7xl mx-auto px-4 py-10 flex-1 w-full relative">
     
-    <!-- SUCCESS SCREEN FOR CUSTOMERS -->
+    <!-- SUCCESS SCREEN FOR CUSTOMERS WITH EXPLICIT FOLLOW-UP NOTICES RESTORED -->
     <div id="view-success" class="hidden max-w-xl mx-auto bg-white border border-zinc-200 rounded-2xl p-8 text-center space-y-5 shadow-sm my-12 animate-fadeIn">
       <div class="w-12 h-12 bg-zinc-900 text-white rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
-      <h2 class="text-xl font-extrabold uppercase tracking-tight">Manifest Submitted!</h2>
-      <p class="text-sm text-zinc-500 leading-relaxed font-medium">
-        Thank you! Your combined project specifications and contact credentials have been uploaded securely. An operator from the **Humble Hussle** team will look over your layout and reach out shortly with a quote.
-      </p>
+      <h2 class="text-xl font-extrabold uppercase tracking-tight">Project Sourced!</h2>
+      <div class="text-sm text-zinc-600 space-y-3 font-medium leading-relaxed">
+        <p>Your combined multi-item package specifications and structural contact fields have been logged successfully into our production queue.</p>
+        <p class="bg-zinc-50 border border-zinc-200 p-3 rounded-xl text-xs font-bold text-zinc-900 italic">
+          📢 Please Note: The configuration layout generated below is a rough preliminary baseline. An office operator from the Humble Hussle team will review your artwork vectors and touch base with you very soon with your finalized complete estimate proof.
+        </p>
+      </div>
       <button onclick="resetPortalForNewQuote()" class="bg-black hover:bg-zinc-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
         Build Another Package
       </button>
@@ -143,13 +146,13 @@
     <div id="view-estimator" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       <div class="lg:col-span-2 space-y-6">
         
-        <!-- UPGRADED MASTER PROFILE BLOCK WITH LIVE CONTACT INTAKES INCLUDED -->
+        <!-- CUSTOMER MASTER PROFILE BLOCK -->
         <div class="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6 space-y-4">
           <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-800 border-b pb-2">📋 Customer Account & Contact Details</h3>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Contact Name / Organization</label>
+              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Your Name / Business</label>
               <input type="text" id="input-name" required placeholder="e.g. Lubbock Coffee Co." class="w-full px-4 py-2 border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
             </div>
             <div>
@@ -158,15 +161,14 @@
             </div>
           </div>
 
-          <!-- NEW CONTEXTUAL PHONE & EMAIL ACCOUNT FRAME SECTIONS -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
             <div>
               <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Phone Number</label>
-              <input type="tel" id="input-client-phone" required placeholder="e.g. 806-555-0199" class="w-full px-4 py-2 border border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
+              <input type="tel" id="input-client-phone" required placeholder="e.g. 806-555-0199" class="w-full px-4 py-2 border border-zinc-200 rounded-xl outline-none font-medium focus:border-black text-sm text-zinc-800 placeholder-zinc-400" />
             </div>
             <div>
               <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1.5">Email Address</label>
-              <input type="email" id="input-client-email" required placeholder="e.g. manager@husslecafe.com" class="w-full px-4 py-2 border border border-zinc-200 rounded-xl text-sm font-medium text-zinc-800 outline-none focus:border-black" />
+              <input type="email" id="input-client-email" required placeholder="e.g. manager@husslecafe.com" class="w-full px-4 py-2 border border-zinc-200 rounded-xl text-sm font-medium text-zinc-800 outline-none focus:border-black" />
             </div>
           </div>
 
@@ -191,7 +193,7 @@
 
       </div>
 
-      <!-- SIDE TALLY BOARD -->
+      <!-- SIDE TALLY BOARD WITH INJECTED ESTIMATE DISCLAIMER -->
       <div class="space-y-4 sticky top-24">
         <div class="bg-zinc-950 text-white rounded-2xl p-6 shadow-xl border border-zinc-800 space-y-4">
           <h3 class="text-xs font-bold uppercase tracking-widest text-zinc-400 pb-2 border-b border-zinc-800">Combined Package Invoice</h3>
@@ -210,6 +212,12 @@
               <span class="text-2xl font-black text-emerald-400" id="summary-total-cost">$0.00</span>
             </div>
           </div>
+
+          <!-- BOLD ROUGH ESTIMATE DISCLAIMER PANEL INFUSED INFUSED -->
+          <div class="pt-3 border-t border-dashed border-zinc-800 text-[11px] text-zinc-400 font-medium leading-normal italic">
+            ⚠️ Note: This invoice sums an initial <span class="text-zinc-200 font-bold">rough baseline estimate</span>. A specialist will review artwork files and contact you soon with a finalized proofing quote.
+          </div>
+
         </div>
       </div>
     </div>
@@ -738,23 +746,21 @@
           dueDate: document.getElementById('input-date').value,
           totalQuantity: totalCount,
           estimatedTotal: totalCount * 11.50, 
-          notes: `Batch configuration asset on file. Color: ${item.color}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Client Contact: Ph: ${clientPhone} | Em: ${clientEmail}]`,
+          notes: `Batch configuration baseline estimation template. Color: ${item.color}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Client Contact: Ph: ${clientPhone} | Em: ${clientEmail}]`,
           stage: 'pending',
           tasks: [false, false, false, false, false, false],
           invoiceSent: false, isPaid: false, artData: ''
         };
         
-        // Push onto production boards
         appOrders.unshift(systemicCard);
 
-        // AUTO-INJECT DIRECTLY INTO OUTREACH STACK AS AN ACTIVE FOLLOW-UP LEAD!
         appManualLeads.unshift({
           uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000),
           name: clientName,
-          businessName: 'Incoming Hub Manifest Submission',
+          businessName: 'Inbound Web Sourced Hub Request',
           phone: clientPhone,
           email: clientEmail,
-          customerNotes: `Inbound system manifest with ${totalCount} items run configuration. Method style: ${item.decorationType}.`,
+          customerNotes: `Inbound system manifest with ${totalCount} items run configuration needing quote tracking call. Style: ${item.decorationType}.`,
           totalLeadQty: totalCount,
           adultSummary: 'Sourced from Client Portal Input',
           youthSummary: 'Sourced from Client Portal Input'
@@ -763,7 +769,6 @@
 
       saveState();
       
-      // Reset full top container elements
       document.getElementById('input-name').value = '';
       document.getElementById('input-client-phone').value = '';
       document.getElementById('input-client-email').value = '';
@@ -824,6 +829,7 @@
     function openManualJobModal() { document.getElementById('manual-job-modal').classList.remove('hidden'); }
     function closeManualJobModal() { document.getElementById('manual-job-modal').classList.add('hidden'); document.getElementById('manual-form').reset(); }
 
+    // DYNAMIC COLLAPSIBLE TRIGGER ENGINE
     function toggleInlineLeadForm() {
       const box = document.getElementById('inline-lead-form');
       if (box.classList.contains('hidden')) box.classList.remove('hidden'); 
