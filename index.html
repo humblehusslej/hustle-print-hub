@@ -260,11 +260,14 @@
             
             <div class="bg-zinc-100 border-2 border-zinc-300 p-3 rounded-xl space-y-2.5 shadow-inner text-zinc-800">
               <button onclick="toggleInlineLeadForm()" class="w-full text-left text-[11px] font-extrabold uppercase text-zinc-800 tracking-wide flex justify-between items-center">
-                <span>➕ Log Manual Hot Lead</span>
+                <span id="lead-form-title-label">➕ Log Manual Hot Lead</span>
                 <span id="lead-form-indicator" class="text-xs text-zinc-400">▼</span>
               </button>
               
               <div id="inline-lead-form" class="hidden space-y-2 pt-2 border-t-2 border-dashed border-zinc-300">
+                <!-- Hidden state tracker box for inline edits -->
+                <input type="hidden" id="editing-lead-uid" value="" />
+
                 <input type="text" id="lead-name" placeholder="Contact Name" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
                 <input type="text" id="lead-business" placeholder="Business / Organization" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
                 
@@ -299,7 +302,11 @@
                 </div>
 
                 <textarea id="lead-notes" rows="2" placeholder="Scribble client needs or pricing details..." class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none resize-none focus:border-black"></textarea>
-                <button onclick="submitManualOutreachLead()" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs font-extrabold py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">Save Lead Note</button>
+                
+                <div class="flex gap-2">
+                  <button onclick="clearLeadFormFieldsOverride()" id="lead-cancel-edit-btn" class="hidden bg-zinc-400 hover:bg-zinc-500 text-white text-xs font-extrabold px-3 py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">X</button>
+                  <button onclick="submitManualOutreachLead()" id="lead-submit-btn" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs font-extrabold py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">Save Lead Note</button>
+                </div>
               </div>
             </div>
 
@@ -353,7 +360,7 @@
 
   <script>
     // PASTE YOUR MAKE.COM URL ENDPOINT LINK DIRECTLY INSIDE THESE QUOTES BELOW:
-    const WEBHOOK_URL = "bn6cklg971ylz9yi23yosl9ufxcytayn@hook.us2.make.com";
+    const WEBHOOK_URL = "https://httpbin.org/post";
 
     let appOrders = [
       { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Coal Black', dueDate: '2026-06-25', totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Screen printed standard bulk shirts setup run. [Contact: 806-555-0144]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '', clientPhone: '806-555-0144', clientEmail: 'athletics@wt.edu' }
@@ -797,7 +804,11 @@
           customerNotes: `Inbound system manifest with ${totalCount} items run configuration needing quote tracking call. Style: ${item.decorationType}.`,
           totalLeadQty: totalCount,
           adultSummary: 'Sourced from Client Portal Input',
-          youthSummary: 'Sourced from Client Portal Input'
+          youthSummary: 'Sourced from Client Portal Input',
+          rawSizes: {
+            s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0,
+            yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0
+          }
         });
 
         dispatchOutboundRelayNotification(systemicCard, "QUOTE_SUBMITTED");
@@ -867,8 +878,78 @@
 
     function toggleInlineLeadForm() {
       const box = document.getElementById('inline-lead-form');
-      if (box.classList.contains('hidden')) box.classList.remove('hidden'); 
-      else box.classList.add('hidden');
+      if (box.classList.contains('hidden')) {
+        box.classList.remove('hidden');
+      } else {
+        box.classList.add('hidden');
+        clearLeadFormFieldsOverride();
+      }
+    }
+
+    // INTERACTION ENGINE: INLINE LEAD MODIFIER HOOK INJECTOR
+    function loadLeadIntoEditorOverride(leadUid) {
+      const targetLead = appManualLeads.find(l => l.uid === leadUid);
+      if (!targetLead) return;
+
+      // Populate string input rows
+      document.getElementById('editing-lead-uid').value = targetLead.uid;
+      document.getElementById('lead-name').value = targetLead.name || '';
+      document.getElementById('lead-business').value = targetLead.businessName || '';
+      document.getElementById('lead-phone').value = targetLead.phone || '';
+      document.getElementById('lead-email').value = targetLead.email || '';
+      document.getElementById('lead-notes').value = targetLead.customerNotes || '';
+
+      // Fallback checks for older arrays that lack raw numeric tracking
+      const sizes = targetLead.rawSizes || { s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0, yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0 };
+      
+      document.getElementById('l-size-s').value = sizes.s || '';
+      document.getElementById('l-size-m').value = sizes.m || '';
+      document.getElementById('l-size-l').value = sizes.l || '';
+      document.getElementById('l-size-xl').value = sizes.xl || '';
+      document.getElementById('l-size-2xl').value = sizes.x2l || '';
+      document.getElementById('l-size-3xl').value = sizes.x3l || '';
+      document.getElementById('l-size-4xl').value = sizes.x4l || '';
+
+      document.getElementById('l-size-yxs').value = sizes.yxs || '';
+      document.getElementById('l-size-ys').value = sizes.ys || '';
+      document.getElementById('l-size-ym').value = sizes.ym || '';
+      document.getElementById('l-size-yl').value = sizes.yl || '';
+      document.getElementById('l-size-yxl').value = sizes.yxl || '';
+
+      // Tweak contextual title controls to notify user they are customizing records
+      document.getElementById('lead-form-title-label').innerText = `✏️ Customizing: ${targetLead.name}`;
+      document.getElementById('lead-submit-btn').innerText = "Update Lead Specifications";
+      document.getElementById('lead-cancel-edit-btn').classList.remove('hidden');
+
+      // Expand accordion container smoothly onto layout space
+      document.getElementById('inline-lead-form').classList.remove('hidden');
+      showToast('Lead records initialized inside editor block');
+    }
+
+    function clearLeadFormFieldsOverride() {
+      document.getElementById('editing-lead-uid').value = '';
+      document.getElementById('lead-name').value = '';
+      document.getElementById('lead-business').value = '';
+      document.getElementById('lead-phone').value = '';
+      document.getElementById('lead-email').value = '';
+      document.getElementById('lead-notes').value = '';
+
+      document.getElementById('l-size-s').value = '';
+      document.getElementById('l-size-m').value = '';
+      document.getElementById('l-size-l').value = '';
+      document.getElementById('l-size-xl').value = '';
+      document.getElementById('l-size-2xl').value = '';
+      document.getElementById('l-size-3xl').value = '';
+      document.getElementById('l-size-4xl').value = '';
+      document.getElementById('l-size-yxs').value = '';
+      document.getElementById('l-size-ys').value = '';
+      document.getElementById('l-size-ym').value = '';
+      document.getElementById('l-size-yl').value = '';
+      document.getElementById('l-size-yxl').value = '';
+
+      document.getElementById('lead-form-title-label').innerText = "➕ Log Manual Hot Lead";
+      document.getElementById('lead-submit-btn').innerText = "Save Lead Note";
+      document.getElementById('lead-cancel-edit-btn').add('hidden');
     }
 
     function submitManualOutreachLead() {
@@ -877,8 +958,9 @@
       const phone = document.getElementById('lead-phone').value.trim();
       const email = document.getElementById('lead-email').value.trim();
       const notes = document.getElementById('lead-notes').value.trim();
+      const editingUid = document.getElementById('editing-lead-uid').value;
       
-      if (!name) return;
+      if (!name) { alert('Please map a valid contact name.'); return; }
 
       const as = parseInt(document.getElementById('l-size-s').value) || 0;
       const am = parseInt(document.getElementById('l-size-m').value) || 0;
@@ -896,8 +978,7 @@
 
       const totalCalculatedLeadQty = as + am + al + axl + axx + a3x + a4x + yxs + ys + ym + yl + yxl;
 
-      appManualLeads.unshift({
-        uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000),
+      const gatheredData = {
         name: name,
         businessName: biz || 'Individual Account',
         phone: phone || 'No Phone Logged',
@@ -905,23 +986,34 @@
         customerNotes: notes || 'No specs logged yet.',
         totalLeadQty: totalCalculatedLeadQty,
         adultSummary: `S:${as} M:${am} L:${al} XL:${axl} 2X:${axx} 3X:${a3x} 4X:${a4x}`,
-        youthSummary: `YXS:${yxs} YS:${ys} YM:${ym} L:${yl} YXL:${yxl}`
-      });
+        youthSummary: `YXS:${yxs} YS:${ys} YM:${ym} L:${yl} YXL:${yxl}`,
+        rawSizes: {
+          s: as, m: am, l: al, xl: axl, x2l: axx, x3l: a3x, x4l: a4x,
+          yxs: yxs, ys: ys, ym: ym, yl: yl, yxl: yxl
+        }
+      };
+
+      if (editingUid) {
+        // OVERWRITE MODE: update index matching arrays safely in place
+        const indexMatch = appManualLeads.findIndex(l => l.uid === editingUid);
+        if (indexMatch !== -1) {
+          appManualLeads[indexMatch] = { ...appManualLeads[indexMatch], ...gatheredData };
+          showToast('✓ Lead updated in memory pipeline');
+        }
+      } else {
+        // STANDARD FRESH LEAD INSERTION MODE
+        const newLead = {
+          uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000),
+          ...gatheredData
+        };
+        appManualLeads.unshift(newLead);
+        showToast('✓ Brand new hot lead registered');
+      }
 
       saveState();
-      
-      document.getElementById('lead-name').value = ''; document.getElementById('lead-business').value = '';
-      document.getElementById('lead-phone').value = ''; document.getElementById('lead-email').value = '';
-      document.getElementById('lead-notes').value = '';
-      document.getElementById('l-size-s').value = ''; document.getElementById('l-size-m').value = '';
-      document.getElementById('l-size-l').value = ''; document.getElementById('l-size-xl').value = '';
-      document.getElementById('l-size-2xl').value = ''; document.getElementById('l-size-3xl').value = '';
-      document.getElementById('l-size-4xl').value = '';
-      document.getElementById('l-size-yxs').value = ''; document.getElementById('l-size-ys').value = '';
-      document.getElementById('l-size-ym').value = ''; document.getElementById('l-size-yl').value = '';
-      document.getElementById('l-size-yxl').value = '';
-
-      toggleInlineLeadForm(); renderDashboard(); showToast('✓ Lead updated');
+      clearLeadFormFieldsOverride();
+      toggleInlineLeadForm(); 
+      renderDashboard();
     }
 
     function purgeLeadRecord(leadUid) {
@@ -1016,6 +1108,7 @@
           `;
         }
 
+        // BACK OFFICE OUTREACH ELEMENT: INJECTING RE-CONFIGURED ✏️ EDIT TRIGGER HOOK ACTIONS
         outreachBox.innerHTML += `
           <div class="p-3 border border-zinc-200 bg-white rounded-xl shadow-xs space-y-2 flex flex-col justify-between">
             <div class="space-y-1">
@@ -1029,14 +1122,21 @@
             <div class="text-[11px] bg-amber-50/60 border border-amber-200 text-amber-900 p-2.5 font-medium leading-normal rounded-xl select-text italic">
               ${lead.customerNotes}
             </div>
-            <div class="pt-2 border-t border-zinc-100 flex items-center justify-between gap-2">
-              <div class="flex gap-2 text-[10px] font-bold">
-                <a href="tel:${lead.phone}" class="text-red-600 hover:underline">📞 Call</a>
-                <a href="mailto:${lead.email}" class="text-zinc-500 hover:underline">✉️ Email</a>
+            <div class="pt-2 border-t border-zinc-100 flex flex-col gap-2">
+              <div class="flex justify-between items-center text-[10px] font-bold">
+                <div class="flex gap-3">
+                  <a href="tel:${lead.phone}" class="text-red-600 hover:underline">📞 Call</a>
+                  <a href="mailto:${lead.email}" class="text-zinc-500 hover:underline">✉️ Email</a>
+                </div>
+                <button onclick="loadLeadIntoEditorOverride('${lead.uid}')" class="bg-zinc-950 text-white hover:bg-zinc-800 font-black px-2 py-1 rounded text-[9px] transition-colors uppercase tracking-wider shadow-xs">
+                  ✏️ Edit Lead
+                </button>
               </div>
-              <button onclick="purgeLeadRecord('${lead.uid}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded text-[9px] border border-red-100 transition-colors uppercase tracking-wider">
-                Delete
-              </button>
+              <div class="pt-1 flex justify-end">
+                <button onclick="purgeLeadRecord('${lead.uid}')" class="text-zinc-400 hover:text-red-600 font-bold text-[9px] uppercase tracking-widest">
+                  Scrub Record ×
+                </button>
+              </div>
             </div>
           </div>
         `;
