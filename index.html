@@ -450,7 +450,6 @@
       calculateManifestTotals();
     }
 
-    // RESET MANUAL COUNTERS LOCAL 
     function updateManualFlatQtyField(id, val) {
       const row = customerManifestItems.find(item => item.id === id);
       if (!row) return;
@@ -535,24 +534,24 @@
               <div>
                 <span class="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block mb-1">Adult Size Breakdown</span>
                 <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5 text-center text-[10px] font-bold text-zinc-500">
-                  <div><span>S</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.S || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'S', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  <div><span>M</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.M || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'M', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  <div><span>L</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.L || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'L', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  <div><span>XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes.XL || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  <div><span>2XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes['2XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '2XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  <div><span>3XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes['3XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '3XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  <div><span>4XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes['4XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '4XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>S</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.S || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'S', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>M</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.M || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'M', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>L</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.L || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'L', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.XL || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>2XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.['2XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '2XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>3XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.['3XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '3XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>4XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.['4XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '4XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
                 </div>
               </div>
 
               <div class="pt-2 border-t border-dashed border-zinc-200">
                 <span class="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block mb-1">Youth Size Breakdown</span>
                 <div class="grid grid-cols-5 gap-1.5 text-center text-[10px] font-bold text-zinc-500">
-                  <div><span>YXS</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YXS || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXS', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  <div><span>YS</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YS || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YS', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  <div><span>YM</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YM || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YM', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  <div><span>YL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
-                  <div><span>YXL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes.YXL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YXS</span><input type="number" min="0" placeholder="0" value="${item.youthSizes?.YXS || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXS', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YS</span><input type="number" min="0" placeholder="0" value="${item.youthSizes?.YS || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YS', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YM</span><input type="number" min="0" placeholder="0" value="${item.youthSizes?.YM || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YM', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes?.YL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YXL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes?.YXL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
                 </div>
               </div>
             </div>
@@ -684,8 +683,8 @@
         } else if (isHatsSelected) {
           itemSumQty = item.hatQty || 12;
         } else {
-          itemSumQty = (item.adultSizes.S || 0) + (item.adultSizes.M || 0) + (item.adultSizes.L || 0) + (item.adultSizes.XL || 0) + (item.adultSizes['2XL'] || 0) + (item.adultSizes['3XL'] || 0) + (item.adultSizes['4XL'] || 0) +
-                       (item.youthSizes.YXS || 0) + (item.youthSizes.YS || 0) + (item.youthSizes.YM || 0) + (item.youthSizes.YL || 0) + (item.youthSizes.YXL || 0);
+          itemSumQty = (item.adultSizes?.S || 0) + (item.adultSizes?.M || 0) + (item.adultSizes?.L || 0) + (item.adultSizes?.XL || 0) + (item.adultSizes?.['2XL'] || 0) + (item.adultSizes?.['3XL'] || 0) + (item.adultSizes?.['4XL'] || 0) +
+                       (item.youthSizes?.YXS || 0) + (item.youthSizes?.YS || 0) + (item.youthSizes?.YM || 0) + (item.youthSizes?.YL || 0) + (item.youthSizes?.YXL || 0);
         }
 
         let lineRate = 0;
@@ -723,6 +722,7 @@
       document.getElementById('summary-total-cost').innerText = "$" + completeBatchCost.toFixed(2);
     }
 
+    // ARMORED SECURITY SUBMISSION ENGINE PIPELINE
     function fireManifestSubmission(e) {
       e.preventDefault();
       const clientName = document.getElementById('input-name').value.trim();
@@ -739,6 +739,7 @@
         let youthDetailsStr = "";
         const isHatsSelected = item.decorationType === 'Embroidery' && item.brand.startsWith('Hats');
 
+        // Safe default sizing matrix structure protection layer
         let sSizes = { s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0, yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0 };
 
         if (item.decorationType === 'Marketing Materials') {
@@ -747,15 +748,17 @@
           totalCount = item.hatQty || 12;
           youthDetailsStr = ` [Wholesale OSFA Hat Run Pool]`;
         } else {
-          totalCount = (item.adultSizes.S || 0) + (item.adultSizes.M || 0) + (item.adultSizes.L || 0) + (item.adultSizes.XL || 0) + (item.adultSizes['2XL'] || 0) + (item.adultSizes['3XL'] || 0) + (item.adultSizes['4XL'] || 0) +
-                       (item.youthSizes.YXS || 0) + (item.youthSizes.YS || 0) + (item.youthSizes.YM || 0) + (item.youthSizes.YL || 0) + (item.youthSizes.YXL || 0);
-          youthDetailsStr = ` [Youth Volumes - YXS:${item.youthSizes.YXS} YS:${item.youthSizes.YS} YM:${item.youthSizes.YM} YL:${item.youthSizes.YL} YXL:${item.youthSizes.YXL}]`;
+          totalCount = (item.adultSizes?.S || 0) + (item.adultSizes?.M || 0) + (item.adultSizes?.L || 0) + (item.adultSizes?.XL || 0) + (item.adultSizes?.['2XL'] || 0) + (item.adultSizes?.['3XL'] || 0) + (item.adultSizes?.['4XL'] || 0) +
+                       (item.youthSizes?.YXS || 0) + (item.youthSizes?.YS || 0) + (item.youthSizes?.YM || 0) + (item.youthSizes?.YL || 0) + (item.youthSizes?.YXL || 0);
+          youthDetailsStr = ` [Youth Volumes - YXS:${item.youthSizes?.YXS || 0} YS:${item.youthSizes?.YS || 0} YM:${item.youthSizes?.YM || 0} YL:${item.youthSizes?.YL || 0} YXL:${item.youthSizes?.YXL || 0}]`;
 
-          sSizes = {
-            s: item.adultSizes.S || 0, m: item.adultSizes.M || 0, l: item.adultSizes.L || 0, xl: item.adultSizes.XL || 0,
-            x2l: item.adultSizes['2XL'] || 0, x3l: item.adultSizes['3XL'] || 0, x4l: item.adultSizes['4XL'] || 0,
-            yxs: item.youthSizes.YXS || 0, ys: item.youthSizes.YS || 0, ym: item.youthSizes.YM || 0, yl: item.youthSizes.YL || 0, yxl: item.youthSizes.YXL || 0
-          };
+          if (item.adultSizes || item.youthSizes) {
+            sSizes = {
+              s: item.adultSizes?.S || 0, m: item.adultSizes?.M || 0, l: item.adultSizes?.L || 0, xl: item.adultSizes?.XL || 0,
+              x2l: item.adultSizes?.['2XL'] || 0, x3l: item.adultSizes?.['3XL'] || 0, x4l: item.adultSizes?.['4XL'] || 0,
+              yxs: item.youthSizes?.YXS || 0, ys: item.youthSizes?.YS || 0, ym: item.youthSizes?.YM || 0, yl: item.youthSizes?.YL || 0, yxl: item.youthSizes?.YXL || 0
+            };
+          }
         }
 
         const systemicCard = {
@@ -763,11 +766,11 @@
           customerName: clientName,
           decorationType: item.decorationType,
           brand: item.brand,
-          color: item.color,
+          color: item.color || "Standard",
           dueDate: document.getElementById('input-date').value,
           totalQuantity: totalCount,
           estimatedTotal: totalCount * 11.50, 
-          notes: `Batch configuration baseline estimation template. Color: ${item.color}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Client Contact: Ph: ${clientPhone} | Em: ${clientEmail}]`,
+          notes: `Batch configuration baseline estimation template. Color: ${item.color || "Standard"}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Client Contact: Ph: ${clientPhone} | Em: ${clientEmail}]`,
           stage: 'pending',
           tasks: [false, false, false, false, false, false],
           invoiceSent: false, isPaid: false, artData: '',
