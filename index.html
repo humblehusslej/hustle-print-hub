@@ -6,6 +6,7 @@
   <title>Humble Hussle Print Shop - Control Hub</title>
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* Clean Premium Fading Halftone Screen Print Matrix */
     .bg-gradient-halftone {
@@ -342,28 +343,19 @@
   </footer>
 
   <script>
+    // DIRECT INJECTED SUPABASE CLIENT CONNECTORS
+    const SUPABASE_URL = "https://rtgjovwxbunfbytheyjp.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_yEcIS8oCgmh9IC1xMF3sPA_GVONhjee";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     let appOrders = [];
     let appManualLeads = [];
-    let appWebQuotes = []; // SANDBOX PROTECTION TANK V2
     let isAdminMode = false;
     let clickCountTracker = 0;
 
     let customerManifestItems = [
       { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 12 }
     ];
-
-    // ARMORED BOOTSTRAP RESILIENCY LAYER
-    try {
-      if (localStorage.getItem('hpc_static_orders')) appOrders = JSON.parse(localStorage.getItem('hpc_static_orders')) || [];
-    } catch(e) { appOrders = []; }
-
-    try {
-      if (localStorage.getItem('hpc_manual_leads')) appManualLeads = JSON.parse(localStorage.getItem('hpc_manual_leads')) || [];
-    } catch(e) { appManualLeads = []; }
-
-    try {
-      if (localStorage.getItem('hpc_web_quotes')) appWebQuotes = JSON.parse(localStorage.getItem('hpc_web_quotes')) || [];
-    } catch(e) { appWebQuotes = []; }
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true') {
@@ -373,16 +365,35 @@
           document.getElementById('admin-nav-container').classList.remove('hidden');
         }
         document.getElementById('hub-subtitle').innerText = "Production Command Hub";
+        fetchCloudDatabaseState();
       });
     }
 
-    function saveState() {
-      localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
-      localStorage.setItem('hpc_manual_leads', JSON.stringify(appManualLeads));
-      localStorage.setItem('hpc_web_quotes', JSON.stringify(appWebQuotes));
-      if (document.getElementById('queue-count')) {
-        document.getElementById('queue-count').innerText = appOrders.length + appWebQuotes.length;
-      }
+    // STREAMING INITIALIZER ENGINE
+    async function fetchCloudDatabaseState() {
+      try {
+        const { data: orders, error: err1 } = await _supabase.from('app_orders').select('*').order('created_at', { ascending: false });
+        const { data: leads, error: err2 } = await _supabase.from('app_manual_leads').select('*').order('created_at', { ascending: false });
+        
+        if (!err1 && orders) appOrders = orders;
+        if (!err2 && leads) appManualLeads = leads;
+        
+        renderDashboard();
+      } catch (e) { console.error("Cloud connection sync timeout:", e); }
+    }
+
+    async function syncCloudOrders(payload, mode = 'insert') {
+      if (mode === 'insert') await _supabase.from('app_orders').insert([payload]);
+      else if (mode === 'update') await _supabase.from('app_orders').update(payload).eq('id', payload.id);
+      else if (mode === 'delete') await _supabase.from('app_orders').delete().eq('id', payload);
+      await fetchCloudDatabaseState();
+    }
+
+    async function syncCloudLeads(payload, mode = 'insert') {
+      if (mode === 'insert') await _supabase.from('app_manual_leads').insert([payload]);
+      else if (mode === 'update') await _supabase.from('app_manual_leads').update(payload).eq('uid', payload.uid);
+      else if (mode === 'delete') await _supabase.from('app_manual_leads').delete().eq('uid', payload);
+      await fetchCloudDatabaseState();
     }
 
     function initializeDefaultDates() {
@@ -713,8 +724,8 @@
       document.getElementById('summary-total-cost').innerText = "$" + completeBatchCost.toFixed(2);
     }
 
-    // 100% SECURE PRIVATE VAULT SUBMISSION LOOP
-    function fireManifestSubmission(e) {
+    // CLOUD PUSH INTAKE LOOP
+    async function fireManifestSubmission(e) {
       e.preventDefault();
       const clientName = document.getElementById('input-name').value.trim();
       const clientPhone = document.getElementById('input-client-phone').value.trim();
@@ -725,7 +736,7 @@
         return; 
       }
 
-      customerManifestItems.forEach(item => {
+      for (const item of customerManifestItems) {
         let totalCount = 0;
         let youthDetailsStr = "";
         const isHatsSelected = item.decorationType === 'Embroidery' && item.brand && item.brand.startsWith('Hats');
@@ -748,27 +759,47 @@
           };
         }
 
-        const targetId = "WEB-" + Math.floor(1000 + Math.random() * 9000);
-        const detailedSpecs = `Sourced via Estimator. Method: ${item.decorationType}. Canvas: ${item.brand || "Standard"}. Color: ${item.color || "Standard"}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Ph: ${clientPhone} | Em: ${clientEmail}]`;
+        const targetId = "HPC-" + Math.floor(1000 + Math.random() * 9000);
+        const trackingUid = 'LEAD-' + Math.floor(1000 + Math.random() * 9000);
+        const detailedSpecs = `Web Sourced Quote. Style: ${item.decorationType}. Stock Canvas: ${item.brand || "Standard"}. Color: ${item.color || "Standard"}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}]`;
 
-        // PUSHING ENTIRELY INTO SAFE PRIVATE TANK
-        appWebQuotes.unshift({
-          uid: targetId,
+        const systemicCard = {
+          id: targetId,
+          customer_name: clientName,
+          decoration_type: item.decorationType,
+          brand: item.brand || "Standard",
+          color: item.color || "Standard",
+          due_date: document.getElementById('input-date').value,
+          total_quantity: totalCount,
+          estimated_total: totalCount * 11.50, 
+          notes: detailedSpecs,
+          stage: 'pending',
+          tasks: [false, false, false, false, false, false],
+          invoice_sent: false,
+          is_paid: false,
+          client_phone: clientPhone,
+          client_email: clientEmail
+        };
+
+        const manualLeadCard = {
+          uid: trackingUid,
           name: clientName,
-          businessName: `Sourced Online Quote (${item.decorationType})`,
+          business_name: `Online Sourced Request (#${targetId})`,
           phone: clientPhone,
           email: clientEmail,
-          followUpDate: document.getElementById('input-date').value || '', 
-          customerNotes: detailedSpecs,
-          totalLeadQty: totalCount,
-          adultSummary: `S:${sSizes.s} M:${sSizes.m} L:${sSizes.l} XL:${sSizes.xl} 2X:${sSizes.x2l} 3X:${sSizes.x3l} 4X:${sSizes.x4l}`,
-          youthSummary: `YXS:${sSizes.yxs} YS:${sSizes.ys} YM:${sSizes.ym} L:${sSizes.yl} YXL:${sSizes.yxl}`,
-          rawSizes: sSizes
-        });
-      });
+          follow_up_date: document.getElementById('input-date').value || '', 
+          customer_notes: detailedSpecs,
+          total_lead_qty: totalCount,
+          adult_summary: `S:${sSizes.s} M:${sSizes.m} L:${sSizes.l} XL:${sSizes.xl} 2X:${sSizes.x2l} 3X:${sSizes.x3l} 4X:${sSizes.x4l}`,
+          youth_summary: `YXS:${sSizes.yxs} YS:${sSizes.ys} YM:${sSizes.ym} L:${sSizes.yl} YXL:${sSizes.yxl}`,
+          raw_sizes: sSizes
+        };
 
-      saveState();
-      
+        // Fire both directly to the cloud network live 
+        await syncCloudOrders(systemicCard, 'insert');
+        await syncCloudLeads(manualLeadCard, 'insert');
+      }
+
       document.getElementById('input-name').value = '';
       document.getElementById('input-client-phone').value = '';
       document.getElementById('input-client-email').value = '';
@@ -810,7 +841,7 @@
         document.getElementById('portal-footer').classList.add('hidden');
         document.getElementById('nav-dashboard').className = "px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded bg-white text-black";
         document.getElementById('nav-estimator').className = "px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded text-zinc-400 hover:text-white";
-        renderDashboard();
+        fetchCloudDatabaseState();
       }
     }
 
@@ -840,19 +871,18 @@
     }
 
     function loadLeadIntoEditorOverride(leadUid) {
-      // Search inside both memory vaults seamlessly
-      let targetLead = appManualLeads.find(l => l.uid === leadUid) || appWebQuotes.find(q => q.uid === leadUid);
+      const targetLead = appManualLeads.find(l => l.uid === leadUid);
       if (!targetLead) return;
 
       document.getElementById('editing-lead-uid').value = targetLead.uid;
       document.getElementById('lead-name').value = targetLead.name || '';
-      document.getElementById('lead-business').value = targetLead.businessName || '';
+      document.getElementById('lead-business').value = targetLead.business_name || '';
       document.getElementById('lead-phone').value = targetLead.phone || '';
       document.getElementById('lead-email').value = targetLead.email || '';
-      document.getElementById('lead-date').value = targetLead.followUpDate || '';
-      document.getElementById('lead-notes').value = targetLead.customerNotes || '';
+      document.getElementById('lead-date').value = targetLead.follow_up_date || '';
+      document.getElementById('lead-notes').value = targetLead.customer_notes || '';
 
-      const sizes = targetLead.rawSizes || { s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0, yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0 };
+      const sizes = targetLead.raw_sizes || { s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0, yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0 };
       
       document.getElementById('l-size-s').value = sizes.s || '';
       document.getElementById('l-size-m').value = sizes.m || '';
@@ -902,7 +932,7 @@
       document.getElementById('lead-cancel-edit-btn').classList.add('hidden');
     }
 
-    function submitManualOutreachLead() {
+    async function submitManualOutreachLead() {
       const name = document.getElementById('lead-name').value.trim();
       const biz = document.getElementById('lead-business').value.trim();
       const phone = document.getElementById('lead-phone').value.trim();
@@ -931,80 +961,103 @@
 
       const gatheredData = {
         name: name,
-        businessName: biz || 'Individual Account',
+        business_name: biz || 'Individual Account',
         phone: phone || 'No Phone Logged',
         email: email || 'No Email Logged',
-        followUpDate: fupDate || '',
-        customerNotes: notes || 'No specs logged yet.',
-        totalLeadQty: totalCalculatedLeadQty,
-        adultSummary: `S:${as} M:${am} L:${al} XL:${axl} 2X:${axx} 3X:${a3x} 4X:${a4x}`,
-        youthSummary: `YXS:${yxs} YS:${ys} YM:${ym} L:${yl} YXL:${yxl}`,
-        rawSizes: {
+        follow_up_date: fupDate || '',
+        customer_notes: notes || 'No specs logged yet.',
+        total_lead_qty: totalCalculatedLeadQty,
+        adult_summary: `S:${as} M:${am} L:${al} XL:${axl} 2X:${axx} 3X:${a3x} 4X:${a4x}`,
+        youth_summary: `YXS:${yxs} YS:${ys} YM:${ym} L:${yl} YXL:${yxl}`,
+        raw_sizes: {
           s: as, m: am, l: al, xl: axl, x2l: axx, x3l: a3x, x4l: a4x,
           yxs: yxs, ys: ys, ym: ym, yl: yl, yxl: yxl
         }
       };
 
       if (editingUid) {
-        if (editingUid.startsWith('WEB-')) {
-          const idx = appWebQuotes.findIndex(q => q.uid === editingUid);
-          if (idx !== -1) appWebQuotes[idx] = { ...appWebQuotes[idx], ...gatheredData, uid: editingUid };
-        } else {
-          const idx = appManualLeads.findIndex(l => l.uid === editingUid);
-          if (idx !== -1) appManualLeads[idx] = { ...appManualLeads[idx], ...gatheredData, uid: editingUid };
-        }
-        showToast('✓ Entry overwritten successfully');
+        await syncCloudLeads({ uid: editingUid, ...gatheredData }, 'update');
+        showToast('✓ Entry updated in cloud database');
       } else {
-        appManualLeads.unshift({ uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000), ...gatheredData });
-        showToast('✓ Hot lead registered');
+        const trackingUid = 'LEAD-' + Math.floor(1000 + Math.random() * 9000);
+        await syncCloudLeads({ uid: trackingUid, ...gatheredData }, 'insert');
+        showToast('✓ Hot lead pushed to cloud');
       }
 
-      saveState();
       clearLeadFormFieldsOverride();
       toggleInlineLeadForm(); 
-      renderDashboard();
     }
 
-    function purgeLeadRecord(leadUid) {
-      if (confirm('Delete lead tracking card?')) { 
-        appManualLeads = appManualLeads.filter(l => l.uid !== leadUid); 
-        appWebQuotes = appWebQuotes.filter(q => q.uid !== leadUid);
-        saveState(); renderDashboard(); 
+    async function purgeLeadRecord(leadUid) {
+      if (confirm('Delete lead tracking card from cloud database permanently?')) { 
+        await syncCloudLeads(leadUid, 'delete');
+        showToast('Lead scrubbed from network');
       } 
     }
 
-    function handleManualFormSubmit(e) {
+    async function handleManualFormSubmit(e) {
       e.preventDefault();
       const s = parseInt(document.getElementById('m-size-s').value) || 0;
       const m = parseInt(document.getElementById('m-size-m').value) || 0;
       const flat = parseInt(document.getElementById('m-size-flat').value) || 0;
       let finalQty = flat === 0 ? (s+m) : flat;
 
-      appOrders.unshift({
-        id: "HPC-" + Math.floor(1000 + Math.random() * 9000), customerName: document.getElementById('manual-name').value, decorationType: document.getElementById('manual-type').value, brand: document.getElementById('manual-brand').value || "Standard", color: document.getElementById('manual-color').value || "Standard", dueDate: document.getElementById('manual-date').value, totalQuantity: finalQty, estimatedTotal: parseFloat(document.getElementById('manual-price').value) || 0, notes: document.getElementById('manual-notes').value, stage: document.getElementById('manual-stage').value, tasks: [false,false,false,false,false,false], invoiceSent: false, isPaid: false, artData: ''
-      });
-      saveState(); closeManualJobModal(); renderDashboard(); showToast('✓ Manual order card logged');
+      const manualOrderPayload = {
+        id: "HPC-" + Math.floor(1000 + Math.random() * 9000), 
+        customer_name: document.getElementById('manual-name').value, 
+        decoration_type: document.getElementById('manual-type').value, 
+        brand: document.getElementById('manual-brand').value || "Standard", 
+        color: document.getElementById('manual-color').value || "Standard", 
+        due_date: document.getElementById('manual-date').value, 
+        total_quantity: finalQty, 
+        estimated_total: parseFloat(document.getElementById('manual-price').value) || 0, 
+        notes: document.getElementById('manual-notes').value, 
+        stage: document.getElementById('manual-stage').value, 
+        tasks: [false,false,false,false,false,false], 
+        invoice_sent: false, 
+        is_paid: false
+      };
+
+      await syncCloudOrders(manualOrderPayload, 'insert');
+      closeManualJobModal(); 
+      showToast('✓ Manual order compiled to cloud');
     }
 
-    function toggleTask(orderId, taskIndex) {
+    async function toggleTask(orderId, taskIndex) {
       const order = appOrders.find(o => o.id === orderId);
-      if (order) { order.tasks[taskIndex] = !order.tasks[taskIndex]; saveState(); renderDashboard(); }
+      if (order) { 
+        order.tasks[taskIndex] = !order.tasks[taskIndex]; 
+        await syncCloudOrders({ id: orderId, tasks: order.tasks }, 'update');
+      }
     }
-    function toggleInvoiceStatus(orderId) { 
+    async function toggleInvoiceStatus(orderId) { 
       const order = appOrders.find(o => o.id === orderId); 
-      if (order) { order.invoiceSent = !order.invoiceSent; saveState(); renderDashboard(); } 
+      if (order) { 
+        order.invoice_sent = !order.invoice_sent; 
+        await syncCloudOrders({ id: orderId, invoice_sent: order.invoice_sent }, 'update');
+      } 
     }
-    function togglePaymentStatus(orderId) { 
+    async function togglePaymentStatus(orderId) { 
       const order = appOrders.find(o => o.id === orderId); 
-      if (order) { order.isPaid = !order.isPaid; saveState(); renderDashboard(); } 
+      if (order) { 
+        order.is_paid = !order.is_paid; 
+        await syncCloudOrders({ id: orderId, is_paid: order.is_paid }, 'update');
+      } 
     }
-    function cancelOrder(orderId) { if (confirm('Scrub run?')) { appOrders = appOrders.filter(o => o.id !== orderId); saveState(); renderDashboard(); } }
+    async function cancelOrder(orderId) { 
+      if (confirm('Delete order token from network permanently?')) { 
+        await syncCloudOrders(orderId, 'delete');
+        showToast('Order scrubbed');
+      } 
+    }
     
-    function advanceJob(orderId) {
+    async function advanceJob(orderId) {
       const order = appOrders.find(o => o.id === orderId); if (!order) return;
       const stages = ['pending', 'prepress', 'production', 'ready'];
       const cur = stages.indexOf(order.stage);
-      if (cur !== -1 && cur < stages.length - 1) { order.stage = stages[cur + 1]; saveState(); renderDashboard(); }
+      if (cur !== -1 && cur < stages.length - 1) { 
+        await syncCloudOrders({ id: orderId, stage: stages[cur + 1] }, 'update');
+      }
     }
 
     function generateVisualShopCalendar() {
@@ -1013,8 +1066,8 @@
       for(let i=0; i < 28; i++) {
         const loopDate = new Date(baseToday.getTime() + (i * 24 * 60 * 60 * 1000));
         const searchStr = `${loopDate.getFullYear()}-${String(loopDate.getMonth() + 1).padStart(2, '0')}-${String(loopDate.getDate()).padStart(2, '0')}`;
-        const matchingJobs = appOrders.filter(o => o.dueDate === searchStr);
-        let nodes = ''; matchingJobs.forEach(j => { nodes += `<div class="px-1 py-0.5 mt-1 text-[9px] bg-zinc-900 text-white truncate rounded font-bold uppercase">${j.customerName}</div>`; });
+        const matchingJobs = appOrders.filter(o => o.due_date === searchStr);
+        let nodes = ''; matchingJobs.forEach(j => { nodes += `<div class="px-1 py-0.5 mt-1 text-[9px] bg-zinc-900 text-white truncate rounded font-bold uppercase">${j.customer_name}</div>`; });
         calGrid.innerHTML += `<div class="bg-white border rounded-xl p-2 min-h-[70px]"><span class="text-[10px] font-extrabold text-zinc-400 block">${loopDate.toLocaleString('en-US', { month: 'short', day: 'numeric' })}</span><div class="mt-1 overflow-y-auto max-h-[50px]">${nodes}</div></div>`;
       }
     }
@@ -1028,21 +1081,18 @@
       const paymentBox = document.getElementById('box-followup-payment'); paymentBox.innerHTML = '';
       let outC = 0, payC = 0;
 
-      // SEAMLESSLY MERGE BOTH THE WEB AND MANUAL VAULTS INTO SIDEBAR LIST
-      let combinedLeadsList = [...appWebQuotes, ...appManualLeads];
-
-      combinedLeadsList.forEach(lead => {
+      appManualLeads.forEach(lead => {
         if (!lead || !lead.name) return;
         outC++;
         
         let leadSizeSummaryHtml = '';
-        let totalCount = parseInt(lead.totalLeadQty) || 0;
+        let totalCount = parseInt(lead.total_lead_qty) || 0;
         if(totalCount > 0) {
           leadSizeSummaryHtml = `
             <div class="p-1.5 bg-zinc-100 rounded-lg text-[10px] space-y-0.5 font-mono text-zinc-500 border border-zinc-200">
               <span class="font-bold text-zinc-700 block text-[9px] uppercase tracking-wider">📦 Sizing Run Total: ${totalCount} pcs</span>
-              <div class="truncate">A: ${lead.adultSummary || 'Logged'}</div>
-              <div class="truncate text-red-700 font-bold">Y: ${lead.youthSummary || '0'}</div>
+              <div class="truncate">A: ${lead.adult_summary || 'Logged'}</div>
+              <div class="truncate text-red-700 font-bold">Y: ${lead.youth_summary || '0'}</div>
             </div>
           `;
         }
@@ -1056,14 +1106,14 @@
                 <span class="font-extrabold text-zinc-900 leading-tight text-sm">${lead.name}</span>
                 <div class="flex flex-col items-end gap-1">
                   <span class="text-[9px] bg-zinc-950 text-white font-mono px-1 rounded uppercase tracking-wider">${lead.uid || 'LEAD'}</span>
-                  ${lead.followUpDate ? `<span class="text-[9px] bg-red-600 text-white font-extrabold px-1.5 py-0.5 rounded tracking-wide uppercase">⏳ ${lead.followUpDate}</span>` : ''}
+                  ${lead.follow_up_date ? `<span class="text-[9px] bg-red-600 text-white font-extrabold px-1.5 py-0.5 rounded tracking-wide uppercase">⏳ ${lead.follow_up_date}</span>` : ''}
                 </div>
               </div>
-              <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider truncate">${lead.businessName || 'Individual Account'}</div>
+              <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider truncate">${lead.business_name || 'Individual Account'}</div>
             </div>
             ${leadSizeSummaryHtml}
             <div class="text-[11px] bg-white border border-zinc-200 text-zinc-800 p-2.5 font-medium leading-normal rounded-xl select-text italic shadow-inner">
-              ${lead.customerNotes || 'No notes mapped.'}
+              ${lead.customer_notes || 'No notes mapped.'}
             </div>
             <div class="pt-2 border-t border-zinc-200 flex flex-col gap-2">
               <div class="flex justify-between items-center text-[10px] font-bold">
@@ -1087,13 +1137,13 @@
 
       appOrders.forEach(o => {
         if (!o) return;
-        if (o.stage === 'pending' && !o.invoiceSent) {
-          outC++; outreachBox.innerHTML += `<div class="p-2 border border-red-100 bg-red-50/40 rounded-lg text-xs font-bold text-red-950">${o.customerName || 'Manual Entry'} - Manifest Item [ID: ${o.id}]</div>`;
-        } else if (!o.isPaid && o.invoiceSent) {
-          payC++; paymentBox.innerHTML += `<div class="p-2 border border-amber-100 bg-amber-50/30 rounded-lg text-xs font-bold text-amber-950">${o.customerName || 'Manual Entry'} - Balance Out: $${(o.estimatedTotal || 0).toFixed(2)}</div>`;
+        if (o.stage === 'pending' && !o.invoice_sent) {
+          outC++; outreachBox.innerHTML += `<div class="p-2 border border-red-100 bg-red-50/40 rounded-lg text-xs font-bold text-red-950">${o.customer_name || 'Entry'} - Item [ID: ${o.id}]</div>`;
+        } else if (!o.is_paid && o.invoice_sent) {
+          payC++; paymentBox.innerHTML += `<div class="p-2 border border-amber-100 bg-amber-50/30 rounded-lg text-xs font-bold text-amber-950">${o.customer_name || 'Entry'} - Balance Out: $${(o.estimated_total || 0).toFixed(2)}</div>`;
         }
 
-        const labels = o.decorationType === 'Marketing Materials' ? ['Design Approved', 'Stock Loaded', 'Bleed Verified', 'Color Profiled', 'Plotter Prepped', 'Packaged & QA'] : (o.decorationType === 'Screen Printing' ? ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] : ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Proofed', 'Threads Prepped']);
+        const labels = o.decoration_type === 'Marketing Materials' ? ['Design Approved', 'Stock Loaded', 'Bleed Verified', 'Color Profiled', 'Plotter Prepped', 'Packaged & QA'] : (o.decoration_type === 'Screen Printing' ? ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] : ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Proofed', 'Threads Prepped']);
         let tasksHtml = '';
         labels.forEach((l, idx) => { 
           let isChecked = o.tasks && o.tasks[idx];
@@ -1101,14 +1151,14 @@
         });
 
         const cardHtml = `
-          <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3 text-zinc-800 ${o.isPaid ? 'ring-2 ring-emerald-500' : ''}">
-            <div class="flex justify-between items-center text-[10px] font-bold"><span class="bg-zinc-900 text-white px-2 py-0.5 rounded">${o.id}</span><span class="text-zinc-400">${o.dueDate || 'No date'}</span></div>
-            <div><h4 class="font-extrabold text-sm text-zinc-900 truncate uppercase">${o.customerName || 'Unnamed'}</h4><p class="text-xs text-zinc-500 font-semibold uppercase">${o.totalQuantity || 0}x Run Items [${o.decorationType || 'Custom Style'}]</p></div>
+          <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3 text-zinc-800 ${o.is_paid ? 'ring-2 ring-emerald-500' : ''}">
+            <div class="flex justify-between items-center text-[10px] font-bold"><span class="bg-zinc-900 text-white px-2 py-0.5 rounded">${o.id}</span><span class="text-zinc-400">${o.due_date || 'No date'}</span></div>
+            <div><h4 class="font-extrabold text-sm text-zinc-900 truncate uppercase">${o.customer_name || 'Unnamed'}</h4><p class="text-xs text-zinc-500 font-semibold uppercase">${o.total_quantity || 0}x Run Items [${o.decoration_type || 'Style'}]</p></div>
             <div class="text-[11px] bg-zinc-50 border p-2 text-zinc-600 rounded-lg leading-normal italic">${o.notes || 'No specs logged'}</div>
             <div class="grid grid-cols-2 gap-1 pt-1 border-t">${tasksHtml}</div>
             <div class="pt-2 border-t grid grid-cols-2 gap-1.5 text-[10px]">
-              <button onclick="toggleInvoiceStatus('${o.id}')" class="p-1 rounded font-bold border uppercase ${o.invoiceSent ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-400'}">📄 Invoiced</button>
-              <button onclick="togglePaymentStatus('${o.id}')" class="p-1 rounded font-bold border uppercase ${o.isPaid ? 'bg-emerald-600 text-white' : 'bg-red-50 text-red-600'}">💰 Paid</button>
+              <button onclick="toggleInvoiceStatus('${o.id}')" class="p-1 rounded font-bold border uppercase ${o.invoice_sent ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-400'}">📄 Invoiced</button>
+              <button onclick="togglePaymentStatus('${o.id}')" class="p-1 rounded font-bold border uppercase ${o.is_paid ? 'bg-emerald-600 text-white' : 'bg-red-50 text-red-600'}">💰 Paid</button>
             </div>
             <div class="pt-2 border-t flex items-center justify-between text-xs">
               <button onclick="cancelOrder('${o.id}')" class="text-red-600 font-bold text-[10px] bg-red-50 px-2 py-1 rounded">Cancel</button>
