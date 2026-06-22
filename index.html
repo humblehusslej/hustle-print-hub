@@ -70,7 +70,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1">Base Garment Brand/Code</label>
-            <input type="text" id="manual-brand" required placeholder="e.g. Gildan 5000" class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none font-medium text-sm focus:border-black">
+            <input type="text" id="manual-brand" required placeholder="e.g. Gildan 5000" class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none font-bold text-sm focus:border-black">
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
@@ -373,7 +373,6 @@
       { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 12 }
     ];
 
-    // AUTOMATED PARSING PROTECTION FILTER
     try {
       if (localStorage.getItem('hpc_static_orders')) appOrders = JSON.parse(localStorage.getItem('hpc_static_orders')) || [];
     } catch(e) { appOrders = []; }
@@ -381,7 +380,6 @@
     try {
       if (localStorage.getItem('hpc_manual_leads')) {
         let loadedLeads = JSON.parse(localStorage.getItem('hpc_manual_leads')) || [];
-        // Loop through history items and inject safe property wrappers to keep manual logs intact
         appManualLeads = loadedLeads.map(l => {
           if (!l.totalLeadQty) l.totalLeadQty = parseInt(l.totalLeadQty) || 0;
           if (!l.adultSummary) l.adultSummary = l.adultSummary || "Specs stored";
@@ -736,6 +734,7 @@
       document.getElementById('summary-total-cost').innerText = "$" + completeBatchCost.toFixed(2);
     }
 
+    // ARMORED SECURITY SUBMISSION ENGINE PIPELINE - SYNCHRONIZED CLONING INTEGRATED
     function fireManifestSubmission(e) {
       e.preventDefault();
       const clientName = document.getElementById('input-name').value.trim();
@@ -771,8 +770,12 @@
           };
         }
 
+        const targetId = "HPC-" + Math.floor(1000 + Math.random() * 9000);
+        const trackingUid = 'LEAD-' + Math.floor(1000 + Math.random() * 9000);
+        const detailedSpecs = `Batch configuration baseline estimation template. Style: ${item.decorationType}. Stock Canvas: ${item.brand || "Standard"}. Color: ${item.color || "Standard"}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Client Contact: Ph: ${clientPhone} | Em: ${clientEmail}]`;
+
         const systemicCard = {
-          id: "HPC-" + Math.floor(1000 + Math.random() * 9000),
+          id: targetId,
           customerName: clientName,
           decorationType: item.decorationType,
           brand: item.brand || "Standard",
@@ -780,7 +783,7 @@
           dueDate: document.getElementById('input-date').value,
           totalQuantity: totalCount,
           estimatedTotal: totalCount * 11.50, 
-          notes: `Batch configuration baseline estimation template. Color: ${item.color || "Standard"}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Client Contact: Ph: ${clientPhone} | Em: ${clientEmail}]`,
+          notes: detailedSpecs,
           stage: 'pending',
           tasks: [false, false, false, false, false, false],
           invoiceSent: false, isPaid: false, artData: '',
@@ -788,16 +791,18 @@
           clientEmail: clientEmail
         };
         
+        // Push cleanly onto production backlog queue (List 1)
         appOrders.unshift(systemicCard);
 
+        // FORCE CLONE: Push directly onto back-office hot outreach list side card deck at same instant (List 2)
         appManualLeads.unshift({
-          uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000),
+          uid: trackingUid,
           name: clientName,
-          businessName: 'Inbound Web Sourced Hub Request',
-          phone: clientPhone,
-          email: clientEmail,
-          followUpDate: '', 
-          customerNotes: `Inbound system manifest with ${totalCount} items run configuration needing quote tracking call. Style: ${item.decorationType}.`,
+          businessName: `Online Quote Sourced (#${targetId})`,
+          phone: clientPhone || 'No Phone Mapped',
+          email: clientEmail || 'No Email Mapped',
+          followUpDate: document.getElementById('input-date').value || '', 
+          customerNotes: detailedSpecs,
           totalLeadQty: totalCount,
           adultSummary: `S:${sSizes.s} M:${sSizes.m} L:${sSizes.l} XL:${sSizes.xl} 2X:${sSizes.x2l} 3X:${sSizes.x3l} 4X:${sSizes.x4l}`,
           youthSummary: `YXS:${sSizes.yxs} YS:${sSizes.ys} YM:${sSizes.ym} L:${sSizes.yl} YXL:${sSizes.yxl}`,
@@ -1079,7 +1084,6 @@
       const paymentBox = document.getElementById('box-followup-payment'); paymentBox.innerHTML = '';
       let outC = 0, payC = 0;
 
-      // Safe fallback rendering filters
       let secureLeadsList = Array.isArray(appManualLeads) ? appManualLeads : [];
       let secureOrdersList = Array.isArray(appOrders) ? appOrders : [];
 
