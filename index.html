@@ -70,7 +70,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1">Base Garment Brand/Code</label>
-            <input type="text" id="manual-brand" required placeholder="e.g. Gildan 5000" class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none font-bold text-sm focus:border-black" />
+            <input type="text" id="manual-brand" required placeholder="e.g. Gildan 5000" class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none font-bold text-sm focus:border-black">
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
@@ -450,6 +450,7 @@
       calculateManifestTotals();
     }
 
+    // RESET MANUAL COUNTERS LOCAL 
     function updateManualFlatQtyField(id, val) {
       const row = customerManifestItems.find(item => item.id === id);
       if (!row) return;
@@ -457,7 +458,6 @@
       calculateManifestTotals();
     }
 
-    // LOCAL-ONLY DATA SYNC
     function updateManifestItemField(id, key, value) {
       const row = customerManifestItems.find(item => item.id === id);
       if (!row) return;
@@ -739,6 +739,8 @@
         let youthDetailsStr = "";
         const isHatsSelected = item.decorationType === 'Embroidery' && item.brand.startsWith('Hats');
 
+        let sSizes = { s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0, yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0 };
+
         if (item.decorationType === 'Marketing Materials') {
           totalCount = item.flatQtyOverride || 250;
         } else if (isHatsSelected) {
@@ -748,6 +750,12 @@
           totalCount = (item.adultSizes.S || 0) + (item.adultSizes.M || 0) + (item.adultSizes.L || 0) + (item.adultSizes.XL || 0) + (item.adultSizes['2XL'] || 0) + (item.adultSizes['3XL'] || 0) + (item.adultSizes['4XL'] || 0) +
                        (item.youthSizes.YXS || 0) + (item.youthSizes.YS || 0) + (item.youthSizes.YM || 0) + (item.youthSizes.YL || 0) + (item.youthSizes.YXL || 0);
           youthDetailsStr = ` [Youth Volumes - YXS:${item.youthSizes.YXS} YS:${item.youthSizes.YS} YM:${item.youthSizes.YM} YL:${item.youthSizes.YL} YXL:${item.youthSizes.YXL}]`;
+
+          sSizes = {
+            s: item.adultSizes.S || 0, m: item.adultSizes.M || 0, l: item.adultSizes.L || 0, xl: item.adultSizes.XL || 0,
+            x2l: item.adultSizes['2XL'] || 0, x3l: item.adultSizes['3XL'] || 0, x4l: item.adultSizes['4XL'] || 0,
+            yxs: item.youthSizes.YXS || 0, ys: item.youthSizes.YS || 0, ym: item.youthSizes.YM || 0, yl: item.youthSizes.YL || 0, yxl: item.youthSizes.YXL || 0
+          };
         }
 
         const systemicCard = {
@@ -778,12 +786,9 @@
           followUpDate: '', 
           customerNotes: `Inbound system manifest with ${totalCount} items run configuration needing quote tracking call. Style: ${item.decorationType}.`,
           totalLeadQty: totalCount,
-          adultSummary: 'Sourced from Client Portal Input',
-          youthSummary: 'Sourced from Client Portal Input',
-          rawSizes: {
-            s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0,
-            yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0
-          }
+          adultSummary: `S:${sSizes.s} M:${sSizes.m} L:${sSizes.l} XL:${sSizes.xl} 2X:${sSizes.x2l} 3X:${sSizes.x3l} 4X:${sSizes.x4l}`,
+          youthSummary: `YXS:${sSizes.yxs} YS:${sSizes.ys} YM:${sSizes.ym} L:${sSizes.yl} YXL:${sSizes.yxl}`,
+          rawSizes: sSizes
         });
       });
 
