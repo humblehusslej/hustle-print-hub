@@ -236,4 +236,899 @@
           <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
             <div class="border-b pb-2 flex justify-between items-center">
               <span class="text-xs font-extrabold uppercase tracking-wide text-red-600 block">📞 Needs Call / Outreach</span>
-              <span class="text-[10px] bg-red-50 text-red-700 font-bold px
+              <span class="text-[10px] bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded-full" id="count-outreach">0</span>
+            </div>
+            
+            <div class="bg-zinc-100 border-2 border-zinc-300 p-3 rounded-xl space-y-2.5 shadow-inner text-zinc-800">
+              <button onclick="toggleInlineLeadForm()" class="w-full text-left text-[11px] font-extrabold uppercase text-zinc-800 tracking-wide flex justify-between items-center">
+                <span id="lead-form-title-label">➕ Log Manual Hot Lead</span>
+                <span id="lead-form-indicator" class="text-xs text-zinc-400">▼</span>
+              </button>
+              
+              <div id="inline-lead-form" class="hidden space-y-2 pt-2 border-t-2 border-dashed border-zinc-300">
+                <input type="hidden" id="editing-lead-uid" value="" />
+
+                <input type="text" id="lead-name" placeholder="Contact Name" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                <input type="text" id="lead-business" placeholder="Business / Organization" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                
+                <div class="grid grid-cols-2 gap-1.5">
+                  <input type="tel" id="lead-phone" placeholder="Phone" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                  <input type="email" id="lead-email" placeholder="Email" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
+                </div>
+
+                <div>
+                  <label class="block text-[10px] font-black uppercase text-zinc-400 tracking-wide mb-0.5">Target Follow-Up Date</label>
+                  <input type="date" id="lead-date" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none text-zinc-700 focus:border-black" />
+                </div>
+
+                <div class="border border-zinc-300 p-2 bg-white rounded-lg space-y-2">
+                  <div class="space-y-1">
+                    <span class="text-[9px] font-black uppercase text-zinc-400 tracking-wide block">Adult Sizes (S-4XL)</span>
+                    <div class="grid grid-cols-7 gap-1 text-[9px] text-center font-bold text-zinc-400">
+                      <div>S<input type="number" id="l-size-s" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>M<input type="number" id="l-size-m" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>L<input type="number" id="l-size-l" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>XL<input type="number" id="l-size-xl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>2X<input type="number" id="l-size-2xl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>3X<input type="number" id="l-size-3xl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>4X<input type="number" id="l-size-4xl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                    </div>
+                  </div>
+                  <div class="pt-1.5 border-t border-dashed border-zinc-200 space-y-1">
+                    <span class="text-[9px] font-black uppercase text-zinc-400 tracking-wide block">Youth Sizes (YXS-YXL)</span>
+                    <div class="grid grid-cols-5 gap-1 text-[9px] text-center font-bold text-zinc-400">
+                      <div>YXS<input type="number" id="l-size-yxs" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>YS<input type="number" id="l-size-ys" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>YM<input type="number" id="l-size-ym" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>YL<input type="number" id="l-size-yl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                      <div>YXL<input type="number" id="l-size-yxl" min="0" placeholder="0" class="w-full text-center border rounded border-zinc-200 p-0.5 text-zinc-800 text-[10px]" /></div>
+                    </div>
+                  </div>
+                </div>
+
+                <textarea id="lead-notes" rows="2" placeholder="Scribble client needs or pricing details..." class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none resize-none focus:border-black"></textarea>
+                
+                <div class="flex gap-2">
+                  <button type="button" onclick="clearLeadFormFieldsOverride()" id="lead-cancel-edit-btn" class="hidden bg-zinc-400 hover:bg-zinc-500 text-white text-xs font-extrabold px-3 py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">X</button>
+                  <button type="button" onclick="submitManualOutreachLead()" id="lead-submit-btn" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs font-extrabold py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">Save Lead Note</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="box-followup-outreach" class="space-y-3 text-xs font-medium text-zinc-500 max-h-[380px] overflow-y-auto pt-1"></div>
+          </div>
+
+          <div class="bg-white border border-zinc-200 p-4 rounded-2xl shadow-sm space-y-3">
+            <div class="border-b pb-2 flex justify-between items-center">
+              <span class="text-xs font-extrabold uppercase tracking-wide text-amber-600 block">⏳ Awaiting Payment Ledger</span>
+              <span class="text-[10px] bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded-full" id="count-payment">0</span>
+            </div>
+            <div id="box-followup-payment" class="space-y-2 text-xs font-medium text-zinc-500"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bg-white border border-zinc-200 p-5 rounded-2xl shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b pb-3 gap-2">
+          <div>
+            <h3 class="text-sm font-extrabold uppercase tracking-wider text-zinc-900">🗓️ Visual Shop Deadline Grid (Next 30 Days)</h3>
+            <p class="text-[11px] text-zinc-400 font-medium">Spots clusters and heavy dispatch slots on your schedule across upcoming run thresholds.</p>
+          </div>
+          <div class="flex items-center space-x-3 text-[10px] font-bold">
+            <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-zinc-900"></span><span class="text-zinc-500">Standard Run</span></span>
+            <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-red-600"></span><span class="text-red-600">Priority Rush (&lt;5 Days)</span></span>
+          </div>
+        </div>
+        <div id="visual-calendar-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5"></div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer id="portal-footer" class="bg-black text-zinc-400 text-xs py-8 mt-auto border-t border-zinc-900">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-6 text-center sm:text-left">
+      <div class="space-y-1">
+        <span class="font-bold text-white text-sm uppercase tracking-wide block">Humble Hussle Print Shop</span>
+        <p class="text-[11px] text-zinc-500 font-medium">Premium Screen Printing, Embroidery & Commercial Media Solutions</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 font-medium">
+        <div><span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Main Shop Desk</span><a href="tel:8067824224" class="text-white hover:underline text-xs">806-782-4224</a></div>
+        <div><span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Office Email</span><a href="mailto:thehumblehussle@gmail.com" class="text-white hover:underline text-xs">thehumblehussle@gmail.com</a></div>
+        <div><span class="text-[10px] uppercase text-zinc-500 block tracking-widest">Shop Headquarters</span><span class="text-zinc-300 text-xs block">5113 34th Street</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let appOrders = [];
+    let appManualLeads = [];
+    let appWebQuotes = []; // SANDBOX PROTECTION TANK V2
+    let isAdminMode = false;
+    let clickCountTracker = 0;
+
+    let customerManifestItems = [
+      { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 12 }
+    ];
+
+    // ARMORED BOOTSTRAP RESILIENCY LAYER
+    try {
+      if (localStorage.getItem('hpc_static_orders')) appOrders = JSON.parse(localStorage.getItem('hpc_static_orders')) || [];
+    } catch(e) { appOrders = []; }
+
+    try {
+      if (localStorage.getItem('hpc_manual_leads')) appManualLeads = JSON.parse(localStorage.getItem('hpc_manual_leads')) || [];
+    } catch(e) { appManualLeads = []; }
+
+    try {
+      if (localStorage.getItem('hpc_web_quotes')) appWebQuotes = JSON.parse(localStorage.getItem('hpc_web_quotes')) || [];
+    } catch(e) { appWebQuotes = []; }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'true') {
+      isAdminMode = true;
+      window.addEventListener('DOMContentLoaded', () => {
+        if (document.getElementById('admin-nav-container')) {
+          document.getElementById('admin-nav-container').classList.remove('hidden');
+        }
+        document.getElementById('hub-subtitle').innerText = "Production Command Hub";
+      });
+    }
+
+    function saveState() {
+      localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
+      localStorage.setItem('hpc_manual_leads', JSON.stringify(appManualLeads));
+      localStorage.setItem('hpc_web_quotes', JSON.stringify(appWebQuotes));
+      if (document.getElementById('queue-count')) {
+        document.getElementById('queue-count').innerText = appOrders.length + appWebQuotes.length;
+      }
+    }
+
+    function initializeDefaultDates() {
+      const dateInput = document.getElementById('input-date');
+      const today = new Date();
+      const twoWeeksOut = new Date(today.getTime() + (14 * 24 * 60 * 60 * 1000));
+      if (dateInput) {
+        dateInput.value = `${twoWeeksOut.getFullYear()}-${String(twoWeeksOut.getMonth() + 1).padStart(2, '0')}-${String(twoWeeksOut.getDate()).padStart(2, '0')}`;
+        validateTurnaroundTimeline();
+      }
+    }
+
+    function validateTurnaroundTimeline() {
+      const dateInput = document.getElementById('input-date').value;
+      const noticeBox = document.getElementById('date-turnaround-notice');
+      if (!dateInput || !noticeBox) return;
+      const selectedDate = new Date(dateInput + 'T00:00:00');
+      const today = new Date(); today.setHours(0,0,0,0);
+      const daysDiff = Math.ceil((selectedDate.getTime() - today.getTime()) / (1000 * 3600 * 24));
+      noticeBox.classList.remove('hidden');
+      if (daysDiff < 14) {
+        noticeBox.className = "p-4 rounded-xl border border-zinc-200 bg-white text-xs text-zinc-800 font-medium shadow-sm animate-fadeIn";
+        noticeBox.innerHTML = `<span class="font-bold text-zinc-950 block mb-1">⚡ Rush Timeline Surcharge Applied</span>Orders inside 2 weeks subject to rush tracking.`;
+      } else {
+        noticeBox.className = "p-4 rounded-xl border border-zinc-900 bg-zinc-900 text-white text-xs font-semibold shadow-sm";
+        noticeBox.innerHTML = `<span class="font-bold block mb-0.5">✓ Standard Production Timeline</span>`;
+      }
+    }
+
+    function addBlankManifestItemLine() {
+      const uniqueId = 'item-' + Date.now();
+      customerManifestItems.push({
+        id: uniqueId, decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'White', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 12
+      });
+      renderManifestInputsGrid();
+    }
+
+    function removeManifestItemLine(id) {
+      if (customerManifestItems.length <= 1) return;
+      customerManifestItems = customerManifestItems.filter(item => item.id !== id);
+      renderManifestInputsGrid();
+    }
+
+    function updateSizeValueField(id, sizeGroup, sizeKey, val) {
+      const row = customerManifestItems.find(item => item.id === id);
+      if (!row) return;
+      if (!row[sizeGroup]) row[sizeGroup] = {};
+      row[sizeGroup][sizeKey] = Math.max(0, parseInt(val) || 0);
+      calculateManifestTotals();
+    }
+
+    function updateHatQtyField(id, val) {
+      const row = customerManifestItems.find(item => item.id === id);
+      if (!row) return;
+      row.hatQty = Math.max(0, parseInt(val) || 0);
+      calculateManifestTotals();
+    }
+
+    function updateManualFlatQtyField(id, val) {
+      const row = customerManifestItems.find(item => item.id === id);
+      if (!row) return;
+      row.flatQtyOverride = Math.max(0, parseInt(val) || 0);
+      calculateManifestTotals();
+    }
+
+    function updateManifestItemField(id, key, value) {
+      const row = customerManifestItems.find(item => item.id === id);
+      if (!row) return;
+      if (key === 'logoOnFile') row[key] = (value === 'true');
+      else if (key === 'frontColors' || key === 'backColors' || key === 'stitchCount') row[key] = parseInt(value) || 0;
+      else row[key] = value;
+      calculateManifestTotals();
+    }
+
+    function handleManifestLineArtUpload(id, event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const row = customerManifestItems.find(item => item.id === id);
+      if (row) {
+        row.artFileName = "✓ " + file.name;
+        const label = document.getElementById(`art-preview-label-${id}`);
+        if(label) {
+          label.innerText = "✓ " + file.name;
+          label.className = "block text-xs font-bold text-emerald-600 mt-1";
+        }
+        showToast('Artwork linked successfully');
+      }
+    }
+
+    function renderManifestInputsGrid() {
+      const tank = document.getElementById('manifest-lines-tank');
+      if (!tank) return; tank.innerHTML = '';
+
+      customerManifestItems.forEach((item, index) => {
+        const isSP = item.decorationType === 'Screen Printing';
+        const isEMB = item.decorationType === 'Embroidery';
+        const isMKT = item.decorationType === 'Marketing Materials';
+        const isHatsSelected = isEMB && item.brand && item.brand.startsWith('Hats');
+
+        let catalogNoticeBannerHtml = '';
+        if (isSP || isMKT) {
+          catalogNoticeBannerHtml = `
+            <div class="p-3 bg-zinc-50 border border-zinc-200 text-[11px] text-zinc-500 rounded-xl font-medium leading-relaxed">
+              <span class="font-bold text-zinc-800 block mb-0.5">Looking for specific blank codes?</span>
+              Browse wholesale structures live at <a href="https://www.sanmar.com" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black hover:text-zinc-600">SanMar.com</a> or <a href="https://www.cottoncollective.org" target="_blank" rel="noopener noreferrer" class="font-bold underline text-black hover:text-zinc-600">CottonCollective.org</a>.
+            </div>
+          `;
+        } else if (isEMB) {
+          catalogNoticeBannerHtml = `
+            <div class="p-4 bg-zinc-900 text-white rounded-xl text-[11px] leading-normal flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-xs animate-fadeIn">
+              <div class="font-medium">
+                <span class="font-bold text-white block mb-0.5">Explore Wholesale Headwear Canvas Options</span>
+                Need a hand tracing trucker meshes, snaps, or structured adjustments? Explore options at <span class="font-bold text-zinc-300 underline">Ottocap.com</span>.
+              </div>
+              <a href="https://ottocap.com" target="_blank" rel="noopener noreferrer" class="bg-white text-black hover:bg-zinc-100 font-bold px-3 py-1.5 rounded-lg whitespace-nowrap text-center text-[10px] transition-all">Browse Catalog ↗</a>
+            </div>
+          `;
+        }
+
+        let sizingOrHeadwearFieldTemplate = '';
+        if (isHatsSelected) {
+          sizingOrHeadwearFieldTemplate = `
+            <div class="border border-zinc-200 bg-amber-50/40 p-4 rounded-xl space-y-2.5 animate-fadeIn">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <span class="text-xs font-extrabold uppercase text-amber-900 tracking-wide block">🧢 Headwear Allocation Run</span>
+                  <p class="text-[11px] text-amber-700 font-medium">Professional wholesale One Size Fits All (OSFA) Snapbacks are locked for this component row.</p>
+                </div>
+                <div class="w-full sm:w-32">
+                  <label class="text-[10px] font-bold text-amber-800 block mb-0.5">Total Caps Needed</label>
+                  <input type="number" min="12" value="${item.hatQty || 12}" oninput="updateHatQtyField('${item.id}', this.value)" class="w-full p-2 border border-amber-300 rounded-lg text-xs font-bold text-zinc-800 bg-white outline-none focus:border-black" />
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (isSP || isEMB) {
+          sizingOrHeadwearFieldTemplate = `
+            <div class="border border-zinc-200 rounded-xl p-3 bg-zinc-50/50 space-y-3 animate-fadeIn">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block mb-1">Adult Size Breakdown</span>
+                <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5 text-center text-[10px] font-bold text-zinc-500">
+                  <div><span>S</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.S || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'S', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>M</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.M || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'M', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>L</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.L || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'L', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.XL || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', 'XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>2XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.['2XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '2XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>3XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.['3XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '3XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>4XL</span><input type="number" min="0" placeholder="0" value="${item.adultSizes?.['4XL'] || ''}" oninput="updateSizeValueField('${item.id}', 'adultSizes', '4XL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                </div>
+              </div>
+
+              <div class="pt-2 border-t border-dashed border-zinc-200">
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block mb-1">Youth Size Breakdown</span>
+                <div class="grid grid-cols-5 gap-1.5 text-center text-[10px] font-bold text-zinc-500">
+                  <div><span>YXS</span><input type="number" min="0" placeholder="0" value="${item.youthSizes?.YXS || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXS', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YS</span><input type="number" min="0" placeholder="0" value="${item.youthSizes?.YS || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YS', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YM</span><input type="number" min="0" placeholder="0" value="${item.youthSizes?.YM || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YM', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes?.YL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                  <div><span>YXL</span><input type="number" min="0" placeholder="0" value="${item.youthSizes?.YXL || ''}" oninput="updateSizeValueField('${item.id}', 'youthSizes', 'YXL', this.value)" class="w-full text-center border p-1 rounded bg-white text-zinc-800 outline-none" /></div>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (isMKT) {
+          sizingOrHeadwearFieldTemplate = `
+            <div class="grid grid-cols-2 gap-3 p-3 bg-zinc-50 border border-zinc-200 rounded-xl animate-fadeIn">
+              <div>
+                <label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Asset Coating Spec</label>
+                <select onchange="updateManifestItemField('${item.id}', 'sText', this.value)" class="w-full p-1.5 border border-zinc-200 bg-white rounded-lg text-xs font-medium text-zinc-700 outline-none">
+                  <option value="Standard Finish">Standard Matte Coat Finish</option>
+                  <option value="Premium Heavy Matte">Premium Heavy Matte Stock</option>
+                </select>
+              </div>
+              <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Total Quantity Override</label><input type="number" min="1" value="${item.flatQtyOverride || 250}" oninput="updateManualFlatQtyField('${item.id}', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
+            </div>
+          `;
+        }
+
+        tank.innerHTML += `
+          <div class="bg-white border border-zinc-200 rounded-2xl shadow-sm p-5 space-y-4 animate-fadeIn relative">
+            <div class="flex justify-between items-center border-b pb-2">
+              <span class="text-xs font-extrabold text-zinc-400 uppercase tracking-wider">Item Component Line #${index + 1}</span>
+              <button onclick="removeManifestItemLine('${item.id}')" class="text-xs text-red-500 hover:text-red-700 font-bold">Scrub Line ×</button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Method Style</label>
+                <select id="method-type-${item.id}" onchange="updateManifestItemField('${item.id}', 'decorationType', this.value); syncBrandDropdownPlaceholder('${item.id}'); renderManifestInputsGrid();" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-bold text-zinc-700 outline-none cursor-pointer">
+                  <option value="Screen Printing" ${isSP ? 'selected' : ''}>Screen Printing</option>
+                  <option value="Embroidery" ${isEMB ? 'selected' : ''}>Custom Embroidery</option>
+                  <option value="Marketing Materials" ${isMKT ? 'selected' : ''}>Marketing Asset</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Canvas / Stock</label>
+                <select id="brand-select-${item.id}" onchange="updateManifestItemField('${item.id}', 'brand', this.value); renderManifestInputsGrid()" class="w-full p-2 border border-zinc-200 rounded-xl bg-white text-xs font-medium text-zinc-700 outline-none cursor-pointer"></select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Base Color</label>
+                <input type="text" value="${item.color || ''}" oninput="updateManifestItemField('${item.id}', 'color', this.value)" class="w-full p-2 border border-zinc-200 rounded-xl text-xs font-medium text-zinc-800 outline-none" />
+              </div>
+            </div>
+
+            ${catalogNoticeBannerHtml}
+
+            <div class="p-4 bg-zinc-50 border border-zinc-200 rounded-xl space-y-2">
+              <label class="block text-xs font-bold uppercase tracking-wide text-zinc-700">Upload Artwork File Sourcing Reference</label>
+              <input type="file" accept="image/*" onchange="handleManifestLineArtUpload('${item.id}', event)" class="w-full text-xs font-medium text-zinc-700 bg-white border border-zinc-300 rounded-lg p-2 outline-none cursor-pointer focus:border-black" />
+              <span id="art-preview-label-${item.id}" class="block text-[11px] text-zinc-400 font-medium mt-1">${item.artFileName || 'No drawing vector attached'}</span>
+            </div>
+
+            ${(isSP || isEMB) ? `
+              <div class="p-3 bg-zinc-50 border border-zinc-100 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                <span class="font-bold text-zinc-600">Do we already have your logo on file for screen printing or embroidery?</span>
+                <div class="flex space-x-1">
+                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'true')" class="px-3 py-1 rounded-lg text-[11px] font-bold border ${item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900 shadow-xs' : 'bg-white text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">Yes</button>
+                  <button type="button" onclick="updateManifestItemField('${item.id}', 'logoOnFile', 'false')" class="px-3 py-1 rounded-lg text-[11px] font-bold border ${!item.logoOnFile ? 'bg-zinc-900 text-white border-zinc-900 shadow-xs' : 'bg-white text-zinc-500 border-zinc-200 hover:bg-zinc-100'}">No (+$30 setup)</button>
+                </div>
+              </div>
+            ` : ''}
+
+            ${isSP ? `
+              <div class="grid grid-cols-2 gap-3 p-3 bg-zinc-50 border border-zinc-100 rounded-xl">
+                <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Front Ink Colors</label><input type="number" min="1" max="4" value="${item.frontColors}" oninput="updateManifestItemField('${item.id}', 'frontColors', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
+                <div><label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Back Ink Colors</label><input type="number" min="0" max="4" value="${item.backColors}" oninput="updateManifestItemField('${item.id}', 'backColors', this.value)" class="w-full p-1.5 border border-zinc-200 rounded-lg text-xs font-bold text-zinc-800" /></div>
+              </div>
+            ` : ''}
+
+            ${isEMB ? `
+              <div class="p-3 bg-zinc-50 border border-zinc-100 rounded-xl">
+                <label class="text-[10px] font-bold text-zinc-500 block mb-0.5">Stitch Count Profile</label>
+                <select onchange="updateManifestItemField('${item.id}', 'stitchCount', this.value)" class="w-full p-1.5 border border-zinc-200 bg-white rounded-lg text-xs font-medium text-zinc-700 outline-none">
+                  <option value="5000" ${item.stitchCount === 5000 ? 'selected' : ''}>Small Logo Crest (5k Stitches)</option>
+                  <option value="8000" ${item.stitchCount === 8000 ? 'selected' : ''}>Standard Pattern Run (8k Stitches)</option>
+                </select>
+              </div>
+            ` : ''}
+
+            ${sizingOrHeadwearFieldTemplate}
+
+          </div>
+        `;
+        syncBrandDropdownPlaceholder(item.id, item.brand);
+      });
+      calculateManifestTotals();
+    }
+
+    function syncBrandDropdownPlaceholder(id, selectedValue) {
+      const row = customerManifestItems.find(item => item.id === id);
+      const dropdown = document.getElementById(`brand-select-${id}`);
+      if (!dropdown || !row) return;
+
+      dropdown.innerHTML = '';
+      let options = [];
+      if (row.decorationType === 'Screen Printing') {
+        options = ['Gildan (Economical Tier)', 'Next Level (Midweight)', 'Bella+Canvas (Premium Soft)', 'Specialty Blank (Heavyweight Vintage)'];
+      } else if (row.decorationType === 'Embroidery') {
+        options = ['Hats (Adjustable Snapback)', 'Polos (Professional Classic)', 'Hoodies (Cozy Heavy Fleece)', 'Jackets (Outerwear Protection)'];
+      } else {
+        options = ['Banners (Outdoor Vinyl Run)', 'Business Cards (16pt Bulk Pack)', 'Metal Aluminum Signage'];
+      }
+
+      if (!selectedValue || !options.includes(selectedValue)) {
+        row.brand = options[0];
+      }
+
+      options.forEach(opt => {
+        let el = document.createElement('option'); el.value = opt; el.text = opt;
+        if (opt === row.brand) el.selected = true;
+        dropdown.appendChild(el);
+      });
+    }
+
+    function calculateManifestTotals() {
+      const summaryBox = document.getElementById('side-manifest-summary-rows');
+      if (!summaryBox) return; summaryBox.innerHTML = '';
+
+      let completeBatchQty = 0;
+      let completeBatchCost = 0;
+
+      customerManifestItems.forEach((item, idx) => {
+        let itemSumQty = 0;
+        const isHatsSelected = item.decorationType === 'Embroidery' && item.brand && item.brand.startsWith('Hats');
+
+        if (item.decorationType === 'Marketing Materials') {
+          itemSumQty = item.flatQtyOverride || 250;
+        } else if (isHatsSelected) {
+          itemSumQty = item.hatQty || 12;
+        } else {
+          itemSumQty = (item.adultSizes?.S || 0) + (item.adultSizes?.M || 0) + (item.adultSizes?.L || 0) + (item.adultSizes?.XL || 0) + (item.adultSizes?.['2XL'] || 0) + (item.adultSizes?.['3XL'] || 0) + (item.adultSizes?.['4XL'] || 0) +
+                       (item.youthSizes?.YXS || 0) + (item.youthSizes?.YS || 0) + (item.youthSizes?.YM || 0) + (item.youthSizes?.YL || 0) + (item.youthSizes?.YXL || 0);
+        }
+
+        let lineRate = 0;
+        if (item.decorationType === 'Screen Printing') {
+          let base = item.brand && item.brand.includes('Specialty') ? 15.00 : (item.brand && item.brand.includes('Bella') ? 8.75 : 6.25);
+          let inkGrid = [0, 6.50, 7.50, 8.50, 9.50];
+          lineRate = base + (inkGrid[Math.min(4, item.frontColors)] || 0) + (inkGrid[Math.min(4, item.backColors)] || 0);
+        } else if (item.decorationType === 'Embroidery') {
+          let base = item.brand && item.brand.includes('Jackets') ? 42.00 : 10.00;
+          lineRate = base + 3.50 + ((item.stitchCount / 1000) * 1.50);
+        } else {
+          lineRate = item.brand && item.brand.includes('Business') ? 0.30 : 45.00;
+        }
+
+        let lineCost = itemSumQty * lineRate;
+        if ((item.decorationType === 'Screen Printing' || item.decorationType === 'Embroidery') && !item.logoOnFile) {
+          lineCost += 30.00; 
+        }
+
+        completeBatchQty += itemSumQty;
+        completeBatchCost += lineCost;
+
+        summaryBox.innerHTML += `
+          <div class="py-2 flex justify-between items-start gap-1">
+            <div>
+              <span class="font-extrabold text-white block">Line #${idx + 1}: ${item.decorationType}</span>
+              <span class="text-[10px] text-zinc-400 block">${itemSumQty}x Allocation (${item.logoOnFile ? 'Logo Handed' : 'Setup Fee Attached'})</span>
+            </div>
+            <span class="font-bold text-zinc-300">$${lineCost.toFixed(2)}</span>
+          </div>
+        `;
+      });
+
+      document.getElementById('summary-total-qty').innerText = completeBatchQty + " Items";
+      document.getElementById('summary-total-cost').innerText = "$" + completeBatchCost.toFixed(2);
+    }
+
+    // 100% SECURE PRIVATE VAULT SUBMISSION LOOP
+    function fireManifestSubmission(e) {
+      e.preventDefault();
+      const clientName = document.getElementById('input-name').value.trim();
+      const clientPhone = document.getElementById('input-client-phone').value.trim();
+      const clientEmail = document.getElementById('input-client-email').value.trim();
+
+      if (!clientName || !clientPhone || !clientEmail) { 
+        alert('Please completely fill out your Name, Phone, and Email credentials to activate submission.'); 
+        return; 
+      }
+
+      customerManifestItems.forEach(item => {
+        let totalCount = 0;
+        let youthDetailsStr = "";
+        const isHatsSelected = item.decorationType === 'Embroidery' && item.brand && item.brand.startsWith('Hats');
+        let sSizes = { s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0, yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0 };
+
+        if (item.decorationType === 'Marketing Materials') {
+          totalCount = item.flatQtyOverride || 250;
+        } else if (isHatsSelected) {
+          totalCount = item.hatQty || 12;
+          youthDetailsStr = ` [Wholesale OSFA Hat Run Pool]`;
+        } else {
+          totalCount = (item.adultSizes?.S || 0) + (item.adultSizes?.M || 0) + (item.adultSizes?.L || 0) + (item.adultSizes?.XL || 0) + (item.adultSizes?.['2XL'] || 0) + (item.adultSizes?.['3XL'] || 0) + (item.adultSizes?.['4XL'] || 0) +
+                       (item.youthSizes?.YXS || 0) + (item.youthSizes?.YS || 0) + (item.youthSizes?.YM || 0) + (item.youthSizes?.YL || 0) + (item.youthSizes?.YXL || 0);
+          youthDetailsStr = ` [Youth Volumes - YXS:${item.youthSizes?.YXS || 0} YS:${item.youthSizes?.YS || 0} YM:${item.youthSizes?.YM || 0} YL:${item.youthSizes?.YL || 0} YXL:${item.youthSizes?.YXL || 0}]`;
+
+          sSizes = {
+            s: item.adultSizes?.S || 0, m: item.adultSizes?.M || 0, l: item.adultSizes?.L || 0, xl: item.adultSizes?.XL || 0,
+            x2l: item.adultSizes?.['2XL'] || 0, x3l: item.adultSizes?.['3XL'] || 0, x4l: item.adultSizes?.['4XL'] || 0,
+            yxs: item.youthSizes?.YXS || 0, ys: item.youthSizes?.YS || 0, ym: item.youthSizes?.YM || 0, yl: item.youthSizes?.YL || 0, yxl: item.youthSizes?.YXL || 0
+          };
+        }
+
+        const targetId = "WEB-" + Math.floor(1000 + Math.random() * 9000);
+        const detailedSpecs = `Sourced via Estimator. Method: ${item.decorationType}. Canvas: ${item.brand || "Standard"}. Color: ${item.color || "Standard"}.${youthDetailsStr} [Logo Stored: ${item.logoOnFile ? 'YES' : 'NO'}] [Art Reference: ${item.artFileName || 'None Assigned'}] [Ph: ${clientPhone} | Em: ${clientEmail}]`;
+
+        // PUSHING ENTIRELY INTO SAFE PRIVATE TANK
+        appWebQuotes.unshift({
+          uid: targetId,
+          name: clientName,
+          businessName: `Sourced Online Quote (${item.decorationType})`,
+          phone: clientPhone,
+          email: clientEmail,
+          followUpDate: document.getElementById('input-date').value || '', 
+          customerNotes: detailedSpecs,
+          totalLeadQty: totalCount,
+          adultSummary: `S:${sSizes.s} M:${sSizes.m} L:${sSizes.l} XL:${sSizes.xl} 2X:${sSizes.x2l} 3X:${sSizes.x3l} 4X:${sSizes.x4l}`,
+          youthSummary: `YXS:${sSizes.yxs} YS:${sSizes.ys} YM:${sSizes.ym} L:${sSizes.yl} YXL:${sSizes.yxl}`,
+          rawSizes: sSizes
+        });
+      });
+
+      saveState();
+      
+      document.getElementById('input-name').value = '';
+      document.getElementById('input-client-phone').value = '';
+      document.getElementById('input-client-email').value = '';
+
+      customerManifestItems = [{ id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: '', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 0 }];
+      switchView('estimator');
+      document.getElementById('view-estimator').classList.add('hidden');
+      document.getElementById('view-success').classList.remove('hidden');
+    }
+
+    function resetPortalForNewQuote() {
+      document.getElementById('view-success').classList.add('hidden');
+      document.getElementById('view-estimator').classList.remove('hidden');
+      renderManifestInputsGrid();
+      initializeDefaultDates();
+    }
+
+    function showToast(text) {
+      const t = document.getElementById('toast');
+      if (t) {
+        document.getElementById('toast-text').innerText = text;
+        t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 3500);
+      }
+    }
+
+    function switchView(target) {
+      if (!isAdminMode && target === 'dashboard') return;
+      if (target === 'estimator') {
+        document.getElementById('view-estimator').classList.remove('hidden');
+        document.getElementById('view-success').classList.add('hidden');
+        document.getElementById('view-dashboard').classList.add('hidden');
+        document.getElementById('portal-footer').classList.remove('hidden');
+        document.getElementById('nav-estimator').className = "px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded bg-white text-black";
+        document.getElementById('nav-dashboard').className = "px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded text-zinc-400 hover:text-white";
+      } else if (target === 'dashboard') {
+        document.getElementById('view-estimator').classList.add('hidden');
+        document.getElementById('view-success').classList.add('hidden');
+        document.getElementById('view-dashboard').classList.remove('hidden');
+        document.getElementById('portal-footer').classList.add('hidden');
+        document.getElementById('nav-dashboard').className = "px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded bg-white text-black";
+        document.getElementById('nav-estimator').className = "px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded text-zinc-400 hover:text-white";
+        renderDashboard();
+      }
+    }
+
+    function handleSecretShopClick() {
+      clickCountTracker++;
+      if (clickCountTracker >= 3) {
+        isAdminMode = true;
+        document.getElementById('admin-nav-container').classList.remove('hidden');
+        document.getElementById('hub-subtitle').innerText = "Production Command Hub";
+        switchView('dashboard');
+        showToast('🔓 Shop Dashboard Bypass Override Authorized');
+        clickCountTracker = 0;
+      }
+    }
+
+    function openManualJobModal() { document.getElementById('manual-job-modal').classList.remove('hidden'); }
+    function closeManualJobModal() { document.getElementById('manual-job-modal').classList.add('hidden'); document.getElementById('manual-form').reset(); }
+
+    function toggleInlineLeadForm() {
+      const box = document.getElementById('inline-lead-form');
+      if (box.classList.contains('hidden')) {
+        box.classList.remove('hidden');
+      } else {
+        box.classList.add('hidden');
+        clearLeadFormFieldsOverride();
+      }
+    }
+
+    function loadLeadIntoEditorOverride(leadUid) {
+      // Search inside both memory vaults seamlessly
+      let targetLead = appManualLeads.find(l => l.uid === leadUid) || appWebQuotes.find(q => q.uid === leadUid);
+      if (!targetLead) return;
+
+      document.getElementById('editing-lead-uid').value = targetLead.uid;
+      document.getElementById('lead-name').value = targetLead.name || '';
+      document.getElementById('lead-business').value = targetLead.businessName || '';
+      document.getElementById('lead-phone').value = targetLead.phone || '';
+      document.getElementById('lead-email').value = targetLead.email || '';
+      document.getElementById('lead-date').value = targetLead.followUpDate || '';
+      document.getElementById('lead-notes').value = targetLead.customerNotes || '';
+
+      const sizes = targetLead.rawSizes || { s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0, yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0 };
+      
+      document.getElementById('l-size-s').value = sizes.s || '';
+      document.getElementById('l-size-m').value = sizes.m || '';
+      document.getElementById('l-size-l').value = sizes.l || '';
+      document.getElementById('l-size-xl').value = sizes.xl || '';
+      document.getElementById('l-size-2xl').value = sizes.x2l || '';
+      document.getElementById('l-size-3xl').value = sizes.x3l || '';
+      document.getElementById('l-size-4xl').value = sizes.x4l || '';
+
+      document.getElementById('l-size-yxs').value = sizes.yxs || '';
+      document.getElementById('l-size-ys').value = sizes.ys || '';
+      document.getElementById('l-size-ym').value = sizes.ym || '';
+      document.getElementById('l-size-yl').value = sizes.yl || '';
+      document.getElementById('l-size-yxl').value = sizes.yxl || '';
+
+      document.getElementById('lead-form-title-label').innerText = `✏️ Customizing: ${targetLead.name}`;
+      document.getElementById('lead-submit-btn').innerText = "Update Lead Specifications";
+      document.getElementById('lead-cancel-edit-btn').classList.remove('hidden');
+
+      document.getElementById('inline-lead-form').classList.remove('hidden');
+    }
+
+    function clearLeadFormFieldsOverride() {
+      document.getElementById('editing-lead-uid').value = '';
+      document.getElementById('lead-name').value = '';
+      document.getElementById('lead-business').value = '';
+      document.getElementById('lead-phone').value = '';
+      document.getElementById('lead-email').value = '';
+      document.getElementById('lead-date').value = '';
+      document.getElementById('lead-notes').value = '';
+
+      document.getElementById('l-size-s').value = '';
+      document.getElementById('l-size-m').value = '';
+      document.getElementById('l-size-l').value = '';
+      document.getElementById('l-size-xl').value = '';
+      document.getElementById('l-size-2xl').value = '';
+      document.getElementById('l-size-3xl').value = '';
+      document.getElementById('l-size-4xl').value = '';
+      document.getElementById('l-size-yxs').value = '';
+      document.getElementById('l-size-ys').value = '';
+      document.getElementById('l-size-ym').value = '';
+      document.getElementById('l-size-yl').value = '';
+      document.getElementById('l-size-yxl').value = '';
+
+      document.getElementById('lead-form-title-label').innerText = "➕ Log Manual Hot Lead";
+      document.getElementById('lead-submit-btn').innerText = "Save Lead Note";
+      document.getElementById('lead-cancel-edit-btn').classList.add('hidden');
+    }
+
+    function submitManualOutreachLead() {
+      const name = document.getElementById('lead-name').value.trim();
+      const biz = document.getElementById('lead-business').value.trim();
+      const phone = document.getElementById('lead-phone').value.trim();
+      const email = document.getElementById('lead-email').value.trim();
+      const fupDate = document.getElementById('lead-date').value;
+      const notes = document.getElementById('lead-notes').value.trim();
+      const editingUid = document.getElementById('editing-lead-uid').value;
+      
+      if (!name) { alert('Please map a valid contact name.'); return; }
+
+      const as = parseInt(document.getElementById('l-size-s').value) || 0;
+      const am = parseInt(document.getElementById('l-size-m').value) || 0;
+      const al = parseInt(document.getElementById('l-size-l').value) || 0;
+      const axl = parseInt(document.getElementById('l-size-xl').value) || 0;
+      const axx = parseInt(document.getElementById('l-size-2xl').value) || 0;
+      const a3x = parseInt(document.getElementById('l-size-3xl').value) || 0;
+      const a4x = parseInt(document.getElementById('l-size-4xl').value) || 0;
+      
+      const yxs = parseInt(document.getElementById('l-size-yxs').value) || 0;
+      const ys = parseInt(document.getElementById('l-size-ys').value) || 0;
+      const ym = parseInt(document.getElementById('l-size-ym').value) || 0;
+      const yl = parseInt(document.getElementById('l-size-yl').value) || 0;
+      const yxl = parseInt(document.getElementById('l-size-yxl').value) || 0;
+
+      const totalCalculatedLeadQty = as + am + al + axl + axx + a3x + a4x + yxs + ys + ym + yl + yxl;
+
+      const gatheredData = {
+        name: name,
+        businessName: biz || 'Individual Account',
+        phone: phone || 'No Phone Logged',
+        email: email || 'No Email Logged',
+        followUpDate: fupDate || '',
+        customerNotes: notes || 'No specs logged yet.',
+        totalLeadQty: totalCalculatedLeadQty,
+        adultSummary: `S:${as} M:${am} L:${al} XL:${axl} 2X:${axx} 3X:${a3x} 4X:${a4x}`,
+        youthSummary: `YXS:${yxs} YS:${ys} YM:${ym} L:${yl} YXL:${yxl}`,
+        rawSizes: {
+          s: as, m: am, l: al, xl: axl, x2l: axx, x3l: a3x, x4l: a4x,
+          yxs: yxs, ys: ys, ym: ym, yl: yl, yxl: yxl
+        }
+      };
+
+      if (editingUid) {
+        if (editingUid.startsWith('WEB-')) {
+          const idx = appWebQuotes.findIndex(q => q.uid === editingUid);
+          if (idx !== -1) appWebQuotes[idx] = { ...appWebQuotes[idx], ...gatheredData, uid: editingUid };
+        } else {
+          const idx = appManualLeads.findIndex(l => l.uid === editingUid);
+          if (idx !== -1) appManualLeads[idx] = { ...appManualLeads[idx], ...gatheredData, uid: editingUid };
+        }
+        showToast('✓ Entry overwritten successfully');
+      } else {
+        appManualLeads.unshift({ uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000), ...gatheredData });
+        showToast('✓ Hot lead registered');
+      }
+
+      saveState();
+      clearLeadFormFieldsOverride();
+      toggleInlineLeadForm(); 
+      renderDashboard();
+    }
+
+    function purgeLeadRecord(leadUid) {
+      if (confirm('Delete lead tracking card?')) { 
+        appManualLeads = appManualLeads.filter(l => l.uid !== leadUid); 
+        appWebQuotes = appWebQuotes.filter(q => q.uid !== leadUid);
+        saveState(); renderDashboard(); 
+      } 
+    }
+
+    function handleManualFormSubmit(e) {
+      e.preventDefault();
+      const s = parseInt(document.getElementById('m-size-s').value) || 0;
+      const m = parseInt(document.getElementById('m-size-m').value) || 0;
+      const flat = parseInt(document.getElementById('m-size-flat').value) || 0;
+      let finalQty = flat === 0 ? (s+m) : flat;
+
+      appOrders.unshift({
+        id: "HPC-" + Math.floor(1000 + Math.random() * 9000), customerName: document.getElementById('manual-name').value, decorationType: document.getElementById('manual-type').value, brand: document.getElementById('manual-brand').value || "Standard", color: document.getElementById('manual-color').value || "Standard", dueDate: document.getElementById('manual-date').value, totalQuantity: finalQty, estimatedTotal: parseFloat(document.getElementById('manual-price').value) || 0, notes: document.getElementById('manual-notes').value, stage: document.getElementById('manual-stage').value, tasks: [false,false,false,false,false,false], invoiceSent: false, isPaid: false, artData: ''
+      });
+      saveState(); closeManualJobModal(); renderDashboard(); showToast('✓ Manual order card logged');
+    }
+
+    function toggleTask(orderId, taskIndex) {
+      const order = appOrders.find(o => o.id === orderId);
+      if (order) { order.tasks[taskIndex] = !order.tasks[taskIndex]; saveState(); renderDashboard(); }
+    }
+    function toggleInvoiceStatus(orderId) { 
+      const order = appOrders.find(o => o.id === orderId); 
+      if (order) { order.invoiceSent = !order.invoiceSent; saveState(); renderDashboard(); } 
+    }
+    function togglePaymentStatus(orderId) { 
+      const order = appOrders.find(o => o.id === orderId); 
+      if (order) { order.isPaid = !order.isPaid; saveState(); renderDashboard(); } 
+    }
+    function cancelOrder(orderId) { if (confirm('Scrub run?')) { appOrders = appOrders.filter(o => o.id !== orderId); saveState(); renderDashboard(); } }
+    
+    function advanceJob(orderId) {
+      const order = appOrders.find(o => o.id === orderId); if (!order) return;
+      const stages = ['pending', 'prepress', 'production', 'ready'];
+      const cur = stages.indexOf(order.stage);
+      if (cur !== -1 && cur < stages.length - 1) { order.stage = stages[cur + 1]; saveState(); renderDashboard(); }
+    }
+
+    function generateVisualShopCalendar() {
+      const calGrid = document.getElementById('visual-calendar-grid'); if(!calGrid) return; calGrid.innerHTML = '';
+      const baseToday = new Date('2026-06-15T00:00:00');
+      for(let i=0; i < 28; i++) {
+        const loopDate = new Date(baseToday.getTime() + (i * 24 * 60 * 60 * 1000));
+        const searchStr = `${loopDate.getFullYear()}-${String(loopDate.getMonth() + 1).padStart(2, '0')}-${String(loopDate.getDate()).padStart(2, '0')}`;
+        const matchingJobs = appOrders.filter(o => o.dueDate === searchStr);
+        let nodes = ''; matchingJobs.forEach(j => { nodes += `<div class="px-1 py-0.5 mt-1 text-[9px] bg-zinc-900 text-white truncate rounded font-bold uppercase">${j.customerName}</div>`; });
+        calGrid.innerHTML += `<div class="bg-white border rounded-xl p-2 min-h-[70px]"><span class="text-[10px] font-extrabold text-zinc-400 block">${loopDate.toLocaleString('en-US', { month: 'short', day: 'numeric' })}</span><div class="mt-1 overflow-y-auto max-h-[50px]">${nodes}</div></div>`;
+      }
+    }
+
+    function renderDashboard() {
+      if(!document.getElementById('col-pending-combined')) return;
+      document.getElementById('col-pending-combined').innerHTML = '';
+      document.getElementById('col-production-combined').innerHTML = '';
+      document.getElementById('col-ready-combined').innerHTML = '';
+      const outreachBox = document.getElementById('box-followup-outreach'); outreachBox.innerHTML = '';
+      const paymentBox = document.getElementById('box-followup-payment'); paymentBox.innerHTML = '';
+      let outC = 0, payC = 0;
+
+      // SEAMLESSLY MERGE BOTH THE WEB AND MANUAL VAULTS INTO SIDEBAR LIST
+      let combinedLeadsList = [...appWebQuotes, ...appManualLeads];
+
+      combinedLeadsList.forEach(lead => {
+        if (!lead || !lead.name) return;
+        outC++;
+        
+        let leadSizeSummaryHtml = '';
+        let totalCount = parseInt(lead.totalLeadQty) || 0;
+        if(totalCount > 0) {
+          leadSizeSummaryHtml = `
+            <div class="p-1.5 bg-zinc-100 rounded-lg text-[10px] space-y-0.5 font-mono text-zinc-500 border border-zinc-200">
+              <span class="font-bold text-zinc-700 block text-[9px] uppercase tracking-wider">📦 Sizing Run Total: ${totalCount} pcs</span>
+              <div class="truncate">A: ${lead.adultSummary || 'Logged'}</div>
+              <div class="truncate text-red-700 font-bold">Y: ${lead.youthSummary || '0'}</div>
+            </div>
+          `;
+        }
+
+        let cardThemeBorder = lead.uid && lead.uid.startsWith('WEB-') ? 'border-amber-400 bg-amber-50/20' : 'border-zinc-200 bg-white';
+
+        outreachBox.innerHTML += `
+          <div class="p-3 border rounded-xl shadow-xs space-y-2 flex flex-col justify-between ${cardThemeBorder}">
+            <div class="space-y-1">
+              <div class="flex justify-between items-start gap-1">
+                <span class="font-extrabold text-zinc-900 leading-tight text-sm">${lead.name}</span>
+                <div class="flex flex-col items-end gap-1">
+                  <span class="text-[9px] bg-zinc-950 text-white font-mono px-1 rounded uppercase tracking-wider">${lead.uid || 'LEAD'}</span>
+                  ${lead.followUpDate ? `<span class="text-[9px] bg-red-600 text-white font-extrabold px-1.5 py-0.5 rounded tracking-wide uppercase">⏳ ${lead.followUpDate}</span>` : ''}
+                </div>
+              </div>
+              <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider truncate">${lead.businessName || 'Individual Account'}</div>
+            </div>
+            ${leadSizeSummaryHtml}
+            <div class="text-[11px] bg-white border border-zinc-200 text-zinc-800 p-2.5 font-medium leading-normal rounded-xl select-text italic shadow-inner">
+              ${lead.customerNotes || 'No notes mapped.'}
+            </div>
+            <div class="pt-2 border-t border-zinc-200 flex flex-col gap-2">
+              <div class="flex justify-between items-center text-[10px] font-bold">
+                <div class="flex gap-3">
+                  <a href="tel:${lead.phone || ''}" class="text-red-600 hover:underline">📞 Call</a>
+                  <a href="mailto:${lead.email || ''}" class="text-zinc-500 hover:underline">✉️ Email</a>
+                </div>
+                <button onclick="loadLeadIntoEditorOverride('${lead.uid}')" class="bg-zinc-950 text-white hover:bg-zinc-800 font-black px-2 py-1 rounded text-[9px] transition-colors uppercase tracking-wider shadow-xs">
+                  ✏️ Edit Lead
+                </button>
+              </div>
+              <div class="pt-1 flex justify-end">
+                <button onclick="purgeLeadRecord('${lead.uid}')" class="text-zinc-400 hover:text-red-600 font-bold text-[9px] uppercase tracking-widest">
+                  Scrub Record ×
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      appOrders.forEach(o => {
+        if (!o) return;
+        if (o.stage === 'pending' && !o.invoiceSent) {
+          outC++; outreachBox.innerHTML += `<div class="p-2 border border-red-100 bg-red-50/40 rounded-lg text-xs font-bold text-red-950">${o.customerName || 'Manual Entry'} - Manifest Item [ID: ${o.id}]</div>`;
+        } else if (!o.isPaid && o.invoiceSent) {
+          payC++; paymentBox.innerHTML += `<div class="p-2 border border-amber-100 bg-amber-50/30 rounded-lg text-xs font-bold text-amber-950">${o.customerName || 'Manual Entry'} - Balance Out: $${(o.estimatedTotal || 0).toFixed(2)}</div>`;
+        }
+
+        const labels = o.decorationType === 'Marketing Materials' ? ['Design Approved', 'Stock Loaded', 'Bleed Verified', 'Color Profiled', 'Plotter Prepped', 'Packaged & QA'] : (o.decorationType === 'Screen Printing' ? ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] : ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Proofed', 'Threads Prepped']);
+        let tasksHtml = '';
+        labels.forEach((l, idx) => { 
+          let isChecked = o.tasks && o.tasks[idx];
+          tasksHtml += `<button onclick="toggleTask('${o.id}', ${idx})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border truncate ${isChecked ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-zinc-50 border-zinc-200 text-zinc-500'}">○ ${l}</button>`; 
+        });
+
+        const cardHtml = `
+          <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3 text-zinc-800 ${o.isPaid ? 'ring-2 ring-emerald-500' : ''}">
+            <div class="flex justify-between items-center text-[10px] font-bold"><span class="bg-zinc-900 text-white px-2 py-0.5 rounded">${o.id}</span><span class="text-zinc-400">${o.dueDate || 'No date'}</span></div>
+            <div><h4 class="font-extrabold text-sm text-zinc-900 truncate uppercase">${o.customerName || 'Unnamed'}</h4><p class="text-xs text-zinc-500 font-semibold uppercase">${o.totalQuantity || 0}x Run Items [${o.decorationType || 'Custom Style'}]</p></div>
+            <div class="text-[11px] bg-zinc-50 border p-2 text-zinc-600 rounded-lg leading-normal italic">${o.notes || 'No specs logged'}</div>
+            <div class="grid grid-cols-2 gap-1 pt-1 border-t">${tasksHtml}</div>
+            <div class="pt-2 border-t grid grid-cols-2 gap-1.5 text-[10px]">
+              <button onclick="toggleInvoiceStatus('${o.id}')" class="p-1 rounded font-bold border uppercase ${o.invoiceSent ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-400'}">📄 Invoiced</button>
+              <button onclick="togglePaymentStatus('${o.id}')" class="p-1 rounded font-bold border uppercase ${o.isPaid ? 'bg-emerald-600 text-white' : 'bg-red-50 text-red-600'}">💰 Paid</button>
+            </div>
+            <div class="pt-2 border-t flex items-center justify-between text-xs">
+              <button onclick="cancelOrder('${o.id}')" class="text-red-600 font-bold text-[10px] bg-red-50 px-2 py-1 rounded">Cancel</button>
+              ${o.stage !== 'ready' ? `<button onclick="advanceJob('${o.id}')" class="bg-zinc-900 hover:bg-black text-white font-bold py-1 px-3 text-[10px] rounded uppercase">Next →</button>` : ''}
+            </div>
+          </div>
+        `;
+        if(o.stage === 'pending' || o.stage === 'prepress') document.getElementById('col-pending-combined').innerHTML += cardHtml;
+        else if (o.stage === 'production') document.getElementById('col-production-combined').innerHTML += cardHtml;
+        else if (o.stage === 'ready') document.getElementById('col-ready-combined').innerHTML += cardHtml;
+      });
+
+      document.getElementById('count-outreach').innerText = outC;
+      document.getElementById('count-payment').innerText = payC;
+      generateVisualShopCalendar();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderManifestInputsGrid(); initializeDefaultDates();
+    });
+  </script>
+</body>
+</html>
