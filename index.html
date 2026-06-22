@@ -70,7 +70,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1">Base Garment Brand/Code</label>
-            <input type="text" id="manual-brand" required placeholder="e.g. Gildan 5000" class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none font-bold text-sm focus:border-black">
+            <input type="text" id="manual-brand" required placeholder="e.g. Gildan 5000" class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none font-medium text-sm focus:border-black">
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
@@ -364,9 +364,7 @@
   </footer>
 
   <script>
-    let appOrders = [
-      { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Coal Black', dueDate: '2026-06-25', totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Screen printed standard bulk shirts setup run. [Contact: 806-555-0144]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '', clientPhone: '806-555-0144', clientEmail: 'athletics@wt.edu' }
-    ];
+    let appOrders = [];
     let appManualLeads = [];
     let isAdminMode = false;
     let clickCountTracker = 0;
@@ -374,6 +372,24 @@
     let customerManifestItems = [
       { id: 'item-1', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Midnight Black', frontColors: 1, backColors: 0, stitchCount: 5000, logoOnFile: true, sText: 'Full Front layout', adultSizes: { S: 12, M: 12, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }, youthSizes: { YXS: 0, YS: 0, YM: 0, YL: 0, YXL: 0 }, artFileName: 'No file attached', hatQty: 12 }
     ];
+
+    // AUTOMATED PARSING PROTECTION FILTER
+    try {
+      if (localStorage.getItem('hpc_static_orders')) appOrders = JSON.parse(localStorage.getItem('hpc_static_orders')) || [];
+    } catch(e) { appOrders = []; }
+
+    try {
+      if (localStorage.getItem('hpc_manual_leads')) {
+        let loadedLeads = JSON.parse(localStorage.getItem('hpc_manual_leads')) || [];
+        // Loop through history items and inject safe property wrappers to keep manual logs intact
+        appManualLeads = loadedLeads.map(l => {
+          if (!l.totalLeadQty) l.totalLeadQty = parseInt(l.totalLeadQty) || 0;
+          if (!l.adultSummary) l.adultSummary = l.adultSummary || "Specs stored";
+          if (!l.youthSummary) l.youthSummary = l.youthSummary || "0";
+          return l;
+        });
+      }
+    } catch(e) { appManualLeads = []; }
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === 'true') {
@@ -385,9 +401,6 @@
         document.getElementById('hub-subtitle').innerText = "Production Command Hub";
       });
     }
-
-    if (localStorage.getItem('hpc_static_orders')) appOrders = JSON.parse(localStorage.getItem('hpc_static_orders'));
-    if (localStorage.getItem('hpc_manual_leads')) appManualLeads = JSON.parse(localStorage.getItem('hpc_manual_leads'));
 
     function saveState() {
       localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
@@ -439,6 +452,7 @@
     function updateSizeValueField(id, sizeGroup, sizeKey, val) {
       const row = customerManifestItems.find(item => item.id === id);
       if (!row) return;
+      if (!row[sizeGroup]) row[sizeGroup] = {};
       row[sizeGroup][sizeKey] = Math.max(0, parseInt(val) || 0);
       calculateManifestTotals();
     }
@@ -490,7 +504,7 @@
         const isSP = item.decorationType === 'Screen Printing';
         const isEMB = item.decorationType === 'Embroidery';
         const isMKT = item.decorationType === 'Marketing Materials';
-        const isHatsSelected = isEMB && item.brand.startsWith('Hats');
+        const isHatsSelected = isEMB && item.brand && item.brand.startsWith('Hats');
 
         let catalogNoticeBannerHtml = '';
         if (isSP || isMKT) {
@@ -593,7 +607,7 @@
               </div>
               <div>
                 <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">Base Color</label>
-                <input type="text" value="${item.color}" oninput="updateManifestItemField('${item.id}', 'color', this.value)" class="w-full p-2 border border-zinc-200 rounded-xl text-xs font-medium text-zinc-800 outline-none" />
+                <input type="text" value="${item.color || ''}" oninput="updateManifestItemField('${item.id}', 'color', this.value)" class="w-full p-2 border border-zinc-200 rounded-xl text-xs font-medium text-zinc-800 outline-none" />
               </div>
             </div>
 
@@ -676,7 +690,7 @@
 
       customerManifestItems.forEach((item, idx) => {
         let itemSumQty = 0;
-        const isHatsSelected = item.decorationType === 'Embroidery' && item.brand.startsWith('Hats');
+        const isHatsSelected = item.decorationType === 'Embroidery' && item.brand && item.brand.startsWith('Hats');
 
         if (item.decorationType === 'Marketing Materials') {
           itemSumQty = item.flatQtyOverride || 250;
@@ -689,14 +703,14 @@
 
         let lineRate = 0;
         if (item.decorationType === 'Screen Printing') {
-          let base = item.brand.includes('Specialty') ? 15.00 : item.brand.includes('Bella') ? 8.75 : 6.25;
+          let base = item.brand && item.brand.includes('Specialty') ? 15.00 : (item.brand && item.brand.includes('Bella') ? 8.75 : 6.25);
           let inkGrid = [0, 6.50, 7.50, 8.50, 9.50];
           lineRate = base + (inkGrid[Math.min(4, item.frontColors)] || 0) + (inkGrid[Math.min(4, item.backColors)] || 0);
         } else if (item.decorationType === 'Embroidery') {
-          let base = item.brand.includes('Jackets') ? 42.00 : 10.00;
+          let base = item.brand && item.brand.includes('Jackets') ? 42.00 : 10.00;
           lineRate = base + 3.50 + ((item.stitchCount / 1000) * 1.50);
         } else {
-          lineRate = item.brand.includes('Business') ? 0.30 : 45.00;
+          lineRate = item.brand && item.brand.includes('Business') ? 0.30 : 45.00;
         }
 
         let lineCost = itemSumQty * lineRate;
@@ -722,7 +736,6 @@
       document.getElementById('summary-total-cost').innerText = "$" + completeBatchCost.toFixed(2);
     }
 
-    // ARMORED SECURITY SUBMISSION ENGINE PIPELINE
     function fireManifestSubmission(e) {
       e.preventDefault();
       const clientName = document.getElementById('input-name').value.trim();
@@ -737,9 +750,8 @@
       customerManifestItems.forEach(item => {
         let totalCount = 0;
         let youthDetailsStr = "";
-        const isHatsSelected = item.decorationType === 'Embroidery' && item.brand.startsWith('Hats');
+        const isHatsSelected = item.decorationType === 'Embroidery' && item.brand && item.brand.startsWith('Hats');
 
-        // Safe default sizing matrix structure protection layer
         let sSizes = { s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0, yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0 };
 
         if (item.decorationType === 'Marketing Materials') {
@@ -752,20 +764,18 @@
                        (item.youthSizes?.YXS || 0) + (item.youthSizes?.YS || 0) + (item.youthSizes?.YM || 0) + (item.youthSizes?.YL || 0) + (item.youthSizes?.YXL || 0);
           youthDetailsStr = ` [Youth Volumes - YXS:${item.youthSizes?.YXS || 0} YS:${item.youthSizes?.YS || 0} YM:${item.youthSizes?.YM || 0} YL:${item.youthSizes?.YL || 0} YXL:${item.youthSizes?.YXL || 0}]`;
 
-          if (item.adultSizes || item.youthSizes) {
-            sSizes = {
-              s: item.adultSizes?.S || 0, m: item.adultSizes?.M || 0, l: item.adultSizes?.L || 0, xl: item.adultSizes?.XL || 0,
-              x2l: item.adultSizes?.['2XL'] || 0, x3l: item.adultSizes?.['3XL'] || 0, x4l: item.adultSizes?.['4XL'] || 0,
-              yxs: item.youthSizes?.YXS || 0, ys: item.youthSizes?.YS || 0, ym: item.youthSizes?.YM || 0, yl: item.youthSizes?.YL || 0, yxl: item.youthSizes?.YXL || 0
-            };
-          }
+          sSizes = {
+            s: item.adultSizes?.S || 0, m: item.adultSizes?.M || 0, l: item.adultSizes?.L || 0, xl: item.adultSizes?.XL || 0,
+            x2l: item.adultSizes?.['2XL'] || 0, x3l: item.adultSizes?.['3XL'] || 0, x4l: item.adultSizes?.['4XL'] || 0,
+            yxs: item.youthSizes?.YXS || 0, ys: item.youthSizes?.YS || 0, ym: item.youthSizes?.YM || 0, yl: item.youthSizes?.YL || 0, yxl: item.youthSizes?.YXL || 0
+          };
         }
 
         const systemicCard = {
           id: "HPC-" + Math.floor(1000 + Math.random() * 9000),
           customerName: clientName,
           decorationType: item.decorationType,
-          brand: item.brand,
+          brand: item.brand || "Standard",
           color: item.color || "Standard",
           dueDate: document.getElementById('input-date').value,
           totalQuantity: totalCount,
@@ -1006,7 +1016,7 @@
       let finalQty = flat === 0 ? (s+m) : flat;
 
       appOrders.unshift({
-        id: "HPC-" + Math.floor(1000 + Math.random() * 9000), customerName: document.getElementById('manual-name').value, decorationType: document.getElementById('manual-type').value, brand: document.getElementById('manual-brand').value, color: document.getElementById('manual-color').value, dueDate: document.getElementById('manual-date').value, totalQuantity: finalQty, estimatedTotal: parseFloat(document.getElementById('manual-price').value) || 0, notes: document.getElementById('manual-notes').value, stage: document.getElementById('manual-stage').value, tasks: [false,false,false,false,false,false], invoiceSent: false, isPaid: false, artData: ''
+        id: "HPC-" + Math.floor(1000 + Math.random() * 9000), customerName: document.getElementById('manual-name').value, decorationType: document.getElementById('manual-type').value, brand: document.getElementById('manual-brand').value || "Standard", color: document.getElementById('manual-color').value || "Standard", dueDate: document.getElementById('manual-date').value, totalQuantity: finalQty, estimatedTotal: parseFloat(document.getElementById('manual-price').value) || 0, notes: document.getElementById('manual-notes').value, stage: document.getElementById('manual-stage').value, tasks: [false,false,false,false,false,false], invoiceSent: false, isPaid: false, artData: ''
       });
       saveState(); closeManualJobModal(); renderDashboard(); showToast('✓ Manual card logged');
     }
@@ -1069,14 +1079,21 @@
       const paymentBox = document.getElementById('box-followup-payment'); paymentBox.innerHTML = '';
       let outC = 0, payC = 0;
 
-      appManualLeads.forEach(lead => {
+      // Safe fallback rendering filters
+      let secureLeadsList = Array.isArray(appManualLeads) ? appManualLeads : [];
+      let secureOrdersList = Array.isArray(appOrders) ? appOrders : [];
+
+      secureLeadsList.forEach(lead => {
+        if (!lead || !lead.name) return;
         outC++;
+        
         let leadSizeSummaryHtml = '';
-        if(lead.totalLeadQty && lead.totalLeadQty > 0) {
+        let totalCount = parseInt(lead.totalLeadQty) || 0;
+        if(totalCount > 0) {
           leadSizeSummaryHtml = `
             <div class="p-1.5 bg-zinc-100 rounded-lg text-[10px] space-y-0.5 font-mono text-zinc-500 border border-zinc-200">
-              <span class="font-bold text-zinc-700 block text-[9px] uppercase tracking-wider">📦 Sizing Run Total: ${lead.totalLeadQty} pcs</span>
-              <div class="truncate">A: ${lead.adultSummary || '0'}</div>
+              <span class="font-bold text-zinc-700 block text-[9px] uppercase tracking-wider">📦 Sizing Run Total: ${totalCount} pcs</span>
+              <div class="truncate">A: ${lead.adultSummary || 'Logged'}</div>
               <div class="truncate text-red-700 font-bold">Y: ${lead.youthSummary || '0'}</div>
             </div>
           `;
@@ -1088,21 +1105,21 @@
               <div class="flex justify-between items-start gap-1">
                 <span class="font-extrabold text-zinc-900 leading-tight text-sm">${lead.name}</span>
                 <div class="flex flex-col items-end gap-1">
-                  <span class="text-[9px] bg-zinc-100 border text-zinc-400 font-mono px-1 rounded uppercase tracking-wider">${lead.uid}</span>
+                  <span class="text-[9px] bg-zinc-100 border text-zinc-400 font-mono px-1 rounded uppercase tracking-wider">${lead.uid || 'LEAD'}</span>
                   ${lead.followUpDate ? `<span class="text-[9px] bg-red-600 text-white font-extrabold px-1.5 py-0.5 rounded tracking-wide uppercase">⏳ ${lead.followUpDate}</span>` : ''}
                 </div>
               </div>
-              <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider truncate">${lead.businessName}</div>
+              <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider truncate">${lead.businessName || 'Individual Account'}</div>
             </div>
             ${leadSizeSummaryHtml}
             <div class="text-[11px] bg-amber-50/60 border border-amber-200 text-amber-900 p-2.5 font-medium leading-normal rounded-xl select-text italic">
-              ${lead.customerNotes}
+              ${lead.customerNotes || 'No notes mapped.'}
             </div>
             <div class="pt-2 border-t border-zinc-100 flex flex-col gap-2">
               <div class="flex justify-between items-center text-[10px] font-bold">
                 <div class="flex gap-3">
-                  <a href="tel:${lead.phone}" class="text-red-600 hover:underline">📞 Call</a>
-                  <a href="mailto:${lead.email}" class="text-zinc-500 hover:underline">✉️ Email</a>
+                  <a href="tel:${lead.phone || ''}" class="text-red-600 hover:underline">📞 Call</a>
+                  <a href="mailto:${lead.email || ''}" class="text-zinc-500 hover:underline">✉️ Email</a>
                 </div>
                 <button onclick="loadLeadIntoEditorOverride('${lead.uid}')" class="bg-zinc-950 text-white hover:bg-zinc-800 font-black px-2 py-1 rounded text-[9px] transition-colors uppercase tracking-wider shadow-xs">
                   ✏️ Edit Lead
@@ -1118,22 +1135,26 @@
         `;
       });
 
-      appOrders.forEach(o => {
+      secureOrdersList.forEach(o => {
+        if (!o) return;
         if (o.stage === 'pending' && !o.invoiceSent) {
-          outC++; outreachBox.innerHTML += `<div class="p-2 border border-red-100 bg-red-50/40 rounded-lg text-xs font-bold text-red-950">${o.customerName} - Manifest Item [ID: ${o.id}]</div>`;
+          outC++; outreachBox.innerHTML += `<div class="p-2 border border-red-100 bg-red-50/40 rounded-lg text-xs font-bold text-red-950">${o.customerName || 'Manual Entry'} - Manifest Item [ID: ${o.id}]</div>`;
         } else if (!o.isPaid && o.invoiceSent) {
-          payC++; paymentBox.innerHTML += `<div class="p-2 border border-amber-100 bg-amber-50/30 rounded-lg text-xs font-bold text-amber-950">${o.customerName} - Balance Out: $${o.estimatedTotal.toFixed(2)}</div>`;
+          payC++; paymentBox.innerHTML += `<div class="p-2 border border-amber-100 bg-amber-50/30 rounded-lg text-xs font-bold text-amber-950">${o.customerName || 'Manual Entry'} - Balance Out: $${(o.estimatedTotal || 0).toFixed(2)}</div>`;
         }
 
         const labels = o.decorationType === 'Marketing Materials' ? ['Design Approved', 'Stock Loaded', 'Bleed Verified', 'Color Profiled', 'Plotter Prepped', 'Packaged & QA'] : (o.decorationType === 'Screen Printing' ? ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'Screens Burnt', 'Inks Prepped'] : ['Art Approved', 'Blanks Staged', 'Sizes Verified', 'Color Checked', 'DST Proofed', 'Threads Prepped']);
         let tasksHtml = '';
-        labels.forEach((l, idx) => { tasksHtml += `<button onclick="toggleTask('${o.id}', ${idx})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border truncate ${o.tasks[idx] ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-zinc-50 border-zinc-200 text-zinc-500'}">○ ${l}</button>`; });
+        labels.forEach((l, idx) => { 
+          let isChecked = o.tasks && o.tasks[idx];
+          tasksHtml += `<button onclick="toggleTask('${o.id}', ${idx})" class="w-full text-left text-[10px] p-1.5 rounded font-bold border truncate ${isChecked ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-zinc-50 border-zinc-200 text-zinc-500'}">○ ${l}</button>`; 
+        });
 
         const cardHtml = `
           <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3 text-zinc-800 ${o.isPaid ? 'ring-2 ring-emerald-500' : ''}">
-            <div class="flex justify-between items-center text-[10px] font-bold"><span class="bg-zinc-900 text-white px-2 py-0.5 rounded">${o.id}</span><span class="text-zinc-400">${o.dueDate}</span></div>
-            <div><h4 class="font-extrabold text-sm text-zinc-900 truncate uppercase">${o.customerName}</h4><p class="text-xs text-zinc-500 font-semibold uppercase">${o.totalQuantity}x Run Items [${o.decorationType}]</p></div>
-            <div class="text-[11px] bg-zinc-50 border p-2 text-zinc-600 rounded-lg leading-normal italic">${o.notes}</div>
+            <div class="flex justify-between items-center text-[10px] font-bold"><span class="bg-zinc-900 text-white px-2 py-0.5 rounded">${o.id}</span><span class="text-zinc-400">${o.dueDate || 'No date'}</span></div>
+            <div><h4 class="font-extrabold text-sm text-zinc-900 truncate uppercase">${o.customerName || 'Unnamed'}</h4><p class="text-xs text-zinc-500 font-semibold uppercase">${o.totalQuantity || 0}x Run Items [${o.decorationType || 'Custom Style'}]</p></div>
+            <div class="text-[11px] bg-zinc-50 border p-2 text-zinc-600 rounded-lg leading-normal italic">${o.notes || 'No specs logged'}</div>
             <div class="grid grid-cols-2 gap-1 pt-1 border-t">${tasksHtml}</div>
             <div class="pt-2 border-t grid grid-cols-2 gap-1.5 text-[10px]">
               <button onclick="toggleInvoiceStatus('${o.id}')" class="p-1 rounded font-bold border uppercase ${o.invoiceSent ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-400'}">📄 Invoiced</button>
