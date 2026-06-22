@@ -70,7 +70,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1">Base Garment Brand/Code</label>
-            <input type="text" id="manual-brand" required placeholder="e.g. Gildan 5000" class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none font-medium text-sm focus:border-black" />
+            <input type="text" id="manual-brand" required placeholder="e.g. Gildan 5000" class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none font-bold text-sm focus:border-black" />
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
@@ -276,6 +276,11 @@
                   <input type="email" id="lead-email" placeholder="Email" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none focus:border-black" />
                 </div>
 
+                <div>
+                  <label class="block text-[10px] font-black uppercase text-zinc-400 tracking-wide mb-0.5">Target Follow-Up Date</label>
+                  <input type="date" id="lead-date" class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none text-zinc-700 focus:border-black" />
+                </div>
+
                 <div class="border border-zinc-300 p-2 bg-white rounded-lg space-y-2">
                   <div class="space-y-1">
                     <span class="text-[9px] font-black uppercase text-zinc-400 tracking-wide block">Adult Sizes (S-4XL)</span>
@@ -304,8 +309,8 @@
                 <textarea id="lead-notes" rows="2" placeholder="Scribble client needs or pricing details..." class="w-full p-2 border border-zinc-300 bg-white rounded-lg text-xs font-semibold outline-none resize-none focus:border-black"></textarea>
                 
                 <div class="flex gap-2">
-                  <button onclick="clearLeadFormFieldsOverride()" id="lead-cancel-edit-btn" class="hidden bg-zinc-400 hover:bg-zinc-500 text-white text-xs font-extrabold px-3 py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">X</button>
-                  <button onclick="submitManualOutreachLead()" id="lead-submit-btn" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs font-extrabold py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">Save Lead Note</button>
+                  <button type="button" onclick="clearLeadFormFieldsOverride()" id="lead-cancel-edit-btn" class="hidden bg-zinc-400 hover:bg-zinc-500 text-white text-xs font-extrabold px-3 py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">X</button>
+                  <button type="button" onclick="submitManualOutreachLead()" id="lead-submit-btn" class="w-full bg-red-600 hover:bg-red-700 text-white text-xs font-extrabold py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm">Save Lead Note</button>
                 </div>
               </div>
             </div>
@@ -359,9 +364,6 @@
   </footer>
 
   <script>
-    // PASTE YOUR MAKE.COM URL ENDPOINT LINK DIRECTLY INSIDE THESE QUOTES BELOW:
-    const WEBHOOK_URL = "https://httpbin.org/post";
-
     let appOrders = [
       { id: 'HPC-3891', customerName: 'West Texas Athletics', decorationType: 'Screen Printing', brand: 'Gildan (Economical Tier)', color: 'Coal Black', dueDate: '2026-06-25', totalQuantity: 64, estimatedTotal: 1296.00, notes: 'Screen printed standard bulk shirts setup run. [Contact: 806-555-0144]', stage: 'pending', tasks: [true, true, true, true, false, false], invoiceSent: true, isPaid: false, artData: '', clientPhone: '806-555-0144', clientEmail: 'athletics@wt.edu' }
     ];
@@ -391,35 +393,6 @@
       localStorage.setItem('hpc_static_orders', JSON.stringify(appOrders));
       localStorage.setItem('hpc_manual_leads', JSON.stringify(appManualLeads));
       if (document.getElementById('queue-count')) document.getElementById('queue-count').innerText = appOrders.length;
-    }
-
-    function dispatchOutboundRelayNotification(orderObject, actionEventName) {
-      if (!WEBHOOK_URL || WEBHOOK_URL.includes("httpbin.org/post")) {
-        console.log(`Relay Sandbox Log: Action "${actionEventName}" tracked.`);
-        return;
-      }
-
-      const payload = {
-        event: actionEventName,
-        timestamp: new Date().toISOString(),
-        orderId: orderObject.id,
-        clientName: orderObject.customerName,
-        phone: orderObject.clientPhone || "No Phone",
-        email: orderObject.clientEmail || "No Email",
-        currentStage: orderObject.stage,
-        totalQty: orderObject.totalQuantity,
-        financialStatus: orderObject.isPaid ? "PAID" : "UNPAID",
-        invoiceSent: orderObject.invoiceSent ? "SENT" : "NOT_SENT",
-        specs: orderObject.notes
-      };
-
-      fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-      .then(res => console.log(`Notification Hook Success for Event: ${actionEventName}`))
-      .catch(err => console.error("Relay Connection Refused:", err));
     }
 
     function initializeDefaultDates() {
@@ -484,6 +457,7 @@
       calculateManifestTotals();
     }
 
+    // LOCAL-ONLY DATA SYNC
     function updateManifestItemField(id, key, value) {
       const row = customerManifestItems.find(item => item.id === id);
       if (!row) return;
@@ -801,6 +775,7 @@
           businessName: 'Inbound Web Sourced Hub Request',
           phone: clientPhone,
           email: clientEmail,
+          followUpDate: '', 
           customerNotes: `Inbound system manifest with ${totalCount} items run configuration needing quote tracking call. Style: ${item.decorationType}.`,
           totalLeadQty: totalCount,
           adultSummary: 'Sourced from Client Portal Input',
@@ -810,8 +785,6 @@
             yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0
           }
         });
-
-        dispatchOutboundRelayNotification(systemicCard, "QUOTE_SUBMITTED");
       });
 
       saveState();
@@ -886,20 +859,18 @@
       }
     }
 
-    // INTERACTION ENGINE: INLINE LEAD MODIFIER HOOK INJECTOR
     function loadLeadIntoEditorOverride(leadUid) {
       const targetLead = appManualLeads.find(l => l.uid === leadUid);
       if (!targetLead) return;
 
-      // Populate string input rows
       document.getElementById('editing-lead-uid').value = targetLead.uid;
       document.getElementById('lead-name').value = targetLead.name || '';
       document.getElementById('lead-business').value = targetLead.businessName || '';
       document.getElementById('lead-phone').value = targetLead.phone || '';
       document.getElementById('lead-email').value = targetLead.email || '';
+      document.getElementById('lead-date').value = targetLead.followUpDate || '';
       document.getElementById('lead-notes').value = targetLead.customerNotes || '';
 
-      // Fallback checks for older arrays that lack raw numeric tracking
       const sizes = targetLead.rawSizes || { s: 0, m: 0, l: 0, xl: 0, x2l: 0, x3l: 0, x4l: 0, yxs: 0, ys: 0, ym: 0, yl: 0, yxl: 0 };
       
       document.getElementById('l-size-s').value = sizes.s || '';
@@ -916,12 +887,10 @@
       document.getElementById('l-size-yl').value = sizes.yl || '';
       document.getElementById('l-size-yxl').value = sizes.yxl || '';
 
-      // Tweak contextual title controls to notify user they are customizing records
       document.getElementById('lead-form-title-label').innerText = `✏️ Customizing: ${targetLead.name}`;
       document.getElementById('lead-submit-btn').innerText = "Update Lead Specifications";
       document.getElementById('lead-cancel-edit-btn').classList.remove('hidden');
 
-      // Expand accordion container smoothly onto layout space
       document.getElementById('inline-lead-form').classList.remove('hidden');
       showToast('Lead records initialized inside editor block');
     }
@@ -932,6 +901,7 @@
       document.getElementById('lead-business').value = '';
       document.getElementById('lead-phone').value = '';
       document.getElementById('lead-email').value = '';
+      document.getElementById('lead-date').value = '';
       document.getElementById('lead-notes').value = '';
 
       document.getElementById('l-size-s').value = '';
@@ -949,7 +919,7 @@
 
       document.getElementById('lead-form-title-label').innerText = "➕ Log Manual Hot Lead";
       document.getElementById('lead-submit-btn').innerText = "Save Lead Note";
-      document.getElementById('lead-cancel-edit-btn').add('hidden');
+      document.getElementById('lead-cancel-edit-btn').classList.add('hidden');
     }
 
     function submitManualOutreachLead() {
@@ -957,6 +927,7 @@
       const biz = document.getElementById('lead-business').value.trim();
       const phone = document.getElementById('lead-phone').value.trim();
       const email = document.getElementById('lead-email').value.trim();
+      const fupDate = document.getElementById('lead-date').value;
       const notes = document.getElementById('lead-notes').value.trim();
       const editingUid = document.getElementById('editing-lead-uid').value;
       
@@ -983,6 +954,7 @@
         businessName: biz || 'Individual Account',
         phone: phone || 'No Phone Logged',
         email: email || 'No Email Logged',
+        followUpDate: fupDate || '',
         customerNotes: notes || 'No specs logged yet.',
         totalLeadQty: totalCalculatedLeadQty,
         adultSummary: `S:${as} M:${am} L:${al} XL:${axl} 2X:${axx} 3X:${a3x} 4X:${a4x}`,
@@ -994,14 +966,12 @@
       };
 
       if (editingUid) {
-        // OVERWRITE MODE: update index matching arrays safely in place
         const indexMatch = appManualLeads.findIndex(l => l.uid === editingUid);
         if (indexMatch !== -1) {
           appManualLeads[indexMatch] = { ...appManualLeads[indexMatch], ...gatheredData };
           showToast('✓ Lead updated in memory pipeline');
         }
       } else {
-        // STANDARD FRESH LEAD INSERTION MODE
         const newLead = {
           uid: 'LEAD-' + Math.floor(1000 + Math.random() * 9000),
           ...gatheredData
@@ -1039,7 +1009,6 @@
         order.tasks[taskIndex] = !order.tasks[taskIndex]; 
         saveState(); 
         renderDashboard(); 
-        dispatchOutboundRelayNotification(order, "PRODUCTION_STEP_TOGGLED");
       }
     }
     function toggleInvoiceStatus(orderId) { 
@@ -1048,7 +1017,6 @@
         order.invoiceSent = !order.invoiceSent; 
         saveState(); 
         renderDashboard(); 
-        dispatchOutboundRelayNotification(order, "INVOICE_STATUS_UPDATED");
       } 
     }
     function togglePaymentStatus(orderId) { 
@@ -1057,7 +1025,6 @@
         order.isPaid = !order.isPaid; 
         saveState(); 
         renderDashboard(); 
-        dispatchOutboundRelayNotification(order, "PAYMENT_STATUS_UPDATED");
       } 
     }
     function cancelOrder(orderId) { if (confirm('Scrub run?')) { appOrders = appOrders.filter(o => o.id !== orderId); saveState(); renderDashboard(); } }
@@ -1070,7 +1037,6 @@
         order.stage = stages[cur + 1]; 
         saveState(); 
         renderDashboard(); 
-        dispatchOutboundRelayNotification(order, "ORDER_STAGE_ADVANCED");
       }
     }
 
@@ -1108,13 +1074,15 @@
           `;
         }
 
-        // BACK OFFICE OUTREACH ELEMENT: INJECTING RE-CONFIGURED ✏️ EDIT TRIGGER HOOK ACTIONS
         outreachBox.innerHTML += `
           <div class="p-3 border border-zinc-200 bg-white rounded-xl shadow-xs space-y-2 flex flex-col justify-between">
             <div class="space-y-1">
               <div class="flex justify-between items-start gap-1">
                 <span class="font-extrabold text-zinc-900 leading-tight text-sm">${lead.name}</span>
-                <span class="text-[9px] bg-zinc-100 border text-zinc-400 font-mono px-1 rounded uppercase">${lead.uid}</span>
+                <div class="flex flex-col items-end gap-1">
+                  <span class="text-[9px] bg-zinc-100 border text-zinc-400 font-mono px-1 rounded uppercase tracking-wider">${lead.uid}</span>
+                  ${lead.followUpDate ? `<span class="text-[9px] bg-red-600 text-white font-extrabold px-1.5 py-0.5 rounded tracking-wide uppercase">⏳ ${lead.followUpDate}</span>` : ''}
+                </div>
               </div>
               <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider truncate">${lead.businessName}</div>
             </div>
