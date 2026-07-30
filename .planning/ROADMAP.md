@@ -30,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal**: The three of them can sign in to a trustworthy empty shell — nobody else can get in, the database has room for every piece of the story from day one, and the riskiest unknown in the build is already proven
 **Mode:** mvp
 **Depends on**: Nothing (first phase)
-**Requirements**: FOUND-01, FOUND-02, FOUND-03, FOUND-04, FOUND-05, FOUND-06, AUTH-01, AUTH-02, AUTH-03, AUTH-04
+**Requirements**: FOUND-01, FOUND-02, FOUND-03, FOUND-04, FOUND-05, FOUND-06, AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05
 **Success Criteria** (what must be TRUE):
   1. Each of the three team members signs in with their own account and reaches the dashboard; signed out, every dashboard page refuses and returns no customer data at all
   2. Adding `?admin=true` to any address grants nothing, and neither it nor the triple-click shortcut exists anywhere in the code
@@ -101,7 +101,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal**: The price a customer is quoted is the shop's own price, correct on every dimension that moves money, impossible to tamper with, and exactly the number stored against the job
 **Mode:** mvp
 **Depends on**: Phase 2 (the intake form and submission path). Independent of Phase 3 — if artwork work stalls, this can proceed
-**Requirements**: PRICE-01, PRICE-02, PRICE-03, PRICE-04, PRICE-05, PRICE-06, PRICE-07, PRICE-08, PRICE-09
+**Requirements**: PRICE-01, PRICE-02, PRICE-03, PRICE-04, PRICE-05, PRICE-06, PRICE-07, PRICE-08, PRICE-09, PRICE-10
 **Success Criteria** (what must be TRUE):
   1. A 288-piece run quotes at a visibly lower per-piece rate than a 12-piece run of the same garment
   2. A run containing 2XL and 3XL shirts prices higher than the identical run in standard sizes, and a job inside the rush window prices higher than the same job outside it
@@ -121,7 +121,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal**: All three of them look at one board and trust what it says — where every job is, who moved it, what it actually specifies, and that a misclick cannot quietly corrupt it
 **Mode:** mvp
 **Depends on**: Phase 3 (artwork download) and Phase 4 (totals to display)
-**Requirements**: BOARD-01, BOARD-02, BOARD-03, BOARD-04, BOARD-05, BOARD-06
+**Requirements**: BOARD-01, BOARD-02, BOARD-03, BOARD-04, BOARD-05, BOARD-06, BOARD-07
 **Success Criteria** (what must be TRUE):
   1. Every job sits on the board under its production stage, and a team member can see what's in each stage at a glance
   2. Moving a job asks "move job #1042 to In Production?" before anything happens, jobs move backward as readily as forward, and cancelling the question changes nothing
@@ -145,7 +145,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal**: Nobody who asks for a quote gets dropped, and the owner learns about new work without watching the board
 **Mode:** mvp
 **Depends on**: Phase 2 (leads are a view over quotes) and Phase 1 (Resend domain verified there). Can run before Phase 5 if the stage-model decision is delayed
-**Requirements**: LEAD-01, LEAD-02, LEAD-03, NOTIF-01, NOTIF-02
+**Requirements**: LEAD-01, LEAD-02, LEAD-03, LEAD-04, NOTIF-01, NOTIF-02
 **Success Criteria** (what must be TRUE):
   1. Every lead needing a callback is listed with name, phone and email, and ten submissions produce ten entries — not twenty
   2. A team member marks a lead as called, and the list shows who called and when
