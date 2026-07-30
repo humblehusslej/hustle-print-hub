@@ -68,9 +68,9 @@ The existing prototype is not treated as validated. Its three core paths — art
 ## Constraints
 
 - **Tech stack**: Next.js App Router on Vercel — gives a real server boundary for pricing without operating a separate backend, and server-renders for future SEO.
-- **Auth**: Clerk, individual accounts, flat permissions — fast to integrate, and the browser-never-touches-Supabase design removes the usual RLS/JWT coupling problem.
+- **Auth**: Clerk, individual accounts, **two roles** — `owner` and `staff`, differing only on money visibility and lead approval. Fast to integrate, and keeping the *database* off the browser removes the usual RLS/JWT coupling problem. (Artwork upload is the one browser-to-Supabase path; see Security below.)
 - **Data**: Supabase Postgres + Storage on a **new** project — the old one is gone and is being abandoned.
-- **Security**: The browser never holds a Supabase key. All data access goes through Server Actions using the service role key. No client-supplied price is ever trusted.
+- **Security**: The browser never holds a **durable** Supabase credential. All database access goes through Server Actions using the service role key. Artwork upload is the sole browser-to-Supabase path, authorized by a short-lived signed token scoped to a single server-chosen path — never an API key. No client-supplied price is ever trusted.
 - **Team size**: Three non-technical users — the tool must be obvious without training.
 - **Commercial**: Barter engagement (development for company apparel). Scope boundary is explicit in `ASSESSMENT.md` §8 precisely because there is no invoice to anchor it.
 
@@ -79,7 +79,7 @@ The existing prototype is not treated as validated. Its three core paths — art
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Next.js over Vite + React | Server Actions provide the server-side pricing boundary with no separate backend to deploy; Vite would mean a static SPA plus bolted-on functions | — Pending |
-| Clerk over Supabase Auth | Browser never queries Supabase, so RLS/`auth.uid()` coupling is irrelevant; Clerk's drop-in UI is faster and free at this scale (50k MRU) | — Pending |
+| Clerk over Supabase Auth | The browser never queries the *database*, so RLS/`auth.uid()` coupling is irrelevant; Clerk's drop-in UI is faster and free at this scale (50k MRU). **Caveat surfaced 2026-07-30:** Supabase's documented TUS upload path authenticates with a Supabase Auth session, which this design does not have. The signed-token alternative must be proven in the Phase 1 spike — it is the one place the Clerk choice carries real risk | ⚠️ Revisit after spike |
 | All DB access via Server Actions with service role key | Makes price injection structurally impossible — no database key and no price field ever reaches the client | — Pending |
 | New Supabase project; abandon the old one | The configured project no longer resolves in DNS; assume prior data unrecoverable | — Pending |
 | Single `quotes` table replacing the `app_orders`/`app_manual_leads` split | The dual write is the actual source of duplicate outreach entries | — Pending |

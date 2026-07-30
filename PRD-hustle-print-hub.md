@@ -70,7 +70,11 @@ Priorities align with `ASSESSMENT.md` §4. Acceptance criteria are the exit cond
 
 > **Revised after research.** The original version routed bytes `browser → Server Action → Storage`. That is unbuildable: Vercel caps function request bodies at **4.5 MB** (`FUNCTION_PAYLOAD_TOO_LARGE`) and Next.js caps Server Action bodies at 1 MB by default. Neither limit is enforced by `next dev`, so the naive version passes locally and fails on the first real customer file. Three of four research agents reached this independently.
 
-**Architecture.** A Server Action issues a Supabase **signed upload URL** — path-scoped, short TTL, `upsert:false`. The browser PUTs bytes directly to Storage with a plain `fetch`. Bytes never traverse a Vercel function. This preserves the locked constraint: the browser holds a single-use capability token for one server-chosen path, never a Supabase key.
+**Architecture.** A Server Action issues a Supabase **signed upload token** — path-scoped, short TTL, `upsert:false`. The browser uploads directly to Storage. Bytes never traverse a Vercel function, so the 4.5 MB platform cap does not apply.
+
+> **Corrected 2026-07-30.** An earlier version said the browser "PUTs bytes with a plain `fetch`." That only holds below 6 MB. Supabase's standard upload is documented for files **up to 6 MB**; above that, TUS resumable is required. Since 6 MB rejects a single layered `.ai` file — exactly the artwork this project exists to stop losing — **TUS is mandatory, not optional**, and Phase 3 is costed accordingly: `tus-js-client`, 6 MB chunks, upload fingerprints, resume state.
+
+This preserves the locked constraint in its precise form: the browser never holds a **durable** Supabase credential. It holds a short-lived token scoped to one server-chosen path.
 
 - Accepts PDF, AI, EPS, SVG, PNG, JPG, **and ZIP** (designers routinely send AI + fonts + preview as one archive).
 - Type validated server-side by **extension *and* magic bytes** — `.ai` and `.eps` report as `application/postscript` or `application/octet-stream`, so naive MIME checking rejects legitimate artwork.
@@ -271,9 +275,9 @@ Decided; not open for re-litigation during build. Rationale in `ASSESSMENT.md` �
 | Decision | Value |
 |---|---|
 | Framework | Next.js App Router, deployed on Vercel |
-| Auth | Clerk — individual accounts, flat permissions |
+| Auth | Clerk — individual accounts, two roles (`owner` / `staff`) differing only on money visibility and lead approval (§2) |
 | Database & storage | Supabase — **new** project |
-| Data access | Server Actions with service role key. **Browser never holds a Supabase key.** |
+| Data access | Server Actions with the service role key. **The browser never holds a durable Supabase credential.** Artwork upload is the sole browser-to-Supabase path, authorized by a short-lived signed token scoped to one path — never an API key. |
 | Pricing | Server-computed. No client-supplied price is ever trusted. |
 | Validation | Zod, server-side |
 | Email | Resend |

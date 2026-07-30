@@ -167,7 +167,9 @@ Secondary reasons:
 
 Clerk is the right call for this build.
 
-The usual objection to mixing Clerk with Supabase is that Supabase Row Level Security keys off `auth.uid()` from a Supabase-issued JWT, so using a different auth provider means bridging tokens. That objection **does not apply to this architecture**, because the browser never talks to Supabase at all (§3.4). Supabase never needs to know who the user is; Next.js does, and that is Clerk's job.
+The usual objection to mixing Clerk with Supabase is that Supabase Row Level Security keys off `auth.uid()` from a Supabase-issued JWT, so using a different auth provider means bridging tokens. That objection **does not apply to database access here**, because the browser never queries the database (§3.4). Supabase never needs to know who the user is; Next.js does, and that is Clerk's job.
+
+> **Qualified 2026-07-30.** One place this does bite: Supabase's documented resumable-upload path authenticates with a Supabase Auth session token, which this architecture does not have. Supabase supports a signed-token alternative, but the official example does not demonstrate it. Proving that path is the sole objective of the Phase 1 spike, and it is the one place the Clerk decision carries genuine risk.
 
 Supporting facts:
 

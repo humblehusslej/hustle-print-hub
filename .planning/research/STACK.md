@@ -897,7 +897,7 @@ The stable choice is TypeScript **6.0.2**, published as `@typescript/typescript6
 | `z.string().email()` | Deprecated in Zod 4 | `z.email()` |
 | `revalidateTag('x')` single-arg | TypeScript error in Next 16 | `updateTag('x')` in Server Actions, or `revalidateTag('x', 'max')` |
 | `typescript@7.x` | Next.js 16.2 can't detect it | `npm:@typescript/typescript6@6.0.2` |
-| Clerk's Supabase JWT template | Deprecated April 2025, and irrelevant — the browser never talks to Supabase | Nothing. There is no integration to configure. |
+| Clerk's Supabase JWT template | Deprecated April 2025. Irrelevant for *database* access — the browser never queries Postgres. **Corrected 2026-07-30:** not irrelevant for Storage; Supabase's documented TUS upload path expects a Supabase Auth session, and the signed-token alternative is what the Phase 1 spike must prove | Nothing for the database. For Storage, prove the signed-upload-token path before relying on it. |
 | `cacheComponents: true` | Adds Suspense-boundary failure modes and forces a `ClerkProvider` relocation, for zero benefit on a 3-user internal dashboard | Leave it off |
 | Legacy `anon` key on the new project | Nothing in this architecture needs it; an existing anon key is an open door waiting for someone to use it | Create secret keys, deactivate legacy keys |
 

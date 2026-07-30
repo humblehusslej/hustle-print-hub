@@ -34,8 +34,8 @@ Phase 1 carries more than "scaffold + auth" deliberately. Five prototype-class f
 
 | Decision | Choice | Rationale |
 |---|---|---|
-| Role storage | **Clerk `publicMetadata`** | Clerk already owns identity. A separate `staff` table creates a sync problem — delete a Clerk user and an orphan row keeps granting pricing access. Josh can grant access himself from the Clerk dashboard without a deploy. Session claims avoid the Clerk API rate limit flagged for per-request user lookups. |
-| Artwork size cap | **~100 MB**, provisional | Covers most real designer files including layered `.ai`. Confirm with the shop owner before Phase 3 closes; the spike produces a real number to bring him. |
+| Role storage | **Clerk `publicMetadata`**, surfaced via a **custom session token** | Clerk already owns identity. A separate `staff` table creates a sync problem — delete a Clerk user and an orphan row keeps granting pricing access. Josh can grant access himself from the dashboard without a deploy. **Requires configuring a custom session token** (§5) — `publicMetadata` is *not* in `sessionClaims` by default. |
+| Artwork size cap | **~100 MB** | Chosen before the 6 MB threshold was confirmed. The choice matters less than it appeared: **anything above 6 MB requires TUS**, so 25 MB and 100 MB have identical implementation cost. Only "≤6 MB" would be cheaper, and that rejects the artwork this project exists to stop losing. Confirm the exact number with the shop owner before Phase 3 closes. |
 | Guard runner | **npm scripts invoked from `prebuild`** | GitHub Actions is blocked pending owner access on Josh's repo. Scripts run identically from a Vercel build, a local shell, or Actions later — zero rework when access lands. Guard logic in workflow YAML would leave Phase 1 with no enforcement at all. |
 | Guard scope | **Three custom scripts only** | CodeRabbit and Semgrep already cover secret scanning and SAST locally, on demand. Gitleaks, Trivy, OSV-Scanner, and pgTAP are disproportionate for a three-person internal tool. |
 | Branch strategy | **Work on `develop`** | `main` stays at Josh's live `index.html`. Local `main` was reset to `origin/main` so an accidental push cannot carry rebuild work into the live site. Branch protection deferred — it needs owner access. |
@@ -80,9 +80,18 @@ Consolidating to one table fixes the first. Only a real parent/child relationshi
 Two functions, and only two:
 
 ```ts
-getRole(userId)                  // reads Clerk publicMetadata — the ONLY place role is resolved
+getRole(userId)                  // reads the role claim — the ONLY place role is resolved
 serializeQuoteFor(role, quote)   // the ONLY place money fields are stripped from a payload
 ```
+
+### Required Clerk configuration
+
+`publicMetadata` does **not** appear in `sessionClaims` by default. A custom session token must be configured in the Clerk dashboard with a `user.public_metadata` shortcode, or `getRole()` will read `undefined` and an implementer will reach for `currentUser()` — the rate-limited Backend API call this design exists to avoid.
+
+Two consequences to design around:
+
+- **~60 second propagation.** Metadata changed via the dashboard or Backend API reaches the session token on roughly a one-minute delay. When Josh grants someone pricing access, they may briefly still resolve as `staff`. Acceptable here, but it must not be mistaken for a bug — and any future feature needing instant role changes cannot rely on this path.
+- **4 KB session token ceiling.** A role string is trivial, but the budget is shared with every other custom claim added later.
 
 This indirection is the design. It makes later changes one-line edits rather than hunts:
 
@@ -134,11 +143,28 @@ The Supabase client is a **lazy getter, not a module-scope `const`**. A module-s
 
 ## 8. The upload spike (FOUND-05)
 
-### What it proves
+> **Revised 2026-07-30 after design review.** The first version of this section described a single-shot `PUT` and framed single-shot-vs-resumable as a fork the spike would decide. The documentation already answers that, and the answer is resumable. Corrected below.
 
-A Server Action mints a signed upload URL; the browser PUTs bytes to it with a plain `fetch` — no Supabase client, no key, only a capability token scoped to one server-chosen path. At ~100 MB. On a **deployed preview URL**.
+### The design is TUS resumable — this is not a fork
 
-Never `next dev`. Neither the Vercel 4.5 MB function body cap nor the Next.js 1 MB Server Action cap is enforced locally, so a passing local test proves nothing and the failure appears first in production.
+Supabase's own guidance: **standard uploads are for files up to 6 MB**; above that, TUS resumable is recommended. `createSignedUploadUrl` → `uploadToSignedUrl` is the *standard* path and therefore caps out at 6 MB in practice.
+
+Six megabytes rejects a single layered `.ai` file, which is precisely the artwork this project exists to stop losing. So **TUS is mandatory**, not conditional. That means `tus-js-client`, mandatory 6 MB chunks, upload fingerprints, and resume state — meaningfully more than one `fetch`, and Phase 3 must be costed accordingly.
+
+### The genuine unknown
+
+Supabase's documented TUS example authenticates with a **Supabase Auth session token**:
+
+```js
+const { data: { session } } = await supabase.auth.getSession()
+headers: { authorization: `Bearer ${session.access_token}` }
+```
+
+We do not have one and will not — authentication is Clerk. Supabase supports a signed-token alternative (the `createSignedUploadUrl` token supplied via an `x-signature` header), but the official example does not demonstrate it.
+
+**That is the whole question the spike answers:** can a browser with no Supabase Auth session complete a TUS resumable upload using only a server-issued signed upload token?
+
+If yes, the architecture holds and Phase 3 is a known quantity. If no, the options are (a) a thin server-side proxy that streams — reintroducing the 4.5 MB Vercel ceiling and therefore not viable, (b) Supabase's S3-compatible endpoint with server-issued presigned credentials, or (c) a different storage provider for artwork only. Discovering that in Phase 3 would invalidate the quote form built in Phase 2, which is why this sits in Phase 1.
 
 ### What it deliberately does not build
 
@@ -146,22 +172,16 @@ No UI beyond a bare file input, no database rows, no validation, no cleanup logi
 
 ### Success bar
 
-1. A ~100 MB file uploads from a browser on a deployed preview
+1. A ~100 MB file uploads from a browser on a **deployed preview**, authenticated only by a server-issued signed upload token
 2. The server independently confirms the object exists with matching byte size — never trusting the client's report of success
 3. A signed download returns byte-identical content
 4. **Three consecutive successful runs**, not one
 5. Wall-clock time recorded on a normal connection
+6. Killing the network mid-upload and resuming completes the file — the entire reason for choosing TUS
 
-Criterion 5 is a product finding, not a technical one. If 100 MB succeeds but takes eight minutes on the shop's upload speed, customers abandon the form long before it completes, and the owner needs to hear that.
+Never `next dev`. Neither the Vercel 4.5 MB function body cap nor the Next.js 1 MB Server Action cap is enforced locally, so a passing local test proves nothing and the failure surfaces first in production.
 
-### The fork it produces
-
-The spike cannot fail in a way that blocks Phase 1. It produces information:
-
-- **Single-shot PUT is reliable at 100 MB** → Phase 3 is one `fetch`
-- **It is not** → Phase 3 needs a resumable (TUS) client with chunking, progress, and resume state
-
-Either outcome is known before the quote form is built on top of it. That is why this moved out of Phase 3 — discovering the 4.5 MB wall mid-Phase-3 would invalidate the form built in Phase 2.
+Criterion 5 is a product finding, not a technical one. If 100 MB succeeds but takes eight minutes on the shop's upload speed, customers abandon the form long before it completes, and the owner needs to hear that number.
 
 ## 9. Testing
 
@@ -194,6 +214,8 @@ External, with owners. None block design; several block execution.
 | Needed | From | Blocks |
 |---|---|---|
 | Clerk application + publishable/secret keys | Chris — create at `dashboard.clerk.com` | First `npm run dev` |
+| **Clerk custom session token** with a `user.public_metadata` shortcode | Chris — Clerk dashboard | AUTH-05, PRICE-10. Without it `sessionClaims` has no role and `getRole()` returns `undefined` |
+| Josh's Clerk user ID, with `publicMetadata.role = "owner"` set | Chris, after Josh signs in once | AUTH-05 — until set, nobody resolves as owner and all pricing is hidden from everyone |
 | Vercel env var access, preview scope | Josh — team access | FOUND-04, the spike's deployed run |
 | Resend account + API key | Chris | FOUND-06 |
 | GoDaddy access for the subdomain | Josh | Custom domain, not Phase 1 |
