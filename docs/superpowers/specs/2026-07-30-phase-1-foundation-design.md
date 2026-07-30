@@ -35,7 +35,8 @@ Phase 1 carries more than "scaffold + auth" deliberately. Five prototype-class f
 | Decision | Choice | Rationale |
 |---|---|---|
 | Role storage | **Clerk `publicMetadata`**, surfaced via a **custom session token** | Clerk already owns identity. A separate `staff` table creates a sync problem — delete a Clerk user and an orphan row keeps granting pricing access. Josh can grant access himself from the dashboard without a deploy. **Requires configuring a custom session token** (§5) — `publicMetadata` is *not* in `sessionClaims` by default. |
-| Artwork size cap | **~100 MB** | Chosen before the 6 MB threshold was confirmed. The choice matters less than it appeared: **anything above 6 MB requires TUS**, so 25 MB and 100 MB have identical implementation cost. Only "≤6 MB" would be cheaper, and that rejects the artwork this project exists to stop losing. Confirm the exact number with the shop owner before Phase 3 closes. |
+| Artwork size cap | **50 MB**, held in config | Measured, not assumed (§8). 50 MB is the free plan's hard ceiling; raising it returns `PaymentRequiredException`. Josh moves to a paid plan late in the build, so the cap must be an env var from day one — the upgrade is then a config change, not a code change. The earlier "~100 MB" target is unavailable until that upgrade. |
+| Upload mechanism | **Standard signed upload — not TUS** | Measured (§8). 25 MB transferred cleanly, so the documented 6 MB figure is a reliability recommendation rather than a limit. TUS authenticates but dies at RLS and would require an `anon` INSERT policy on `storage.objects`; the standard path bypasses RLS by design and needs none. |
 | Guard runner | **npm scripts invoked from `prebuild`** | GitHub Actions is blocked pending owner access on Josh's repo. Scripts run identically from a Vercel build, a local shell, or Actions later — zero rework when access lands. Guard logic in workflow YAML would leave Phase 1 with no enforcement at all. |
 | Guard scope | **Three custom scripts only** | CodeRabbit and Semgrep already cover secret scanning and SAST locally, on demand. Gitleaks, Trivy, OSV-Scanner, and pgTAP are disproportionate for a three-person internal tool. |
 | Branch strategy | **Work on `develop`** | `main` stays at Josh's live `index.html`. Local `main` was reset to `origin/main` so an accidental push cannot carry rebuild work into the live site. Branch protection deferred — it needs owner access. |
@@ -143,45 +144,51 @@ The Supabase client is a **lazy getter, not a module-scope `const`**. A module-s
 
 ## 8. The upload spike (FOUND-05)
 
-> **Revised 2026-07-30 after design review.** The first version of this section described a single-shot `PUT` and framed single-shot-vs-resumable as a fork the spike would decide. The documentation already answers that, and the answer is resumable. Corrected below.
+> **Settled by measurement, 2026-07-30.** This section was wrong twice — first "single-shot plain `fetch`", then "TUS is mandatory above 6 MB". Both were reasoned from documentation. A throwaway probe against the live project settled it, and the answer matched neither. Measurements below supersede all prior versions.
 
-### The design is TUS resumable — this is not a fork
+### Measured behaviour
 
-Supabase's own guidance: **standard uploads are for files up to 6 MB**; above that, TUS resumable is recommended. `createSignedUploadUrl` → `uploadToSignedUrl` is the *standard* path and therefore caps out at 6 MB in practice.
+Standard signed upload: the server mints a token with `createSignedUploadUrl`; the browser uploads using **that token alone** — no `apikey`, no `Authorization` header, no Supabase Auth session.
 
-Six megabytes rejects a single layered `.ai` file, which is precisely the artwork this project exists to stop losing. So **TUS is mandatory**, not conditional. That means `tus-js-client`, mandatory 6 MB chunks, upload fingerprints, and resume state — meaningfully more than one `fetch`, and Phase 3 must be costed accordingly.
+| Size | Result | Elapsed |
+|---|---|---|
+| 1 MB | success | 1.6 s |
+| 8 MB | success | 8.8 s |
+| 25 MB | success | 37.6 s |
+| 100 MB | `413 EntityTooLarge` | — |
 
-### The genuine unknown
+Project storage config reports `fileSizeLimit: 52428800` — exactly 50 MB. Raising it returns `PaymentRequiredException`. **The ceiling is the free plan's, not the protocol's.**
 
-Supabase's documented TUS example authenticates with a **Supabase Auth session token**:
+### The design: standard signed upload, no TUS
 
-```js
-const { data: { session } } = await supabase.auth.getSession()
-headers: { authorization: `Bearer ${session.access_token}` }
-```
+- The documented "6 MB" figure is a **reliability recommendation, not a limit**. 25 MB transferred cleanly and verified byte-for-byte.
+- **TUS is actively worse here.** It authenticates successfully, then fails at RLS — `new row violates row-level security policy`. The signed token is not honoured as an RLS bypass. Making TUS work would require an `anon` INSERT policy on `storage.objects`, letting anyone write into the bucket. The standard signed path bypasses RLS *by design* and needs no policy at all.
+- No `tus-js-client`, no chunking, no fingerprints, no resume state. Phase 3 is materially cheaper than the previous revision assumed.
 
-We do not have one and will not — authentication is Clerk. Supabase supports a signed-token alternative (the `createSignedUploadUrl` token supplied via an `x-signature` header), but the official example does not demonstrate it.
+### Size cap: 50 MB now, configurable later
 
-**That is the whole question the spike answers:** can a browser with no Supabase Auth session complete a TUS resumable upload using only a server-issued signed upload token?
+Josh moves to a paid Supabase plan near the end of the build, which unlocks up to 50 GB. Therefore:
 
-If yes, the architecture holds and Phase 3 is a known quantity. If no, the options are (a) a thin server-side proxy that streams — reintroducing the 4.5 MB Vercel ceiling and therefore not viable, (b) Supabase's S3-compatible endpoint with server-issued presigned credentials, or (c) a different storage provider for artwork only. Discovering that in Phase 3 would invalidate the quote form built in Phase 2, which is why this sits in Phase 1.
+- **The cap is configuration, never a constant.** A single server-side env var drives both server validation and the customer-facing rejection message. After the plan upgrade, raising it is an env change plus a bucket setting — not a code change, not a redeploy of validation logic.
+- **Above roughly 100 MB, revisit TUS** for resume-on-failure. Recorded here as a known future decision so it is not rediscovered from scratch.
+- A single-shot upload has **no resume**. At the current cap a dropped connection costs the customer the whole transfer. Acceptable at 50 MB; reconsider when the cap rises.
 
-### What it deliberately does not build
+### What remains unproven
 
-No UI beyond a bare file input, no database rows, no validation, no cleanup logic. Throwaway proof living on the branch, absorbed or deleted in Phase 3.
+Everything above was measured server-side from Node. One thing genuinely requires a browser:
 
-### Success bar
+**CORS.** Does a real browser origin complete this upload against a deployed preview? Node's `fetch` enforces no CORS, so the probe cannot answer it. This is the sole remaining unknown in the artwork path, and it is what the Phase 1 spike now tests — a much narrower question than before.
 
-1. A ~100 MB file uploads from a browser on a **deployed preview**, authenticated only by a server-issued signed upload token
-2. The server independently confirms the object exists with matching byte size — never trusting the client's report of success
+### Spike success bar (revised)
+
+1. A file at the configured cap uploads from a **real browser** on a deployed preview, authorised by a server-issued signed token alone
+2. The server independently confirms the object exists at the expected byte size — never trusting the client's report of success
 3. A signed download returns byte-identical content
-4. **Three consecutive successful runs**, not one
-5. Wall-clock time recorded on a normal connection
-6. Killing the network mid-upload and resuming completes the file — the entire reason for choosing TUS
+4. Wall-clock time recorded on the shop's actual connection
 
-Never `next dev`. Neither the Vercel 4.5 MB function body cap nor the Next.js 1 MB Server Action cap is enforced locally, so a passing local test proves nothing and the failure surfaces first in production.
+Criterion 4 is a product finding, not a technical one. 25 MB measured at 37.6 s here; 50 MB extrapolates to roughly 75 seconds of a customer watching a progress bar, with no resume if the connection drops. Josh should hear that number before the cap is finalised.
 
-Criterion 5 is a product finding, not a technical one. If 100 MB succeeds but takes eight minutes on the shop's upload speed, customers abandon the form long before it completes, and the owner needs to hear that number.
+Never `next dev`. Neither the Vercel 4.5 MB body cap nor the Next.js 1 MB Server Action cap is enforced locally. Both are moot for the bytes themselves — those bypass Vercel entirely — but they still bind the Server Action that mints the token.
 
 ## 9. Testing
 
@@ -220,7 +227,7 @@ External, with owners. None block design; several block execution.
 | Resend account + API key | Chris | FOUND-06 |
 | GoDaddy access for the subdomain | Josh | Custom domain, not Phase 1 |
 | GitHub owner access | Josh | GitHub Actions, branch protection — deferred by design |
-| Confirm ~100 MB cap | Josh | Phase 3 sign-off, not Phase 1 |
+| Supabase paid plan (~$25/mo) if the cap must exceed 50 MB | Josh — **deferred to late in the build by his decision** | Nothing in Phases 1–3. Build against 50 MB; `MAX_ARTWORK_BYTES` makes the later raise a config change |
 
 ## 12. Out of scope for Phase 1
 

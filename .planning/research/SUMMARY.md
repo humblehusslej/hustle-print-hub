@@ -13,9 +13,11 @@
 >
 > Two claims below were superseded by design review. The research is otherwise sound and is retained as written, as a point-in-time record.
 >
-> **1. The upload fix is incomplete as described.** This document says the browser `PUT`s bytes directly to Storage via a signed upload URL. That is Supabase's **standard** upload path, documented for files **up to 6 MB**. Above 6 MB — which includes essentially all real print artwork — **TUS resumable upload is required**: `tus-js-client`, mandatory 6 MB chunks, upload fingerprints, resume state. The diagnosis (Vercel's 4.5 MB cap makes the Server Action route unbuildable) is correct; the remedy needs the resumable path, and Phase 3 must be costed accordingly.
+> **1. The upload conclusion is correct; the size guidance is not.** This document's remedy — a server-issued signed upload token with the browser sending bytes straight to Storage — was **measured working against the live project** and holds. The "6 MB" figure that appears in the research is a Supabase *reliability recommendation*, not a limit: 25 MB transferred cleanly and verified byte-for-byte. The real ceiling is **50 MB, imposed by the free plan**; raising it returns `PaymentRequiredException`.
 >
-> **Open risk this creates:** Supabase's documented TUS example authenticates with a **Supabase Auth session token**, which this architecture does not have. A signed-token alternative exists but is not demonstrated officially. Proving it is now the sole objective of the Phase 1 spike (`FOUND-05`).
+> **TUS was tested and rejected.** It authenticates but then fails at RLS (`new row violates row-level security policy`) — the signed token is not honoured as a bypass. Making it work would require an `anon` INSERT policy on `storage.objects`, letting anyone write to the bucket. The standard signed path bypasses RLS by design and needs no policy. **No `tus-js-client`, no chunking, no resume state.**
+>
+> The only untested piece is **CORS from a real browser origin**, which Node cannot answer. That is now the sole objective of the Phase 1 spike (`FOUND-05`).
 >
 > **2. Permissions are no longer flat.** Client review established two roles — `owner` (Josh) and `staff` — differing on money visibility and lead approval. Anywhere this cohort assumes flat permissions, see `PROJECT.md` Key Decisions.
 

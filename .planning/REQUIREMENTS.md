@@ -15,7 +15,7 @@
 - [ ] **FOUND-02**: All database access routes through a data-access layer with an error-unwrapping helper that throws — `supabase-js` returns `{data, error}` and does not throw, which is how the prototype's silent-failure bug would recur
 - [ ] **FOUND-03**: Production build is grepped for rate-card values; any hit fails the build
 - [ ] **FOUND-04**: Vercel deployment protection enabled and environment variables scoped per environment
-- [ ] **FOUND-05**: A browser with **no Supabase Auth session** completes a TUS resumable upload to Storage using only a server-issued signed upload token, proven against a **deployed preview** — neither the Vercel 4.5 MB nor the Next.js 1 MB body cap is enforced by `next dev`, so a local pass proves nothing
+- [ ] **FOUND-05**: A **real browser** with no Supabase Auth session completes a signed upload to Storage against a **deployed preview**, confirming CORS permits it. The server-side half is already proven by measurement (25 MB clean, 50 MB plan ceiling); CORS is the only untested piece, and `next dev` cannot answer it
 - [ ] **FOUND-06**: Resend sending domain verified — started in this phase because DNS propagation is wall-clock time
 
 ### Authentication
@@ -50,7 +50,7 @@
 
 ### Artwork
 
-- [ ] **ART-01**: Artwork uploads directly from the browser to Supabase Storage via **TUS resumable upload** authorized by a server-issued signed token, so bytes never pass through a Vercel function. TUS is mandatory rather than optional: Supabase's standard upload is documented for files up to 6 MB, and 6 MB rejects the vector artwork this project exists to stop losing. Includes progress reporting and resume-after-interruption
+- [ ] **ART-01**: Artwork uploads directly from the browser to Supabase Storage using a **server-issued signed upload token alone** — no Supabase key, no session — so bytes never pass through a Vercel function. Standard signed upload, not TUS: measured working to 25 MB, and TUS fails at RLS without an `anon` insert policy the standard path does not need. The size cap is **configuration, not a constant** (currently 50 MB, the free plan's ceiling)
 - [ ] **ART-02**: File type is validated server-side by extension and magic bytes, accepting PDF, AI, EPS, SVG, PNG, JPG, and ZIP
 - [ ] **ART-03**: Artwork attaches per line item and supports multiple files per line
 - [ ] **ART-04**: No quote row can reference artwork whose bytes never landed — enforced by verify-then-commit plus a database constraint, with a standing invariant query returning zero rows

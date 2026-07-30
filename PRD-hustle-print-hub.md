@@ -72,7 +72,7 @@ Priorities align with `ASSESSMENT.md` §4. Acceptance criteria are the exit cond
 
 **Architecture.** A Server Action issues a Supabase **signed upload token** — path-scoped, short TTL, `upsert:false`. The browser uploads directly to Storage. Bytes never traverse a Vercel function, so the 4.5 MB platform cap does not apply.
 
-> **Corrected 2026-07-30.** An earlier version said the browser "PUTs bytes with a plain `fetch`." That only holds below 6 MB. Supabase's standard upload is documented for files **up to 6 MB**; above that, TUS resumable is required. Since 6 MB rejects a single layered `.ai` file — exactly the artwork this project exists to stop losing — **TUS is mandatory, not optional**, and Phase 3 is costed accordingly: `tus-js-client`, 6 MB chunks, upload fingerprints, resume state.
+> **Settled by measurement, 2026-07-30.** Standard signed upload was measured against the live project: 25 MB transferred cleanly and verified byte-for-byte, so the documented 6 MB figure is a reliability recommendation rather than a limit. The hard ceiling is **50 MB — the free plan's**, not the protocol's; raising it returns `PaymentRequiredException`. TUS was tested and is *worse* here: it authenticates but fails at RLS, and would require an `anon` insert policy the standard path does not need. **No TUS.** The size cap lives in configuration so the eventual paid-plan upgrade is an env change, not a code change.
 
 This preserves the locked constraint in its precise form: the browser never holds a **durable** Supabase credential. It holds a short-lived token scoped to one server-chosen path.
 
