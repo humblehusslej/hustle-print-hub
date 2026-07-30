@@ -38,7 +38,7 @@ The existing prototype is not treated as validated. Its three core paths — art
 
 ### Out of Scope
 
-- **Role separation / permission tiers** — deliberately declined. Three people who all see everything; attribution via audit trail is the accountability mechanism instead. Revisit only if headcount grows.
+- **General role hierarchy / permission tiers** — declined beyond the single owner/staff split described in Key Decisions. There are exactly two roles and they differ on two things only: visibility of money, and authority to approve a lead into production. Everything else stays flat. No per-feature permission matrix.
 - **Payment processing** — the tool quotes and tracks; it does not collect money.
 - **SanMar / Cotton Collective drop-ship platform** — a separate project, separately priced and scoped. Not part of this build.
 - **Customer accounts / customer login** — customers interact through a public link only.
@@ -83,7 +83,10 @@ The existing prototype is not treated as validated. Its three core paths — art
 | All DB access via Server Actions with service role key | Makes price injection structurally impossible — no database key and no price field ever reaches the client | — Pending |
 | New Supabase project; abandon the old one | The configured project no longer resolves in DNS; assume prior data unrecoverable | — Pending |
 | Single `quotes` table replacing the `app_orders`/`app_manual_leads` split | The dual write is the actual source of duplicate outreach entries | — Pending |
-| Flat permissions — all users see financials | Three trusted people; role tiers add complexity without value at this size | — Pending |
+| **Owner-only pricing visibility.** Money fields — totals, setup fees, payment status — are visible to the owner (Josh) alone, not to the partner or worker | Client decision, made with the tradeoff stated explicitly. **Reverses an earlier "all users see financials" choice.** Must be enforced by omitting fields from the server payload, never by hiding them in the UI — conditional rendering leaves values readable in the network tab, which is `?admin=true` in a new costume | — Pending |
+| **Owner-only lead approval.** A lead enters the Pending column only when the owner approves it | Keeps Pending meaningful — it holds qualified work, not raw enquiries | — Pending |
+| Stage movement stays flat — any authenticated user moves any job | Making the owner a bottleneck on routine production flow would defeat the point of a shared board. Confirmation modal plus audit attribution is the safeguard | — Pending |
+| **Three production stages retained** — Pending / Pre-Press → In Production → Ready / Complete | Client declined a researched 5-stage model as more structure than the work needs. `stage` stays `text` + `CHECK`, so expanding later is a one-line migration | — Pending |
 | Individual logins, not a shared account | With no permission gate, per-user attribution in the audit trail *is* the accountability mechanism | — Pending |
 | Confirmation modal on every stage change | Three people touching one board; misclicks were a stated pain point | — Pending |
 | New-quote email to owner only | Owner's explicit preference. Watch this — it makes him a single point of failure on lead response time, which is a tracked metric | ⚠️ Revisit |

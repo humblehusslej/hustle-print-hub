@@ -24,6 +24,7 @@
 - [ ] **AUTH-02**: Every dashboard route requires an authenticated session and returns no data when signed out
 - [ ] **AUTH-03**: Every dashboard Server Action calls `auth.protect()` as its first statement — middleware cannot protect actions, which are dispatched by ID rather than path
 - [ ] **AUTH-04**: The `?admin=true` parameter and triple-click handler are absent from the codebase
+- [ ] **AUTH-05**: Accounts carry a role — `owner` (Josh) or `staff` (business partner, worker). Role is resolved server-side from the authenticated identity, never from a client-supplied value
 
 ### Quote intake
 
@@ -45,6 +46,7 @@
 - [ ] **PRICE-07**: Embroidery digitizing is charged as a distinct one-time fee, separate from screen setup
 - [ ] **PRICE-08**: Rush orders are surcharged — currently promised in the UI copy and never applied by the math
 - [ ] **PRICE-09**: The total stored in the database equals the total quoted to the customer, in integer cents
+- [ ] **PRICE-10**: No price, total, setup fee, or payment field is ever transmitted to a `staff` account. The fields are **omitted from the server payload**, not hidden in the UI — conditional rendering leaves the values readable in the browser's network tab, which is the same client-side gating failure as the prototype's `?admin=true`. Only the `owner` role receives money fields
 
 ### Artwork
 
@@ -58,10 +60,11 @@
 
 ### Production board
 
-- [ ] **BOARD-01**: All jobs are visible grouped by production stage
+- [ ] **BOARD-01**: All jobs are visible grouped by the shop's three production stages — Pending / Pre-Press, In Production, Ready / Complete
+- [ ] **BOARD-07**: Completed jobs sort newest-first, so the most recently finished job is at the top of the Ready / Complete column
 - [ ] **BOARD-02**: Jobs move forward and backward between stages, each move gated by a confirmation naming the job and destination
 - [ ] **BOARD-03**: Every stage change, edit, and delete records actor, action, and timestamp against an individual identity, visible on the job
-- [ ] **BOARD-04**: Board cards open a detail view showing full job specification, customer contact, and artwork download
+- [ ] **BOARD-04**: Board cards open a detail view showing full job specification, customer contact, and artwork download. Money fields appear for the `owner` role only, per PRICE-10
 - [ ] **BOARD-05**: A team member creates a job directly from the dashboard, including a flat-price override, distinguishable in the audit trail from customer-submitted jobs
 - [ ] **BOARD-06**: A team member edits quantities, sizes, notes, and due date on an existing job; edits re-run pricing server-side and are recorded with before/after values
 
@@ -70,6 +73,7 @@
 - [ ] **LEAD-01**: Leads needing a callback are listed with contact details, each submission appearing exactly once
 - [ ] **LEAD-02**: A team member marks a lead contacted, with attribution and timestamp
 - [ ] **LEAD-03**: A team member adds a lead manually for walk-in and phone enquiries
+- [ ] **LEAD-04**: A lead does not enter the Pending column until **the owner** approves it — unapproved enquiries stay in the outreach list, so Pending holds only qualified work. Approval is restricted to the `owner` role, enforced server-side, and recorded with actor and timestamp
 
 ### Notifications
 
@@ -80,7 +84,7 @@
 
 - [ ] **OPS-01**: The production calendar is driven by the current date and marks overdue jobs — the prototype's window is hardcoded to a fixed date
 - [ ] **OPS-02**: Deleted jobs are recoverable; every board query excludes soft-deleted rows
-- [ ] **OPS-03**: A team member marks a job invoiced and paid, with attribution *(pending client confirmation — see Client Input below)*
+- [ ] **OPS-03**: The owner marks a job invoiced and paid, with attribution. Payment status is a money field and is not transmitted to `staff` accounts, per PRICE-10
 - [ ] **OPS-04**: Time-in-stage is visible per job, derived from the audit trail
 
 ---
@@ -139,34 +143,94 @@ Not developer decisions. Each blocks specific work.
 | 1 | Full rate card — volume tiers, size upcharges, per-screen setup, digitizing fee, underbase | PRICE-04 … PRICE-07 | Engine structure can be built in parallel with the numbers |
 | 2 | Rush surcharge multiplier | PRICE-08 | Promised to customers today, charged to nobody |
 | 3 | Does the shop run DTF (direct-to-film)? | QUOTE-01, pricing model | Now the default for small runs; absent from the prototype's decoration types |
-| 4 | Production stage model — four stages or five? | BOARD-01 | **Does not block the schema.** Stage is `text` + `CHECK`, alterable in a one-line migration. It blocks the board UI, so the decision is needed before the board phase, not the foundation phase |
-| 5 | Payment status tracking wanted? | OPS-03 | In scope by the letter of the exclusion list — tracking is not processing |
+| 4 | ~~Production stage model~~ | — | **RESOLVED.** Keep the existing three stages: Pending / Pre-Press → In Production → Ready / Complete. The 5-stage proposal was declined as more structure than the work needs |
+| 5 | ~~Payment status tracking wanted?~~ | — | **RESOLVED.** Yes — the live dashboard already runs an "Awaiting Payment Ledger". Owner-visible only, per PRICE-10 |
 | 6 | Artwork retention period | ART-04 sweeper | Build configurable regardless |
-| 7 | Anything worth recovering from the old Supabase project? | FOUND-01 | Assumed no |
+| 7 | Anything worth recovering from the old Supabase project? | FOUND-01 | Assumed no. The live board currently reads **DASHBOARD (0)** with every column empty, consistent with the configured project no longer resolving |
 
 ---
 
 ## Traceability
 
-Populated during roadmap creation.
+Populated during roadmap creation. See `.planning/ROADMAP.md` for phase goals and success criteria.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 … FOUND-06 | TBD | Pending |
-| AUTH-01 … AUTH-04 | TBD | Pending |
-| QUOTE-01 … QUOTE-06 | TBD | Pending |
-| PRICE-01 … PRICE-09 | TBD | Pending |
-| ART-01 … ART-07 | TBD | Pending |
-| BOARD-01 … BOARD-06 | TBD | Pending |
-| LEAD-01 … LEAD-03 | TBD | Pending |
-| NOTIF-01 … NOTIF-02 | TBD | Pending |
-| OPS-01 … OPS-04 | TBD | Pending |
+| FOUND-01 | Phase 1 — Foundation & Access Control | Pending |
+| FOUND-02 | Phase 1 — Foundation & Access Control | Pending |
+| FOUND-03 | Phase 1 — Foundation & Access Control | Pending |
+| FOUND-04 | Phase 1 — Foundation & Access Control | Pending |
+| FOUND-05 | Phase 1 — Foundation & Access Control | Pending |
+| FOUND-06 | Phase 1 — Foundation & Access Control | Pending |
+| AUTH-01 | Phase 1 — Foundation & Access Control | Pending |
+| AUTH-02 | Phase 1 — Foundation & Access Control | Pending |
+| AUTH-03 | Phase 1 — Foundation & Access Control | Pending |
+| AUTH-04 | Phase 1 — Foundation & Access Control | Pending |
+| QUOTE-01 | Phase 2 — Quote Intake | Pending |
+| QUOTE-02 | Phase 2 — Quote Intake | Pending |
+| QUOTE-03 | Phase 2 — Quote Intake | Pending |
+| QUOTE-04 | Phase 2 — Quote Intake | Pending |
+| QUOTE-05 | Phase 2 — Quote Intake | Pending |
+| QUOTE-06 | Phase 2 — Quote Intake | Pending |
+| ART-01 | Phase 3 — Artwork Pipeline | Pending |
+| ART-02 | Phase 3 — Artwork Pipeline | Pending |
+| ART-03 | Phase 3 — Artwork Pipeline | Pending |
+| ART-04 | Phase 3 — Artwork Pipeline | Pending |
+| ART-05 | Phase 3 — Artwork Pipeline | Pending |
+| ART-06 | Phase 3 — Artwork Pipeline | Pending |
+| ART-07 | Phase 3 — Artwork Pipeline | Pending |
+| PRICE-01 | Phase 4 — Pricing | Pending |
+| PRICE-02 | Phase 4 — Pricing | Pending |
+| PRICE-03 | Phase 4 — Pricing | Pending |
+| PRICE-04 | Phase 4 — Pricing | Pending *(rate values: client input #1)* |
+| PRICE-05 | Phase 4 — Pricing | Pending *(rate values: client input #1)* |
+| PRICE-06 | Phase 4 — Pricing | Pending *(rate values: client input #1)* |
+| PRICE-07 | Phase 4 — Pricing | Pending *(rate values: client input #1)* |
+| PRICE-08 | Phase 4 — Pricing | Pending *(multiplier: client input #2)* |
+| PRICE-09 | Phase 4 — Pricing | Pending |
+| BOARD-01 | Phase 5 — Production Board | Pending |
+| BOARD-02 | Phase 5 — Production Board | Pending |
+| BOARD-03 | Phase 5 — Production Board | Pending |
+| BOARD-04 | Phase 5 — Production Board | Pending |
+| BOARD-05 | Phase 5 — Production Board | Pending |
+| BOARD-06 | Phase 5 — Production Board | Pending |
+| LEAD-01 | Phase 6 — Leads & Notifications | Pending |
+| LEAD-02 | Phase 6 — Leads & Notifications | Pending |
+| LEAD-03 | Phase 6 — Leads & Notifications | Pending |
+| NOTIF-01 | Phase 6 — Leads & Notifications | Pending |
+| NOTIF-02 | Phase 6 — Leads & Notifications | Pending |
+| OPS-01 | Phase 7 — Operations & Recovery | Pending |
+| OPS-02 | Phase 7 — Operations & Recovery | Pending |
+| OPS-03 | Phase 7 — Operations & Recovery | Pending *(build-or-drop: client input #5)* |
+| OPS-04 | Phase 7 — Operations & Recovery | Pending |
+
+| AUTH-05 | Phase 1 — Foundation & Access Control | Pending |
+| PRICE-10 | Phase 4 — Pricing | Pending |
+| BOARD-07 | Phase 5 — Production Board | Pending |
+| LEAD-04 | Phase 6 — Leads & Notifications | Pending |
 
 **Coverage:**
-- v1 requirements: 43 total
-- Mapped to phases: 0 (roadmap pending)
-- Unmapped: 43 ⚠️
+- v1 requirements: 51 total
+- Mapped to phases: 51 ✓
+- Unmapped: 0 ✓
+- Duplicated across phases: 0 ✓
+
+> **Count correction.** This section previously read "43 total." The enumerated v1 list contained 47 (FOUND 6, AUTH 4, QUOTE 6, PRICE 9, ART 7, BOARD 6, LEAD 3, NOTIF 2, OPS 4) — the original figure was an arithmetic error, not a missing requirement.
+>
+> **Post-roadmap additions (47 → 51).** Four requirements were added after client review: **AUTH-05** (owner/staff role model), **PRICE-10** (money fields omitted server-side for staff accounts), **BOARD-07** (completed jobs sort newest-first), **LEAD-04** (owner-only approval gating a lead into Pending). All four trace to client decisions recorded in PROJECT.md.
+
+**Client-input exposure by phase:**
+
+| Phase | Client input | Blocks the phase? |
+|-------|--------------|-------------------|
+| 1 | #3 DTF, #7 old Supabase data | No — both are `text` + `CHECK` or informational |
+| 2 | none | — |
+| 3 | #6 artwork retention | No — sweeper built configurable |
+| 4 | #1 rate card, #2 rush multiplier | No — built and verified on a placeholder card; real rates are a data-only change |
+| 5 | #4 stage model (four or five) | **Yes** — needed before Phase 5 planning |
+| 6 | none | — |
+| 7 | #5 payment tracking | No — OPS-03 drops cleanly if unwanted |
 
 ---
 *Requirements defined: 2026-07-30*
-*Last updated: 2026-07-30 after initial definition*
+*Last updated: 2026-07-30 — traceability populated during roadmap creation*
